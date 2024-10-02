@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:folk_robe/constants.dart';
 
 class CostumeItem extends StatelessWidget {
   final String title;
@@ -23,7 +24,7 @@ class CostumeItem extends StatelessWidget {
         child: Container(
           height: 50,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
+            borderRadius: BorderRadius.circular(Constants.circularRadius),
             color: Colors.white,
           ),
           child: Row(
