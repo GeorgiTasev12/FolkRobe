@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:folk_robe/constants.dart';
 
 class CustomCard extends StatefulWidget {
   final String title;
@@ -24,7 +25,7 @@ class _CustomCardState extends State<CustomCard> {
         height: 360,
         child: Card(
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25)
+              borderRadius: BorderRadius.circular(Constants.circularRadius)
           ),
           color: Colors.grey.shade50,
           child: Center(
@@ -32,7 +33,7 @@ class _CustomCardState extends State<CustomCard> {
               widget.title,
               style: const TextStyle(
                 color: Colors.black,
-                fontSize: 21,
+                fontSize: Constants.titleFontSize,
               ),
             ),
           ),
