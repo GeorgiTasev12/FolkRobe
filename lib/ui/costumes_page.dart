@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:folk_robe/models/costume.dart';
+import 'package:folk_robe/ui/gender_page.dart';
 import 'package:folk_robe/ui/widgets/costume_item.dart';
 
 class CostumesPage extends StatelessWidget {
@@ -24,10 +25,18 @@ class CostumesPage extends StatelessWidget {
       ),
       backgroundColor: Colors.blueGrey,
       body: ListView.separated(
-          itemBuilder: (context, index) =>
-              CostumeItem(title: costumes[index].title),
-          separatorBuilder: (context, index) => const SizedBox(height: 5),
-          itemCount: costumes.length),
+        itemBuilder: (context, index) => CostumeItem(
+          title: costumes[index].title,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const GenderPage()),
+            );
+          },
+        ),
+        separatorBuilder: (context, index) => const SizedBox(height: 5),
+        itemCount: costumes.length,
+      ),
     );
   }
 }
