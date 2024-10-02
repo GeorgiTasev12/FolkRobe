@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:folk_robe/constants.dart';
 import 'package:folk_robe/models/costume.dart';
 import 'package:folk_robe/ui/gender_page.dart';
 import 'package:folk_robe/ui/widgets/costume_item.dart';
@@ -34,7 +35,7 @@ class CostumesPage extends StatelessWidget {
             );
           },
         ),
-        separatorBuilder: (context, index) => const SizedBox(height: 5),
+        separatorBuilder: (context, index) => const SizedBox(height: Constants.sizedBoxHeight),
         itemCount: costumes.length,
       ),
     );

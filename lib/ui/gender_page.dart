@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:folk_robe/constants.dart';
 import 'package:folk_robe/ui/widgets/gender_card.dart';
 
 class GenderPage extends StatelessWidget {
@@ -19,7 +20,7 @@ class GenderPage extends StatelessWidget {
       ),
       backgroundColor: Colors.blueGrey,
       body: const Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(Constants.globalPadding),
         child: Center(
           child: Row(
             children: [
