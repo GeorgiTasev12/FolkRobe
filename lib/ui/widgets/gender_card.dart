@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:folk_robe/constants.dart';
 
 class GenderCard extends StatelessWidget {
   final String title;
@@ -17,7 +18,8 @@ class GenderCard extends StatelessWidget {
       height: 180,
       child: Card(
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25)),
+          borderRadius: BorderRadius.circular(Constants.circularRadius),
+        ),
         color: Colors.white,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -27,10 +29,12 @@ class GenderCard extends StatelessWidget {
               icon,
               size: 70,
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: Constants.sizedBoxHeight),
             Text(
-                title,
-                style: const TextStyle(fontWeight: FontWeight.bold)
+              title,
+              style: const TextStyle(
+                fontSize: Constants.titleFontSize,
+              ),
             ),
           ],
         ),
