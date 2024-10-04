@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:folk_robe/constants.dart';
 import 'package:folk_robe/ui/widgets/gender_card.dart';
 
+import 'costumes_page.dart';
+
 class GenderPage extends StatelessWidget {
   const GenderPage({super.key});
 
@@ -19,8 +21,8 @@ class GenderPage extends StatelessWidget {
         backgroundColor: Colors.blueGrey,
       ),
       backgroundColor: Colors.blueGrey,
-      body: const Padding(
-        padding: EdgeInsets.all(Constants.globalPadding),
+      body: Padding(
+        padding: const EdgeInsets.all(Constants.globalPadding),
         child: Center(
           child: Row(
             children: [
@@ -28,8 +30,21 @@ class GenderPage extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    GenderCard(title: 'Мъжки носии', icon: Icons.male_rounded),
-                    GenderCard(title: 'Женски носии', icon: Icons.female_rounded),
+                    GenderCard(
+                      title: 'Мъжки носии',
+                      icon: Icons.male_rounded,
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CostumesPage(),
+                        ),
+                      ),
+                    ),
+                    const GenderCard(
+                      title: 'Женски носии',
+                      icon: Icons.female_rounded,
+                      onTap: null,
+                    ),
                   ],
                 ),
               ),

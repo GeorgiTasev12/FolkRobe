@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:folk_robe/ui/costumes_page.dart';
+import 'package:folk_robe/ui/gender_page.dart';
 import 'package:folk_robe/ui/widgets/custom_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
                       title: 'Костюми',
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const CostumesPage(),
+                          builder: (context) => const GenderPage(),
                         ),
                       ),
                     ),
