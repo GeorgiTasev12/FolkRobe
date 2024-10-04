@@ -32,7 +32,7 @@ class CostumesPage extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: Constants.fontSizeTitleAppBar,
-              color: Colors.white,
+            color: Colors.white,
           ),
         ),
       ),
