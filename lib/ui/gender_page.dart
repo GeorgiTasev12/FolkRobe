@@ -28,8 +28,8 @@ class GenderPage extends StatelessWidget {
         backgroundColor: Colors.blueGrey,
       ),
       backgroundColor: Colors.blueGrey,
-      body: Padding(
-        padding: const EdgeInsets.all(Constants.globalPadding),
+      body: const Padding(
+        padding: EdgeInsets.all(Constants.globalPadding),
         child: Center(
           child: Row(
             children: [
@@ -42,7 +42,7 @@ class GenderPage extends StatelessWidget {
                       icon: Icons.male_rounded,
                       onTap: null,
                     ),
-                    const GenderCard(
+                    GenderCard(
                       title: 'Женски',
                       icon: Icons.female_rounded,
                       onTap: null,
