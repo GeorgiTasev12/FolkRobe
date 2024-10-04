@@ -11,6 +11,15 @@ class GenderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: const Text(
+          'Изберете тип носии',
+          softWrap: true,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: Constants.fontSizeTitleAppBar,
+            color: Colors.white,
+          ),
+        ),
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
           icon: const Icon(
@@ -31,7 +40,7 @@ class GenderPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     GenderCard(
-                      title: 'Мъжки носии',
+                      title: 'Мъжки',
                       icon: Icons.male_rounded,
                       onTap: () => Navigator.push(
                         context,
@@ -41,7 +50,7 @@ class GenderPage extends StatelessWidget {
                       ),
                     ),
                     const GenderCard(
-                      title: 'Женски носии',
+                      title: 'Женски',
                       icon: Icons.female_rounded,
                       onTap: null,
                     ),
