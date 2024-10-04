@@ -26,6 +26,15 @@ class CostumesPage extends StatelessWidget {
           color: Colors.white,
         ),
         backgroundColor: Colors.blueGrey,
+        title: const Text(
+          'Изберете флоклорната област за \nмъжките носии',
+          softWrap: true,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: Constants.fontSizeTitleAppBar,
+              color: Colors.white,
+          ),
+        ),
       ),
       backgroundColor: Colors.blueGrey,
       body: ListView.separated(
@@ -33,7 +42,8 @@ class CostumesPage extends StatelessWidget {
           title: costumes[index].title,
           onTap: null,
         ),
-        separatorBuilder: (context, index) => const SizedBox(height: Constants.sizedBoxHeight),
+        separatorBuilder: (context, index) =>
+            const SizedBox(height: Constants.sizedBoxHeight),
         itemCount: costumes.length,
       ),
     );

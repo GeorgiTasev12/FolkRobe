@@ -3,4 +3,5 @@ class Constants {
   static const circularRadius = 25.0;
   static const titleFontSize = 21.0;
   static const sizedBoxHeight = 5.0;
+  static const fontSizeTitleAppBar = 18.0;
 }
