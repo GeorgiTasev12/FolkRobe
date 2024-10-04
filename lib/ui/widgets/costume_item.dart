@@ -22,7 +22,7 @@ class CostumeItem extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          height: 50,
+          height: 60,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(Constants.circularRadius),
             color: Colors.white,
@@ -32,7 +32,10 @@ class CostumeItem extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 17,
+                ),
               ),
             ],
           ),
