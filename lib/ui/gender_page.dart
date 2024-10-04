@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:folk_robe/constants.dart';
 import 'package:folk_robe/ui/widgets/gender_card.dart';
 
-import 'costumes_page.dart';
-
 class GenderPage extends StatelessWidget {
   const GenderPage({super.key});
 
@@ -42,12 +40,7 @@ class GenderPage extends StatelessWidget {
                     GenderCard(
                       title: 'Мъжки',
                       icon: Icons.male_rounded,
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CostumesPage(),
-                        ),
-                      ),
+                      onTap: null,
                     ),
                     const GenderCard(
                       title: 'Женски',

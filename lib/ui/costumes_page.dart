@@ -40,7 +40,10 @@ class CostumesPage extends StatelessWidget {
       body: ListView.separated(
         itemBuilder: (context, index) => CostumeItem(
           title: costumes[index].title,
-          onTap: null,
+          onTap: () => Navigator.pushNamed(
+            context,
+            Constants.genderPageRouteString,
+          ),
         ),
         separatorBuilder: (context, index) =>
             const SizedBox(height: Constants.sizedBoxHeight),
