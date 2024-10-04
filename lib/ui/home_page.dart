@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:folk_robe/ui/gender_page.dart';
+import 'package:folk_robe/constants.dart';
 import 'package:folk_robe/ui/widgets/custom_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -24,10 +24,8 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     CustomCard(
                       title: 'Костюми',
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const GenderPage(),
-                        ),
+                      onTap: () => Navigator.of(context).pushNamed(
+                        Constants.costumesPageRouteString,
                       ),
                     ),
                     CustomCard(

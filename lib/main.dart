@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:folk_robe/constants.dart';
+import 'package:folk_robe/ui/costumes_page.dart';
+import 'package:folk_robe/ui/gender_page.dart';
 import 'package:folk_robe/ui/home_page.dart';
 
 void main() {
@@ -12,12 +15,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      routes: {
+        Constants.initialRouteString: (context) => const HomePage(),
+        Constants.costumesPageRouteString: (context) => const CostumesPage(),
+        Constants.genderPageRouteString: (context) => const GenderPage(),
+      },
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      initialRoute: Constants.initialRouteString,
     );
   }
 }

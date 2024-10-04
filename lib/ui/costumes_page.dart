@@ -32,7 +32,7 @@ class CostumesPage extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: Constants.fontSizeTitleAppBar,
-              color: Colors.white,
+            color: Colors.white,
           ),
         ),
       ),
@@ -40,7 +40,9 @@ class CostumesPage extends StatelessWidget {
       body: ListView.separated(
         itemBuilder: (context, index) => CostumeItem(
           title: costumes[index].title,
-          onTap: null,
+          onTap: () => Navigator.of(context).pushNamed(
+            Constants.genderPageRouteString,
+          ),
         ),
         separatorBuilder: (context, index) =>
             const SizedBox(height: Constants.sizedBoxHeight),
