@@ -40,8 +40,7 @@ class CostumesPage extends StatelessWidget {
       body: ListView.separated(
         itemBuilder: (context, index) => CostumeItem(
           title: costumes[index].title,
-          onTap: () => Navigator.pushNamed(
-            context,
+          onTap: () => Navigator.of(context).pushNamed(
             Constants.genderPageRouteString,
           ),
         ),
