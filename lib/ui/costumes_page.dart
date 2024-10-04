@@ -12,6 +12,10 @@ class CostumesPage extends StatelessWidget {
       Costume(title: 'Шопски'),
       Costume(title: 'Тракийски'),
       Costume(title: 'Северняшки'),
+      Costume(title: 'Пирински'),
+      Costume(title: 'Странджански'),
+      Costume(title: 'Добруджански'),
+      Costume(title: 'Родопска'),
     ];
 
     return Scaffold(
