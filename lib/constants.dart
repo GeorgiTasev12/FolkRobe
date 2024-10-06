@@ -8,4 +8,5 @@ class Constants {
   static const initialRouteString = '/';
   static const costumesPageRouteString = '/costumes_page';
   static const genderPageRouteString = '/gender_page';
+  static const costumesListPageRouteString = '/costumes_list_page';
 }
