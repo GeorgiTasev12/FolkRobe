@@ -13,12 +13,52 @@ class CostumeListPage extends StatefulWidget {
 class _CostumeListPageState extends State<CostumeListPage> {
   List<Costume> costumeList = [];
 
+  TextEditingController controller = TextEditingController();
+
+  void addListItem(String text) {
+    setState(() {
+      costumeList.add(Costume(title: text));
+      controller.clear();
+    });
+    Navigator.pop(context);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
-        onPressed: () {},
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Моля, въведете реквизит.'),
+              content: TextField(
+                controller: controller,
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text(
+                      'Затвори',
+                      style: TextStyle(color: Colors.lightBlue),
+                    )),
+                TextButton(
+                    onPressed: () => addListItem(controller.text),
+                    child: const Text(
+                      'Запази',
+                      style: TextStyle(color: Colors.lightBlue),
+                    )),
+              ],
+            ),
+          );
+        },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Constants.circularRadius),
         ),
