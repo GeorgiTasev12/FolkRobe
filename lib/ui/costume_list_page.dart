@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:folk_robe/constants.dart';
-import 'package:folk_robe/models/costume.dart';
+import 'package:folk_robe/providers/costumesList_provider.dart';
 import 'package:folk_robe/ui/widgets/costume_item.dart';
+import 'package:provider/provider.dart';
 
 class CostumeListPage extends StatefulWidget {
   const CostumeListPage({super.key});
@@ -11,26 +12,31 @@ class CostumeListPage extends StatefulWidget {
 }
 
 class _CostumeListPageState extends State<CostumeListPage> {
-  List<Costume> costumeList = [];
-
   TextEditingController controller = TextEditingController();
 
-  void addListItem(String text) {
-    setState(() {
-      costumeList.add(Costume(title: text));
-      controller.clear();
+  CostumesListProvider? costumesListProvider;
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      costumesListProvider = Provider.of<CostumesListProvider>(context, listen: false);
     });
-    Navigator.pop(context);
   }
 
   @override
   void dispose() {
     super.dispose();
     controller.dispose();
+    costumesListProvider?.dispose();
+    costumesListProvider = null;
   }
 
   @override
   Widget build(BuildContext context) {
+    final costumesListProvider = Provider.of<CostumesListProvider>(context);
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
@@ -50,7 +56,12 @@ class _CostumeListPageState extends State<CostumeListPage> {
                       style: TextStyle(color: Colors.lightBlue),
                     )),
                 TextButton(
-                    onPressed: () => addListItem(controller.text),
+                    onPressed: () {
+                      setState(() {
+                        costumesListProvider.addListItem(controller.text, controller);
+                        Navigator.pop(context);
+                      });
+                    },
                     child: const Text(
                       'Запази',
                       style: TextStyle(color: Colors.lightBlue),
@@ -76,7 +87,7 @@ class _CostumeListPageState extends State<CostumeListPage> {
         backgroundColor: Colors.blueGrey,
       ),
       backgroundColor: Colors.blueGrey,
-      body: costumeList.isEmpty
+      body: costumesListProvider.costumesList.isEmpty
           ? const Padding(
               padding: EdgeInsets.all(Constants.globalPadding),
               child: Center(
@@ -103,11 +114,13 @@ class _CostumeListPageState extends State<CostumeListPage> {
               ),
             )
           : ListView.separated(
-              itemCount: costumeList.length,
+              itemCount: costumesListProvider.costumesList.length,
               separatorBuilder: (context, index) => const SizedBox(height: 10),
               itemBuilder: (context, index) {
                 return CostumeItem(
-                    title: costumeList[index].title, onTap: null);
+                  title: costumesListProvider.costumesList[index].title,
+                  onTap: null,
+                );
               },
             ),
     );
