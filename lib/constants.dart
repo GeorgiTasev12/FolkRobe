@@ -9,4 +9,7 @@ class Constants {
   static const costumesPageRouteString = '/costumes_page';
   static const genderPageRouteString = '/gender_page';
   static const costumesListPageRouteString = '/costumes_list_page';
+
+  static const databaseName = 'costumes_database.db';
+  static const tableName = 'costumes';
 }

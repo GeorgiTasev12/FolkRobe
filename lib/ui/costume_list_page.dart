@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:folk_robe/constants.dart';
-import 'package:folk_robe/providers/costumesList_provider.dart';
+import 'package:folk_robe/providers/costumes_list_provider.dart';
 import 'package:folk_robe/ui/widgets/costume_item.dart';
 import 'package:provider/provider.dart';
 
