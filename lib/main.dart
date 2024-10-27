@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:folk_robe/constants.dart';
-import 'package:folk_robe/providers/costumesList_provider.dart';
+import 'package:folk_robe/providers/costumes_list_provider.dart';
+import 'package:folk_robe/service/database_helper.dart';
 import 'package:folk_robe/ui/costume_list_page.dart';
 import 'package:folk_robe/ui/costumes_page.dart';
 import 'package:folk_robe/ui/gender_page.dart';
 import 'package:folk_robe/ui/home_page.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DatabaseHelper().database;
+
   runApp(const MyApp());
 }
 
