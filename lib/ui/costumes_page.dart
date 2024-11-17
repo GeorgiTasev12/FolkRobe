@@ -53,7 +53,7 @@ class ListViewOfCostumes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      itemBuilder: (context, index) => CostumeItem(
+      itemBuilder: (context, index) => CommonCostumeItem(
         title: costumes[index].title,
         onTap: () => Navigator.of(context).pushNamed(
           Constants.genderPageRouteString,
