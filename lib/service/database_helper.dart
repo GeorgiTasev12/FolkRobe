@@ -20,7 +20,7 @@ class DatabaseHelper {
             'id INTEGER PRIMARY KEY AUTOINCREMENT,'
             'title TEXT'
             ')');
-      }
+      },
     );
     return _database!;
   }
@@ -34,6 +34,16 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> queryData() async {
     final db = await database;
     return await db.query(Constants.tableName);
+  }
+
+  Future<int> deleteCostume(int id) async {
+    final db = await database;
+
+    return await db.delete(
+      Constants.tableName,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 
   Future<void> close() async {
