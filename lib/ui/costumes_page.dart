@@ -37,17 +37,31 @@ class CostumesPage extends StatelessWidget {
         ),
       ),
       backgroundColor: Colors.blueGrey,
-      body: ListView.separated(
-        itemBuilder: (context, index) => CostumeItem(
-          title: costumes[index].title,
-          onTap: () => Navigator.of(context).pushNamed(
-            Constants.genderPageRouteString,
-          ),
+      body: ListViewOfCostumes(costumes: costumes),
+    );
+  }
+}
+
+class ListViewOfCostumes extends StatelessWidget {
+  const ListViewOfCostumes({
+    super.key,
+    required this.costumes,
+  });
+
+  final List<Costume> costumes;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      itemBuilder: (context, index) => CostumeItem(
+        title: costumes[index].title,
+        onTap: () => Navigator.of(context).pushNamed(
+          Constants.genderPageRouteString,
         ),
-        separatorBuilder: (context, index) =>
-            const SizedBox(height: Constants.sizedBoxHeight),
-        itemCount: costumes.length,
       ),
+      separatorBuilder: (context, index) =>
+          const SizedBox(height: Constants.sizedBoxHeight),
+      itemCount: costumes.length,
     );
   }
 }
