@@ -21,7 +21,8 @@ class _CostumeListPageState extends State<CostumeListPage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      costumesListProvider = Provider.of<CostumesListProvider>(context, listen: false);
+      costumesListProvider =
+          Provider.of<CostumesListProvider>(context, listen: false);
     });
   }
 
@@ -48,25 +49,7 @@ class _CostumeListPageState extends State<CostumeListPage> {
               content: TextField(
                 controller: controller,
               ),
-              actions: [
-                TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text(
-                      'Затвори',
-                      style: TextStyle(color: Colors.lightBlue),
-                    )),
-                TextButton(
-                    onPressed: () {
-                      setState(() {
-                        costumesListProvider.addListItem(controller.text, controller);
-                        Navigator.pop(context);
-                      });
-                    },
-                    child: const Text(
-                      'Запази',
-                      style: TextStyle(color: Colors.lightBlue),
-                    )),
-              ],
+              actions: _alertDialogTextButtons(context, costumesListProvider),
             ),
           );
         },
@@ -91,38 +74,89 @@ class _CostumeListPageState extends State<CostumeListPage> {
           ? const Padding(
               padding: EdgeInsets.all(Constants.globalPadding),
               child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Имате празен инвентар от риквизити, моля добавте като натискате:',
-                      softWrap: true,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white54,
-                        fontSize: 18,
-                      ),
-                    ),
-                    SizedBox(height: 15),
-                    Icon(
-                      Icons.add,
-                      color: Colors.white54,
-                      size: 32,
-                    ),
-                  ],
-                ),
+                child: FloatingButtonWidget(),
               ),
             )
-          : ListView.separated(
-              itemCount: costumesListProvider.costumesList.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 10),
-              itemBuilder: (context, index) {
-                return CostumeItem(
-                  title: costumesListProvider.costumesList[index].title,
-                  onTap: null,
-                );
-              },
-            ),
+          : ListViewOfCostumeItems(costumesListProvider: costumesListProvider),
+    );
+  }
+
+  List<Widget> _alertDialogTextButtons(
+    BuildContext context,
+    CostumesListProvider costumesListProvider,
+  ) {
+    return [
+      TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text(
+            'Затвори',
+            style: TextStyle(color: Colors.lightBlue),
+          )),
+      TextButton(
+        onPressed: () {
+          setState(() {
+            costumesListProvider.addListItem(controller.text, controller);
+            Navigator.pop(context);
+          });
+        },
+        child: const Text(
+          'Запази',
+          style: TextStyle(color: Colors.lightBlue),
+        ),
+      ),
+    ];
+  }
+}
+
+class FloatingButtonWidget extends StatelessWidget {
+  const FloatingButtonWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'Имате празен инвентар от риквизити, моля добавте като натискате:',
+          softWrap: true,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white54,
+            fontSize: 18,
+          ),
+        ),
+        SizedBox(height: 15),
+        Icon(
+          Icons.add,
+          color: Colors.white54,
+          size: 32,
+        ),
+      ],
+    );
+  }
+}
+
+class ListViewOfCostumeItems extends StatelessWidget {
+  const ListViewOfCostumeItems({
+    super.key,
+    required this.costumesListProvider,
+  });
+
+  final CostumesListProvider costumesListProvider;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      itemCount: costumesListProvider.costumesList.length,
+      separatorBuilder: (context, index) => const SizedBox(height: 10),
+      itemBuilder: (context, index) {
+        return CostumeItem(
+          title: costumesListProvider.costumesList[index].title,
+          onTap: null,
+        );
+      },
     );
   }
 }

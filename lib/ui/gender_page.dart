@@ -28,32 +28,44 @@ class GenderPage extends StatelessWidget {
         backgroundColor: Colors.blueGrey,
       ),
       backgroundColor: Colors.blueGrey,
-      body: Padding(
-        padding: const EdgeInsets.all(Constants.globalPadding),
+      body: const Padding(
+        padding: EdgeInsets.all(Constants.globalPadding),
         child: Center(
           child: Row(
             children: [
               Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GenderCard(
-                      title: 'Мъжки',
-                      icon: Icons.male_rounded,
-                      onTap: () => Navigator.of(context).pushNamed(Constants.costumesListPageRouteString),
-                    ),
-                    const GenderCard(
-                      title: 'Женски',
-                      icon: Icons.female_rounded,
-                      onTap: null,
-                    ),
-                  ],
-                ),
+                child: RowOfGenderCards(),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class RowOfGenderCards extends StatelessWidget {
+  const RowOfGenderCards({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        GenderCard(
+          title: 'Мъжки',
+          icon: Icons.male_rounded,
+          onTap: () => Navigator.of(context)
+              .pushNamed(Constants.costumesListPageRouteString),
+        ),
+        const GenderCard(
+          title: 'Женски',
+          icon: Icons.female_rounded,
+          onTap: null,
+        ),
+      ],
     );
   }
 }

@@ -25,25 +25,41 @@ class GenderCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(Constants.circularRadius),
           ),
           color: Colors.white,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                size: 70,
-              ),
-              const SizedBox(height: Constants.sizedBoxHeight),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: Constants.titleFontSize,
-                ),
-              ),
-            ],
-          ),
+          child: ColumnOfIconText(icon: icon, title: title),
         ),
       ),
+    );
+  }
+}
+
+class ColumnOfIconText extends StatelessWidget {
+  const ColumnOfIconText({
+    super.key,
+    required this.icon,
+    required this.title,
+  });
+
+  final IconData? icon;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Icon(
+          icon,
+          size: 70,
+        ),
+        const SizedBox(height: Constants.sizedBoxHeight),
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: Constants.titleFontSize,
+          ),
+        ),
+      ],
     );
   }
 }

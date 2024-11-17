@@ -12,31 +12,42 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
         backgroundColor: Colors.blueGrey,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Flexible(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    CustomCard(
-                      title: 'Костюми',
-                      onTap: () => Navigator.of(context).pushNamed(
-                        Constants.costumesPageRouteString,
-                      ),
-                    ),
-                    CustomCard(
-                      title: 'Танцьори',
-                      onTap: () {},
-                    ),
-                  ],
-                ),
+                child: RowOfCustomCards(),
               ),
             ],
           ),
         ));
+  }
+}
+
+class RowOfCustomCards extends StatelessWidget {
+  const RowOfCustomCards({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        CustomCard(
+          title: 'Костюми',
+          onTap: () => Navigator.of(context).pushNamed(
+            Constants.costumesPageRouteString,
+          ),
+        ),
+        CustomCard(
+          title: 'Танцьори',
+          onTap: () {},
+        ),
+      ],
+    );
   }
 }
