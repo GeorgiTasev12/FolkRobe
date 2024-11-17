@@ -5,7 +5,6 @@ import 'package:folk_robe/models/costume.dart';
 import 'package:folk_robe/providers/costumes_list_provider.dart';
 import 'package:folk_robe/ui/widgets/costume_item.dart';
 
-
 class CostumeListPage extends StatelessWidget {
   const CostumeListPage({super.key});
 
@@ -19,11 +18,11 @@ class _CostumeListPageState extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final costumes = ref.watch(costumesProvider);
-    final addCostume = ref.watch(costumesProvider.notifier);
+    final notifier = ref.watch(costumesProvider.notifier);
 
     return Scaffold(
       floatingActionButton: ShowAddCostumeButton(
-        costumes: addCostume,
+        costumes: notifier,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       appBar: AppBar(
@@ -140,7 +139,7 @@ class FloatingButtonWidget extends StatelessWidget {
   }
 }
 
-class ListViewOfCostumeItems extends StatelessWidget {
+class ListViewOfCostumeItems extends ConsumerWidget {
   final List<Costume> costumes;
 
   const ListViewOfCostumeItems({
@@ -149,14 +148,15 @@ class ListViewOfCostumeItems extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListView.separated(
       itemCount: costumes.length,
       separatorBuilder: (context, index) => const SizedBox(height: 10),
       itemBuilder: (context, index) {
-        return CostumeItem(
+        return CommonCostumeItem(
           title: costumes[index].title,
           onTap: null,
+          onDelete: () => ref.watch(costumesProvider.notifier).deleteCostume(costumes[index].id ?? index),
         );
       },
     );
