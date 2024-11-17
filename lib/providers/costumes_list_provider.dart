@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:folk_robe/models/costume.dart';
 import 'package:folk_robe/service/database_helper.dart';
@@ -8,14 +9,27 @@ final costumesProvider = StateNotifierProvider<CostumesListProvider, List<Costum
 });
 
 final databaseHelperProvider = Provider<DatabaseHelper>((ref) {
-  return DatabaseHelper();
+  final databaseHelper = DatabaseHelper();
+
+  ref.onDispose(() async {
+    await databaseHelper.close();
+  });
+  
+  return databaseHelper;
 });
 
 class CostumesListProvider extends StateNotifier<List<Costume>> {
   final DatabaseHelper _database;
+  final textController = TextEditingController();
 
   CostumesListProvider(this._database) : super([]) {
     _initData();
+  }
+
+ @override
+  void dispose() {
+    super.dispose();
+    textController.dispose();
   }
 
   Future<void> _initData() async {

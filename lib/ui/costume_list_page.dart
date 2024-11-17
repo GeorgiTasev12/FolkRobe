@@ -23,7 +23,7 @@ class _CostumeListPageState extends ConsumerWidget {
 
     return Scaffold(
       floatingActionButton: ShowAddCostumeButton(
-        addCostume: addCostume,
+        costumes: addCostume,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       appBar: AppBar(
@@ -50,17 +50,15 @@ class _CostumeListPageState extends ConsumerWidget {
 }
 
 class ShowAddCostumeButton extends StatelessWidget {
-  final CostumesListProvider addCostume;
+  final CostumesListProvider costumes;
 
   const ShowAddCostumeButton({
     super.key,
-    required this.addCostume,
+    required this.costumes,
   });
 
   @override
   Widget build(BuildContext context) {
-    final controller = TextEditingController();
-
     return FloatingActionButton(
       backgroundColor: Colors.white,
       onPressed: () {
@@ -69,12 +67,12 @@ class ShowAddCostumeButton extends StatelessWidget {
           builder: (context) => AlertDialog(
             title: const Text('Моля, въведете реквизит.'),
             content: TextField(
-              controller: controller,
+              controller: costumes.textController,
             ),
             actions: _alertDialogTextButtons(
               context,
-              controller,
-              addCostume,
+              costumes.textController,
+              costumes,
             ),
           ),
         );
