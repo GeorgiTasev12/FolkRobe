@@ -1,42 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:folk_robe/constants.dart';
+import 'package:folk_robe/models/costume.dart';
 import 'package:folk_robe/providers/costumes_list_provider.dart';
 import 'package:folk_robe/ui/widgets/costume_item.dart';
-import 'package:provider/provider.dart';
 
-class CostumeListPage extends StatefulWidget {
+class CostumeListPage extends StatelessWidget {
   const CostumeListPage({super.key});
 
   @override
-  State<CostumeListPage> createState() => _CostumeListPageState();
+  Widget build(BuildContext context) => ProviderScope(
+        child: _CostumeListPageState(),
+      );
 }
 
-class _CostumeListPageState extends State<CostumeListPage> {
-  TextEditingController controller = TextEditingController();
-
-  CostumesListProvider? costumesListProvider;
+class _CostumeListPageState extends ConsumerWidget {
+  final TextEditingController controller = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      costumesListProvider =
-          Provider.of<CostumesListProvider>(context, listen: false);
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    controller.dispose();
-    costumesListProvider?.dispose();
-    costumesListProvider = null;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final costumesListProvider = Provider.of<CostumesListProvider>(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final costumes = ref.watch(costumesProvider);
+    final addCostume = ref.watch(costumesProvider.notifier);
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -49,7 +33,7 @@ class _CostumeListPageState extends State<CostumeListPage> {
               content: TextField(
                 controller: controller,
               ),
-              actions: _alertDialogTextButtons(context, costumesListProvider),
+              actions: _alertDialogTextButtons(context, controller, addCostume),
             ),
           );
         },
@@ -70,42 +54,41 @@ class _CostumeListPageState extends State<CostumeListPage> {
         backgroundColor: Colors.blueGrey,
       ),
       backgroundColor: Colors.blueGrey,
-      body: costumesListProvider.costumesList.isEmpty
+      body: costumes.isEmpty
           ? const Padding(
               padding: EdgeInsets.all(Constants.globalPadding),
               child: Center(
                 child: FloatingButtonWidget(),
               ),
             )
-          : ListViewOfCostumeItems(costumesListProvider: costumesListProvider),
+          : ListViewOfCostumeItems(costumes: costumes),
     );
   }
+}
 
-  List<Widget> _alertDialogTextButtons(
-    BuildContext context,
-    CostumesListProvider costumesListProvider,
-  ) {
-    return [
-      TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text(
-            'Затвори',
-            style: TextStyle(color: Colors.lightBlue),
-          )),
-      TextButton(
-        onPressed: () {
-          setState(() {
-            costumesListProvider.addListItem(controller.text, controller);
-            Navigator.pop(context);
-          });
-        },
+List<Widget> _alertDialogTextButtons(
+  BuildContext context,
+  TextEditingController controller, 
+  CostumesListProvider costumes,
+) {
+  return [
+    TextButton(
+        onPressed: () => Navigator.pop(context),
         child: const Text(
-          'Запази',
+          'Затвори',
           style: TextStyle(color: Colors.lightBlue),
-        ),
+        )),
+    TextButton(
+      onPressed: () {
+        costumes.addCostume(controller.text);
+        Navigator.pop(context);
+      },
+      child: const Text(
+        'Запази',
+        style: TextStyle(color: Colors.lightBlue),
       ),
-    ];
-  }
+    ),
+  ];
 }
 
 class FloatingButtonWidget extends StatelessWidget {
@@ -139,21 +122,21 @@ class FloatingButtonWidget extends StatelessWidget {
 }
 
 class ListViewOfCostumeItems extends StatelessWidget {
+  final List<Costume> costumes;
+
   const ListViewOfCostumeItems({
     super.key,
-    required this.costumesListProvider,
+    required this.costumes,
   });
-
-  final CostumesListProvider costumesListProvider;
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      itemCount: costumesListProvider.costumesList.length,
+      itemCount: costumes.length,
       separatorBuilder: (context, index) => const SizedBox(height: 10),
       itemBuilder: (context, index) {
         return CostumeItem(
-          title: costumesListProvider.costumesList[index].title,
+          title: costumes[index].title,
           onTap: null,
         );
       },
