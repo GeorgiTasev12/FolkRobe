@@ -1,19 +1,23 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:folk_robe/models/costume.dart';
 import 'package:folk_robe/service/database_helper.dart';
 
-class CostumesListProvider extends ChangeNotifier {
-  final _database = DatabaseHelper();
+final costumesProvider = StateNotifierProvider<CostumesListProvider, List<Costume>>((ref) {
+  return CostumesListProvider(ref.read(databaseHelperProvider));
+});
 
-  final List<Costume> _costumesList = [];
-  List<Costume> get costumesList => _costumesList;
+final databaseHelperProvider = Provider<DatabaseHelper>((ref) {
+  return DatabaseHelper();
+});
 
-  Future<void> addListItem(String text, TextEditingController controller) async {
+class CostumesListProvider extends StateNotifier<List<Costume>> {
+  final DatabaseHelper _database;
+
+  CostumesListProvider(this._database) : super([]);
+
+  Future<void> addCostume(String text) async {
     final costume = Costume(title: text);
-
     await _database.insertCostume(costume);
-    _costumesList.add(costume);
-    controller.clear();
-    notifyListeners();
+    state = [...state, costume]; // Update state with new list
   }
 }
