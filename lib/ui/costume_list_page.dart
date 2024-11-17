@@ -5,6 +5,7 @@ import 'package:folk_robe/models/costume.dart';
 import 'package:folk_robe/providers/costumes_list_provider.dart';
 import 'package:folk_robe/ui/widgets/costume_item.dart';
 
+
 class CostumeListPage extends StatelessWidget {
   const CostumeListPage({super.key});
 
@@ -15,32 +16,14 @@ class CostumeListPage extends StatelessWidget {
 }
 
 class _CostumeListPageState extends ConsumerWidget {
-  final TextEditingController controller = TextEditingController();
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final costumes = ref.watch(costumesProvider);
     final addCostume = ref.watch(costumesProvider.notifier);
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white,
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Моля, въведете реквизит.'),
-              content: TextField(
-                controller: controller,
-              ),
-              actions: _alertDialogTextButtons(context, controller, addCostume),
-            ),
-          );
-        },
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Constants.circularRadius),
-        ),
-        child: const Icon(Icons.add),
+      floatingActionButton: ShowAddCostumeButton(
+        addCostume: addCostume,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       appBar: AppBar(
@@ -66,9 +49,47 @@ class _CostumeListPageState extends ConsumerWidget {
   }
 }
 
+class ShowAddCostumeButton extends StatelessWidget {
+  final CostumesListProvider addCostume;
+
+  const ShowAddCostumeButton({
+    super.key,
+    required this.addCostume,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = TextEditingController();
+
+    return FloatingActionButton(
+      backgroundColor: Colors.white,
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Моля, въведете реквизит.'),
+            content: TextField(
+              controller: controller,
+            ),
+            actions: _alertDialogTextButtons(
+              context,
+              controller,
+              addCostume,
+            ),
+          ),
+        );
+      },
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Constants.circularRadius),
+      ),
+      child: const Icon(Icons.add),
+    );
+  }
+}
+
 List<Widget> _alertDialogTextButtons(
   BuildContext context,
-  TextEditingController controller, 
+  TextEditingController controller,
   CostumesListProvider costumes,
 ) {
   return [
