@@ -14,7 +14,7 @@ void main() {
       await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
-              body: CostumeItem(title: title, onTap: onTap),
+              body: CommonCostumeItem(title: title, onTap: onTap),
             ),
           )
       );

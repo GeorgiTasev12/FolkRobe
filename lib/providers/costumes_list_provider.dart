@@ -50,4 +50,13 @@ class CostumesListProvider extends StateNotifier<List<Costume>> {
       if (kDebugMode) print("Error adding costume: $e");
     }
   }
+
+  Future<void> deleteCostume(int id) async {
+    try {
+      await _database.deleteCostume(id);
+      state = state.where((costume) => costume.id != id).toList();
+    } on Exception catch(e) {
+      if (kDebugMode) print("Error deleting costume: $e");
+    }
+  }
 }
