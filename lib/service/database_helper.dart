@@ -35,4 +35,11 @@ class DatabaseHelper {
     final db = await database;
     return await db.query(Constants.tableName);
   }
+
+  Future<void> close() async {
+    if (_database != null) {
+      await _database?.close();
+      _database = null;
+    }
+  }
 }
