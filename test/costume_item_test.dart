@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:folk_robe/ui/widgets/costume_item.dart';
+import 'package:folk_robe/views/costume_list_page/widgets/costume_item.dart';
 
 void main() {
   testWidgets(
@@ -14,7 +14,7 @@ void main() {
       await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
-              body: CommonCostumeItem(title: title, onTap: onTap),
+              body: CostumeItem(title: title, onTap: onTap),
             ),
           )
       );

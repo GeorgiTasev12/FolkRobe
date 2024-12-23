@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:folk_robe/constants.dart';
+import 'package:folk_robe/locator.dart';
 import 'package:folk_robe/models/costume.dart';
-import 'package:folk_robe/ui/widgets/costume_item.dart';
+import 'package:folk_robe/service/navigation_service.dart';
+import 'package:folk_robe/views/core_page.dart';
+import 'package:folk_robe/views/costumes_type_page/widgets/costume_type_item.dart';
+import 'package:folk_robe/views/gender_page/page.dart';
 
-class CostumesPage extends StatelessWidget {
-  const CostumesPage({super.key});
+class CostumesTypePage extends StatelessWidget {
+  const CostumesTypePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,26 +22,12 @@ class CostumesPage extends StatelessWidget {
       Costume(title: 'Родопска'),
     ];
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back),
-          color: Colors.white,
-        ),
-        backgroundColor: Colors.blueGrey,
-        title: const Text(
-          'Изберете флоклорната област за \nмъжките носии',
-          softWrap: true,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: Constants.fontSizeTitleAppBar,
-            color: Colors.white,
-          ),
-        ),
-      ),
-      backgroundColor: Colors.blueGrey,
-      body: ListViewOfCostumes(costumes: costumes),
+    return CorePage(
+      hasAppBar: true,
+      hasBackButton: true,
+      hasAppBarTitle: true,
+      appBarTitle: 'Изберете флоклорната област за мъжките носии',
+      child: ListViewOfCostumes(costumes: costumes),
     );
   }
 }
@@ -53,10 +43,10 @@ class ListViewOfCostumes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      itemBuilder: (context, index) => CommonCostumeItem(
+      itemBuilder: (context, index) => CostumeTypeItem(
         title: costumes[index].title,
-        onTap: () => Navigator.of(context).pushNamed(
-          Constants.genderPageRouteString,
+        onTap: () => locator<NavigationService>().push(
+            MaterialPageRoute(builder: (context) => GenderPage())
         ),
       ),
       separatorBuilder: (context, index) =>

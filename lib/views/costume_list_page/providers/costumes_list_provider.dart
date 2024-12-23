@@ -19,7 +19,7 @@ final databaseHelperProvider = Provider<DatabaseHelper>((ref) {
 });
 
 class CostumesListProvider extends StateNotifier<List<Costume>> {
-  final DatabaseHelper _database;
+  final DatabaseHelper? _database;
   final textController = TextEditingController();
 
   CostumesListProvider(this._database) : super([]) {
@@ -34,8 +34,8 @@ class CostumesListProvider extends StateNotifier<List<Costume>> {
 
   Future<void> _initData() async {
     try {
-      final costumes = await _database.queryData();
-      state = costumes.map((e) => Costume.fromMap(e)).toList();
+      final costumes = await _database?.queryData();
+      state = costumes?.map((e) => Costume.fromMap(e)).toList() ?? [];
     } on Exception catch(e) {
       if (kDebugMode) print("Error loading costumes: $e");
     }
@@ -44,7 +44,7 @@ class CostumesListProvider extends StateNotifier<List<Costume>> {
   Future<void> addCostume(String text) async {
     try {
       final costume = Costume(title: text);
-      await _database.insertCostume(costume);
+      await _database?.insertCostume(costume);
       state = List.from(state)..add(costume); // Update state with new list
     } on Exception catch (e) {
       if (kDebugMode) print("Error adding costume: $e");
@@ -53,7 +53,7 @@ class CostumesListProvider extends StateNotifier<List<Costume>> {
 
   Future<void> deleteCostume(int id) async {
     try {
-      await _database.deleteCostume(id);
+      await _database?.deleteCostume(id);
       state = state.where((costume) => costume.id != id).toList();
     } on Exception catch(e) {
       if (kDebugMode) print("Error deleting costume: $e");
