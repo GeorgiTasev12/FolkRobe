@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:folk_robe/constants.dart';
 
-class CommonCostumeItem extends StatelessWidget {
+class CostumeItem extends StatelessWidget {
   final String title;
   final void Function()? onTap;
   final void Function()? onDelete;
 
-  const CommonCostumeItem({
+  const CostumeItem({
     super.key,
     required this.title,
     required this.onTap,
@@ -16,11 +16,7 @@ class CommonCostumeItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-        left: 10,
-        right: 10,
-        top: 10,
-      ),
+      padding: const EdgeInsets.only(top: 10),
       child: GestureDetector(
         onTap: onTap,
         child: Container(

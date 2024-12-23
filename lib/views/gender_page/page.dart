@@ -1,34 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:folk_robe/constants.dart';
-import 'package:folk_robe/ui/widgets/gender_card.dart';
+import 'package:folk_robe/locator.dart';
+import 'package:folk_robe/service/navigation_service.dart';
+import 'package:folk_robe/views/core_page.dart';
+import 'package:folk_robe/views/costume_list_page/page.dart';
+import 'package:folk_robe/views/gender_page/widgets/gender_card.dart';
 
 class GenderPage extends StatelessWidget {
   const GenderPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Изберете тип носии',
-          softWrap: true,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: Constants.fontSizeTitleAppBar,
-            color: Colors.white,
-          ),
-        ),
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: Colors.blueGrey,
-      ),
-      backgroundColor: Colors.blueGrey,
-      body: const Padding(
+    return CorePage(
+      hasAppBar: true,
+      hasAppBarTitle: true,
+      hasBackButton: true,
+      appBarTitle: "Изберете тип носии",
+      child: const Padding(
         padding: EdgeInsets.all(Constants.globalPadding),
         child: Center(
           child: Row(
@@ -57,8 +45,8 @@ class RowOfGenderCards extends StatelessWidget {
         GenderCard(
           title: 'Мъжки',
           icon: Icons.male_rounded,
-          onTap: () => Navigator.of(context)
-              .pushNamed(Constants.costumesListPageRouteString),
+          onTap: () => locator<NavigationService>()
+              .push(MaterialPageRoute(builder: (context) => CostumeListPage())),
         ),
         const GenderCard(
           title: 'Женски',

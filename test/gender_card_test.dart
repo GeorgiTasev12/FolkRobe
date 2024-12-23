@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:folk_robe/ui/widgets/gender_card.dart';
+import 'package:folk_robe/views/gender_page/widgets/gender_card.dart';
 
 void main() {
   testWidgets(
