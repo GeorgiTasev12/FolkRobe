@@ -19,6 +19,7 @@ class ShowAddCostumeButton extends StatelessWidget {
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('Моля, въведете реквизит.'),
+            backgroundColor: Colors.white,
             content: TextField(
               controller: costumes?.textController,
             ),
