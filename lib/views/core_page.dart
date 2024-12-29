@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:folk_robe/constants.dart';
+import 'package:folk_robe/locator.dart';
+import 'package:folk_robe/service/navigation_service.dart';
 
 class CorePage extends StatelessWidget {
   final Widget child;
@@ -33,19 +35,21 @@ class CorePage extends StatelessWidget {
                 automaticallyImplyLeading: false,
                 leading: hasBackButton ?? false
                   ? IconButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => locator<NavigationService>().pop(),
                     icon: const Icon(Icons.arrow_back),
                     color: Colors.white,
                   ) : null,
                 backgroundColor: Colors.blueGrey,
                 title: hasAppBarTitle ?? false
-                  ? Text(
-                    appBarTitle ?? "",
-                    softWrap: true,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: Constants.fontSizeTitleAppBar,
-                      color: Colors.white,
+                  ? FittedBox(
+                    child: Text(
+                      appBarTitle ?? "",
+                      softWrap: true,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: Constants.fontSizeTitleAppBar,
+                        color: Colors.white,
+                      ),
                     ),
                   ) : null,
               ) : null,
