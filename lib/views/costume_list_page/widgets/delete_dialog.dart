@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:folk_robe/locator.dart';
 import 'package:folk_robe/models/costume.dart';
+import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/views/costume_list_page/providers/costumes_list_provider.dart';
 
 class DeleteDialog extends StatelessWidget {
@@ -23,7 +25,7 @@ class DeleteDialog extends StatelessWidget {
       content: Text("Вие сте на път да премахнете определен елемент на костюма. След това няма да можете да го върнете. Желаете ли да продължите с операцията ?"),
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => locator<NavigationService>().pop(),
           child: Text(
               "Не",
               style: TextStyle(color: Colors.lightBlue)
@@ -32,7 +34,7 @@ class DeleteDialog extends StatelessWidget {
         TextButton(
           onPressed: () {
             widgetRef.watch(costumesProvider.notifier).deleteCostume(costumes[index].id ?? index);
-            Navigator.pop(context);
+            locator<NavigationService>().pop();
           },
           child: Text(
               "Да",

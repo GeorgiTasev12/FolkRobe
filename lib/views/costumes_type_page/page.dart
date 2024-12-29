@@ -26,7 +26,7 @@ class CostumesTypePage extends StatelessWidget {
       hasAppBar: true,
       hasBackButton: true,
       hasAppBarTitle: true,
-      appBarTitle: 'Изберете флоклорната област за мъжките носии',
+      appBarTitle: 'Изберете флоклорната област',
       child: ListViewOfCostumes(costumes: costumes),
     );
   }

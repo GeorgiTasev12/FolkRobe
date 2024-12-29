@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:folk_robe/constants.dart';
+import 'package:folk_robe/locator.dart';
+import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/views/costume_list_page/providers/costumes_list_provider.dart';
 
 class ShowAddCostumeButton extends StatelessWidget {
@@ -25,7 +27,7 @@ class ShowAddCostumeButton extends StatelessWidget {
             ),
             actions: [
               TextButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => locator<NavigationService>().pop(),
                   child: const Text(
                     'Затвори',
                     style: TextStyle(color: Colors.lightBlue),
@@ -33,7 +35,7 @@ class ShowAddCostumeButton extends StatelessWidget {
               TextButton(
                 onPressed: () {
                   costumes?.addCostume(costumes?.textController.text ?? "");
-                  Navigator.pop(context);
+                  locator<NavigationService>().pop();
                 },
                 child: const Text(
                   'Запази',
