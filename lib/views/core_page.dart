@@ -42,10 +42,10 @@ class CorePage extends StatelessWidget {
                 backgroundColor: Colors.blueGrey,
                 title: hasAppBarTitle ?? false
                   ? FittedBox(
+                    fit: BoxFit.fitHeight,
                     child: Text(
                       appBarTitle ?? "",
-                      softWrap: true,
-                      textAlign: TextAlign.center,
+                      textAlign: TextAlign.start,
                       style: const TextStyle(
                         fontSize: Constants.fontSizeTitleAppBar,
                         color: Colors.white,
