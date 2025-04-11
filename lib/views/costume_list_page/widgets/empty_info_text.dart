@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:folk_robe/constants.dart';
 
-class AddInfoText extends StatelessWidget {
-  const AddInfoText({
+class EmptyInfoText extends StatelessWidget {
+  const EmptyInfoText({
     super.key,
   });
 
