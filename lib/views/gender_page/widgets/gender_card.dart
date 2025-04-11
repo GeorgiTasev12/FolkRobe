@@ -22,7 +22,7 @@ class GenderCard extends StatelessWidget {
         height: 180,
         child: Card(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Constants.circularRadius),
+            borderRadius: BorderRadius.circular(25),
           ),
           color: Colors.white,
           child: Column(
@@ -33,11 +33,11 @@ class GenderCard extends StatelessWidget {
                 icon,
                 size: 70,
               ),
-              const SizedBox(height: Constants.sizedBoxHeight),
+              const SizedBox(height: 5),
               Text(
                 title,
                 style: const TextStyle(
-                  fontSize: Constants.titleFontSize,
+                  fontSize: 21,
                 ),
               ),
             ],

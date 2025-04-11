@@ -16,7 +16,7 @@ class GenderPage extends StatelessWidget {
     return CorePage(
       appBarTitle: "Изберете тип носии",
       child: const Padding(
-        padding: EdgeInsets.all(Constants.globalPadding),
+        padding: EdgeInsets.all(8),
         child: Center(
           child: Row(
             children: [

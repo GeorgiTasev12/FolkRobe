@@ -40,8 +40,7 @@ class ListViewOfCostumes extends StatelessWidget {
             MaterialPageRoute(builder: (context) => GenderPage())
         ),
       ),
-      separatorBuilder: (context, index) =>
-          const SizedBox(height: Constants.sizedBoxHeight),
+      separatorBuilder: (context, index) => const SizedBox(height: 5),
       itemCount: costumes.length,
     );
   }
