@@ -44,7 +44,7 @@ class CorePage extends StatelessWidget {
                       appBarTitle ?? "",
                       textAlign: TextAlign.start,
                       style: const TextStyle(
-                        fontSize: Constants.fontSizeTitleAppBar,
+                        fontSize: 18,
                         color: Colors.white,
                       ),
                     ),

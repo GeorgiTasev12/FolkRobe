@@ -23,7 +23,7 @@ class CostumeItem extends StatelessWidget {
           height: 60,
           padding: const EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(Constants.circularRadius),
+            borderRadius: BorderRadius.circular(25),
             color: Colors.white,
           ),
           child: Row(

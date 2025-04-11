@@ -59,7 +59,7 @@ class ShowAddCostumeButton extends StatelessWidget {
             );
           },
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Constants.circularRadius),
+            borderRadius: BorderRadius.circular(25),
           ),
           child: const Icon(Icons.add),
         );

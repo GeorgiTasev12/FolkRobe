@@ -21,8 +21,7 @@ class MainOptionCard extends StatelessWidget {
         width: 190,
         height: 360,
         child: Card(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Constants.circularRadius)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
           color: Colors.grey.shade50,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -41,7 +40,7 @@ class MainOptionCard extends StatelessWidget {
                 title,
                 style: const TextStyle(
                   color: Colors.black,
-                  fontSize: Constants.titleFontSize,
+                  fontSize: 21,
                 ),
               ),
             ],

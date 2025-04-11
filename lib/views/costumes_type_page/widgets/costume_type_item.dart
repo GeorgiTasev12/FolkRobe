@@ -20,7 +20,7 @@ class CostumeTypeItem extends StatelessWidget {
         child: Container(
           height: 50,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(Constants.circularRadius),
+            borderRadius: BorderRadius.circular(25),
             color: Colors.white,
           ),
           child: Center(
