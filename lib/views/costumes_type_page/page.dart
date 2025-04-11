@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:folk_robe/constants.dart';
 import 'package:folk_robe/locator.dart';
-import 'package:folk_robe/models/costume.dart';
+import 'package:folk_robe/dao/costume.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/views/core_page.dart';
 import 'package:folk_robe/views/costumes_type_page/widgets/costume_type_item.dart';
@@ -14,18 +14,9 @@ class CostumesTypePage extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Costume> costumes = [
       Costume(title: 'Шопски'),
-      Costume(title: 'Тракийски'),
-      Costume(title: 'Северняшки'),
-      Costume(title: 'Пирински'),
-      Costume(title: 'Странджански'),
-      Costume(title: 'Добруджански'),
-      Costume(title: 'Родопска'),
     ];
 
     return CorePage(
-      hasAppBar: true,
-      hasBackButton: true,
-      hasAppBarTitle: true,
       appBarTitle: 'Изберете флоклорната област',
       child: ListViewOfCostumes(costumes: costumes),
     );

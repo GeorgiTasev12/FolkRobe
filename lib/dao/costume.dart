@@ -20,4 +20,14 @@ class Costume {
       'title': title,
     };
   }
+
+  Costume copyWith({
+    int? id,
+    String? title,
+  }) {
+    return Costume(
+      id: id ?? this.id,
+      title: title ?? this.title,
+    );
+  }
 }
