@@ -1,5 +1,5 @@
 import 'package:folk_robe/constants.dart';
-import 'package:folk_robe/models/costume.dart';
+import 'package:folk_robe/dao/costume.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -34,6 +34,11 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> queryData() async {
     final db = await database;
     return await db.query(Constants.tableName);
+  }
+
+  Future<List<Costume>> getAllCostumes() async {
+    final List<Map<String, dynamic>> queries = await queryData();
+    return queries.map((e) => Costume.fromMap(e)).toList();
   }
 
   Future<int> deleteCostume(int id) async {

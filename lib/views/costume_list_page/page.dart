@@ -1,36 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:folk_robe/views/core_page.dart';
-import 'package:folk_robe/views/costume_list_page/providers/costumes_list_provider.dart';
-import 'package:folk_robe/views/costume_list_page/widgets/add_info_text.dart';
+import 'package:folk_robe/views/costume_list_page/bloc/costume_bloc.dart';
+import 'package:folk_robe/views/costume_list_page/widgets/empty_info_text.dart';
 import 'package:folk_robe/views/costume_list_page/widgets/add_dialog.dart';
 import 'package:folk_robe/views/costume_list_page/widgets/costume_listview.dart';
 
-class CostumeListPage extends StatelessWidget {
+
+class CostumeListPage extends HookWidget {
   const CostumeListPage({super.key});
 
   @override
-  Widget build(BuildContext context) => ProviderScope(
-        child: _CostumeListPageState(),
-      );
-}
+  Widget build(BuildContext context) {
+    useEffect(() {
+      context.read<CostumeListBloc>().add(InitDataEvent());
+      return null;
+    }, const []);
 
-class _CostumeListPageState extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final costumes = ref.watch(costumesProvider);
-    final notifier = ref.watch(costumesProvider.notifier);
-
-    return CorePage(
-      hasAppBar: true,
-      hasBackButton: true,
-      hasFAB: true,
-      floatingActionButton: ShowAddCostumeButton(
-        costumes: notifier,
-      ),
-      child: costumes.isEmpty
-          ? AddInfoText()
-          : CostumeListView(costumes: costumes),
+    return BlocBuilder<CostumeListBloc, CostumeListState>(
+      buildWhen: (previous, current) => previous.costumeList != current.costumeList,
+      builder: (context, state) {
+        return CorePage(
+          floatingActionButton: ShowAddCostumeButton(),
+          child: state.costumeList?.isEmpty ?? false
+              ? EmptyInfoText()
+              : CostumeListView(),
+        );
+      },
     );
   }
 }

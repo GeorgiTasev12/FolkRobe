@@ -6,7 +6,6 @@ import 'package:folk_robe/service/navigation_service.dart';
 class CorePage extends StatelessWidget {
   final Widget child;
   final bool? hasAppBar;
-  final bool? hasBackButton;
   final String? appBarTitle;
   final bool? hasAppBarTitle;
   final bool? hasFAB;
@@ -16,9 +15,8 @@ class CorePage extends StatelessWidget {
     super.key,
     required this.child,
     this.appBarTitle,
-    this.hasAppBar = false,
-    this.hasBackButton = false,
-    this.hasAppBarTitle = false,
+    this.hasAppBar = true,
+    this.hasAppBarTitle = true,
     this.hasFAB = false,
     this.floatingActionButton,
   });
@@ -33,12 +31,11 @@ class CorePage extends StatelessWidget {
           hasAppBar ?? false
               ? AppBar(
                 automaticallyImplyLeading: false,
-                leading: hasBackButton ?? false
-                  ? IconButton(
+                leading: IconButton(
                     onPressed: () => locator<NavigationService>().pop(),
                     icon: const Icon(Icons.arrow_back),
                     color: Colors.white,
-                  ) : null,
+                  ),
                 backgroundColor: Colors.blueGrey,
                 title: hasAppBarTitle ?? false
                   ? FittedBox(

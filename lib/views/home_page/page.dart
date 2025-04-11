@@ -5,17 +5,13 @@ import 'package:folk_robe/views/core_page.dart';
 import 'package:folk_robe/views/costumes_type_page/page.dart';
 import 'package:folk_robe/views/home_page/widgets/main_options_card.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
   Widget build(BuildContext context) {
     return CorePage(
+      hasAppBar: false,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
