@@ -22,6 +22,7 @@ class CostumeListPage extends HookWidget {
       buildWhen: (previous, current) => previous.costumeList != current.costumeList,
       builder: (context, state) {
         return CorePage(
+          hasFAB: true,
           floatingActionButton: ShowAddCostumeButton(),
           child: state.costumeList?.isEmpty ?? false
               ? EmptyInfoText()

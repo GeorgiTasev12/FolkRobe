@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 
 class CostumeTypeItem extends StatelessWidget {
   final String title;
@@ -20,14 +21,15 @@ class CostumeTypeItem extends StatelessWidget {
           height: 50,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            color: Colors.white,
+            color: context.appTheme.colors.surfaceContainer,
           ),
           child: Center(
             child: Text(
               title,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
+              style: context.appTheme.textStyles.titleMedium.copyWith(
                 fontSize: 17,
+                fontWeight: FontWeight.w300,
+                color: context.appTheme.colors.onSurfaceContainer,
               ),
             ),
           ),

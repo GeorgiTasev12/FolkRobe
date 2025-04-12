@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 
 class CostumeItem extends StatelessWidget {
   final String title;
@@ -23,7 +24,7 @@ class CostumeItem extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            color: Colors.white,
+            color: context.appTheme.colors.surfaceContainer,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -38,15 +39,15 @@ class CostumeItem extends StatelessWidget {
               Container(
                 width: 40,
                 height: 40,
-                decoration: const BoxDecoration(
-                  color: Colors.red,
+                decoration: BoxDecoration(
+                  color: context.appTheme.colors.error,
                   shape: BoxShape.circle
                 ),
                 child: IconButton(
                   onPressed: onDelete,
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.delete,
-                    color: Colors.white,
+                    color: context.appTheme.colors.surfaceContainer,
                   ),
                 ),
               ),

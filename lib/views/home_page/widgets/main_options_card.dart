@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 
 class MainOptionCard extends StatelessWidget {
   final String title;
@@ -21,7 +22,7 @@ class MainOptionCard extends StatelessWidget {
         height: 360,
         child: Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-          color: Colors.grey.shade50,
+          color: context.appTheme.colors.surfaceContainer,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -30,16 +31,15 @@ class MainOptionCard extends StatelessWidget {
                 errorBuilder: (context, object, stacktrace) {
                   return Icon(
                     Icons.error,
-                    color: Colors.redAccent,
+                    color: context.appTheme.colors.error,
                   );
                 },
               ),
               const SizedBox(height: 20),
               Text(
                 title,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 21,
+                style: context.appTheme.textStyles.titleMedium.copyWith(
+                  color: context.appTheme.colors.onSurfaceContainer,
                 ),
               ),
             ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 
 class GenderCard extends StatelessWidget {
   final String title;
@@ -23,7 +24,7 @@ class GenderCard extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25),
           ),
-          color: Colors.white,
+          color: context.appTheme.colors.surfaceContainer,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -35,9 +36,9 @@ class GenderCard extends StatelessWidget {
               const SizedBox(height: 5),
               Text(
                 title,
-                style: const TextStyle(
-                  fontSize: 21,
-                ),
+                style: context.appTheme.textStyles.titleMedium.copyWith(
+                  color: context.appTheme.colors.onSurfaceContainer
+                )
               ),
             ],
           ),
