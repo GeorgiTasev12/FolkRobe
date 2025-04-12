@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:folk_robe/constants.dart';
 
 class MainOptionCard extends StatelessWidget {
   final String title;

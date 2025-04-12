@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:folk_robe/constants.dart';
 
 class CostumeTypeItem extends StatelessWidget {
   final String title;

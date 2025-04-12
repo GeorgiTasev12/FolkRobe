@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:folk_robe/constants.dart';
 import 'package:folk_robe/locator.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/views/costume_list_page/bloc/costume_bloc.dart';
@@ -16,8 +15,9 @@ class ShowAddCostumeButton extends StatelessWidget {
 
     return BlocBuilder<CostumeListBloc, CostumeListState>(
       bloc: bloc,
-      buildWhen: (previous, current) => previous.textController != current.textController
-        || previous.costumeList != current.costumeList,
+      buildWhen: (previous, current) =>
+          previous.textController != current.textController ||
+          previous.costumeList != current.costumeList,
       builder: (context, state) {
         return FloatingActionButton(
           backgroundColor: Colors.white,
@@ -44,7 +44,8 @@ class ShowAddCostumeButton extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        bloc.add(AddCostumeEvent(title: state.textController?.text ?? ""));
+                        bloc.add(AddCostumeEvent(
+                            title: state.textController?.text ?? ""));
                         bloc.add(InitDataEvent());
                         locator<NavigationService>().pop();
                       },

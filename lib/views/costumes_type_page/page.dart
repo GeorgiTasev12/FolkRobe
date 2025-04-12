@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:folk_robe/constants.dart';
 import 'package:folk_robe/locator.dart';
 import 'package:folk_robe/dao/costume.dart';
 import 'package:folk_robe/service/navigation_service.dart';
