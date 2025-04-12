@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:folk_robe/constants.dart';
+import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 
 class EmptyInfoText extends StatelessWidget {
   const EmptyInfoText({
@@ -8,7 +8,7 @@ class EmptyInfoText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
+    return Padding(
       padding: EdgeInsets.all(8),
       child: Center(
         child: Column(
@@ -18,15 +18,14 @@ class EmptyInfoText extends StatelessWidget {
               'Имате празен инвентар от риквизити, моля добавте като натискате:',
               softWrap: true,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white54,
-                fontSize: 18,
+              style: context.appTheme.textStyles.bodyLarge.copyWith(
+                color: context.appTheme.colors.primary,
               ),
             ),
             SizedBox(height: 15),
             Icon(
               Icons.add,
-              color: Colors.white54,
+              color: context.appTheme.colors.primary,
               size: 32,
             ),
           ],

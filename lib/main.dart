@@ -4,6 +4,8 @@ import 'package:folk_robe/service/database_helper.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/views/home_page/page.dart';
 
+import 'theme/app_theme.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DatabaseHelper().database;
@@ -19,10 +21,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      themeMode: ThemeMode.system,
+      theme: AppTheme.light(),
+      darkTheme: AppTheme.dark(),
       navigatorKey: NavigationService.navigatorKey,
       home: const HomePage(),
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:folk_robe/locator.dart';
 import 'package:folk_robe/service/navigation_service.dart';
+import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 import 'package:folk_robe/views/costume_list_page/bloc/costume_bloc.dart';
 
 class DeleteDialog extends StatelessWidget {
@@ -21,27 +22,37 @@ class DeleteDialog extends StatelessWidget {
       buildWhen: (previous, current) => previous.id != current.id,
       builder: (context, state) {
         return AlertDialog(
-          backgroundColor: Colors.white,
+          backgroundColor: context.appTheme.colors.surfaceContainer,
           title: Text("Внимание"),
           content: Text(
-              "Вие сте на път да премахнете определен елемент на костюма. След това няма да можете да го върнете. Желаете ли да продължите с операцията ?"),
+            "Вие сте на път да премахнете определен елемент на костюма. След това няма да можете да го върнете. Желаете ли да продължите с операцията ?",
+            style: context.appTheme.textStyles.bodyLarge
+                .copyWith(color: context.appTheme.colors.onSurfaceContainer),
+          ),
           actions: [
             TextButton(
               onPressed: () => locator<NavigationService>().pop(),
               child: Text(
-                  "Не",
-                  style: TextStyle(color: Colors.lightBlue)
+                "Не",
+                style: context.appTheme.textStyles.labelMedium.copyWith(
+                  color: context.appTheme.colors.secondary,
+                ),
               ),
             ),
-            TextButton(
+            FilledButton(
               onPressed: () {
                 bloc.add(RemoveCostumeEvent(id: index));
                 bloc.add(InitDataEvent());
                 locator<NavigationService>().pop();
               },
+              style: FilledButton.styleFrom(
+                backgroundColor: context.appTheme.colors.secondary,
+              ),
               child: Text(
-                  "Да",
-                  style: TextStyle(color: Colors.lightBlue)
+                "Да",
+                style: context.appTheme.textStyles.labelMedium.copyWith(
+                  color: context.appTheme.colors.surfaceContainer,
+                ),
               ),
             ),
           ],

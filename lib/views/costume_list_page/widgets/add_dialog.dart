@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:folk_robe/constants.dart';
 import 'package:folk_robe/locator.dart';
 import 'package:folk_robe/service/navigation_service.dart';
+import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 import 'package:folk_robe/views/costume_list_page/bloc/costume_bloc.dart';
 
 class ShowAddCostumeButton extends StatelessWidget {
@@ -16,18 +16,19 @@ class ShowAddCostumeButton extends StatelessWidget {
 
     return BlocBuilder<CostumeListBloc, CostumeListState>(
       bloc: bloc,
-      buildWhen: (previous, current) => previous.textController != current.textController
-        || previous.costumeList != current.costumeList,
+      buildWhen: (previous, current) =>
+          previous.textController != current.textController ||
+          previous.costumeList != current.costumeList,
       builder: (context, state) {
         return FloatingActionButton(
-          backgroundColor: Colors.white,
+          backgroundColor: context.appTheme.colors.surfaceContainer,
           onPressed: () {
             showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
                   title: const Text('Моля, въведете реквизит.'),
-                  backgroundColor: Colors.white,
+                  backgroundColor: context.appTheme.colors.surfaceContainer,
                   content: TextField(
                     controller: state.textController,
                   ),
@@ -37,20 +38,26 @@ class ShowAddCostumeButton extends StatelessWidget {
                         state.textController?.clear();
                         locator<NavigationService>().pop();
                       },
-                      child: const Text(
+                      child: Text(
                         'Затвори',
-                        style: TextStyle(color: Colors.lightBlue),
+                        style:
+                            TextStyle(color: context.appTheme.colors.secondary),
                       ),
                     ),
-                    TextButton(
+                    FilledButton(
                       onPressed: () {
-                        bloc.add(AddCostumeEvent(title: state.textController?.text ?? ""));
+                        bloc.add(AddCostumeEvent(
+                            title: state.textController?.text ?? ""));
                         bloc.add(InitDataEvent());
                         locator<NavigationService>().pop();
                       },
-                      child: const Text(
+                      style: FilledButton.styleFrom(
+                        backgroundColor: context.appTheme.colors.secondary,
+                      ),
+                      child: Text(
                         'Запази', // Save button
-                        style: TextStyle(color: Colors.lightBlue),
+                        style: TextStyle(
+                            color: context.appTheme.colors.surfaceContainer),
                       ),
                     ),
                   ],
