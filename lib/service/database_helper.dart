@@ -41,6 +41,17 @@ class DatabaseHelper {
     return queries.map((e) => Costume.fromMap(e)).toList();
   }
 
+  Future<int> updateCostume(Costume costume) async {
+    final db = await database;
+
+    return await db.update(
+      Constants.tableName,
+      costume.toMap(),
+      where: 'id = ?',
+      whereArgs: [costume.id],
+    );
+  }
+
   Future<int> deleteCostume(int id) async {
     final db = await database;
 

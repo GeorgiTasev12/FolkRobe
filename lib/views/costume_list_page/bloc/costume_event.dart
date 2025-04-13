@@ -24,6 +24,26 @@ final class AddCostumeEvent extends CostumeListEvent {
   }
 }
 
+class UpdateCostumeEvent extends CostumeListEvent {
+  final String? title;
+  final int? id;
+
+  UpdateCostumeEvent({
+    this.title,
+    this.id,
+  });
+
+  UpdateCostumeEvent copyWith({
+    String? title,
+    int? id,
+  }) {
+    return UpdateCostumeEvent(
+      title: title ?? this.title,
+      id: id ?? this.id,
+    );
+  }
+}
+
 final class RemoveCostumeEvent extends CostumeListEvent {
   final int? id;
 

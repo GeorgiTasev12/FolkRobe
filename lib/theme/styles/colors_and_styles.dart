@@ -5,6 +5,7 @@ class AppColors {
   final Color? background;
   final Color? surfaceContainer;
   final Color? primary;
+  final Color? warning;
   final Color? error;
   final Color? onSurfaceContainer;
   final Color? secondary;
@@ -13,6 +14,7 @@ class AppColors {
     this.background,
     this.surfaceContainer,
     this.primary,
+    this.warning,
     this.error,
     this.onSurfaceContainer,
     this.secondary,
@@ -23,6 +25,7 @@ class AppColors {
       background: Color.lerp(a.background, b.background, t),
       primary: Color.lerp(a.primary, b.primary, t),
       surfaceContainer: Color.lerp(a.surfaceContainer, b.surfaceContainer, t),
+      warning: Color.lerp(a.warning, b.warning, t),
       error: Color.lerp(a.error, b.error, t),
       onSurfaceContainer:
           Color.lerp(a.onSurfaceContainer, b.onSurfaceContainer, t),

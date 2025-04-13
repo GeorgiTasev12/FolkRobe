@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,10 +11,11 @@ part 'costume_state.dart';
 
 class CostumeListBloc extends Bloc<CostumeListEvent, CostumeListState> {
   CostumeListBloc() : super(CostumeListState(
-    textController: TextEditingController(),
-  )) {
+          textController: TextEditingController(),
+        )) {
     on<InitDataEvent>(_onInitData);
     on<AddCostumeEvent>(_onAddCostume);
+    on<UpdateCostumeEvent>(_onUpdateCostume);
     on<RemoveCostumeEvent>(_onRemoveCostume);
   }
 
@@ -25,9 +28,7 @@ class CostumeListBloc extends Bloc<CostumeListEvent, CostumeListState> {
   Future<void> _onInitData(InitDataEvent event, Emitter<CostumeListState> emit) async {
     final costumes = await DatabaseHelper().queryData();
 
-    emit(state.copyWith(
-      costumeList: costumes.map((e) => Costume.fromMap(e)).toList()
-    ));
+    emit(state.copyWith(costumeList: costumes.map((e) => Costume.fromMap(e)).toList()));
   }
 
   Future<void> _onAddCostume(AddCostumeEvent event, Emitter<CostumeListState> emit) async {
@@ -49,6 +50,18 @@ class CostumeListBloc extends Bloc<CostumeListEvent, CostumeListState> {
     emit(state.copyWith(
       costumeList: updatedList,
       id: event.id,
+    ));
+  }
+
+  FutureOr<void> _onUpdateCostume(UpdateCostumeEvent event, Emitter<CostumeListState> emit) async {
+    final updatedCostume = Costume(id: event.id, title: event.title ?? '');
+    await DatabaseHelper().updateCostume(updatedCostume);
+
+    final updatedList = await DatabaseHelper().getAllCostumes();
+
+    emit(state.copyWith(
+      costumeList: updatedList,
+      costume: updatedCostume,
     ));
   }
 }
