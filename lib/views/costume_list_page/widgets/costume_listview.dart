@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:folk_robe/views/costume_list_page/bloc/costume_bloc.dart';
+import 'package:folk_robe/views/costume_list_page/widgets/update_dialog.dart';
 
 import 'costume_item.dart';
 import 'delete_dialog.dart';
@@ -17,7 +18,7 @@ class CostumeListView extends StatelessWidget {
     return BlocBuilder<CostumeListBloc, CostumeListState>(
       bloc: bloc,
       buildWhen: (previous, current) =>
-      previous.costumeList != current.costumeList,
+          previous.costumeList != current.costumeList,
       builder: (context, state) {
         return ListView.separated(
           itemCount: state.costumeList?.length ?? 0,
@@ -26,15 +27,20 @@ class CostumeListView extends StatelessWidget {
             return CostumeItem(
               title: state.costumeList?[index].title ?? '',
               onTap: null,
-              onDelete: () =>
-                  showDialog(
-                    context: context,
-                    builder: (context) =>
-                        BlocProvider.value(
-                          value: bloc,
-                          child: DeleteDialog(index: state.costumeList?[index].id ?? 0),
-                        ),
-                  ),
+              onUpdate: () => showDialog(
+                context: context,
+                builder: (context) => BlocProvider.value(
+                  value: bloc,
+                  child: UpdateDialog(index: state.costumeList?[index].id ?? 0),
+                ),
+              ),
+              onDelete: () => showDialog(
+                context: context,
+                builder: (context) => BlocProvider.value(
+                  value: bloc,
+                  child: DeleteDialog(index: state.costumeList?[index].id ?? 0),
+                ),
+              ),
             );
           },
         );
