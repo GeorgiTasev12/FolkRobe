@@ -31,6 +31,10 @@ class CostumeListBloc extends Bloc<CostumeListEvent, CostumeListState> {
     emit(state.copyWith(costumeList: costumes.map((e) => Costume.fromMap(e)).toList()));
   }
 
+  bool buildWhen(CostumeListState previous, CostumeListState current) =>
+      previous.costumeList != current.costumeList 
+      || previous.textController != current.textController;
+
   Future<void> _onAddCostume(AddCostumeEvent event, Emitter<CostumeListState> emit) async {
     final costume = Costume(title: event.title);
     final newId = await DatabaseHelper().insertCostume(costume);
