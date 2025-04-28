@@ -2,7 +2,19 @@ part of 'costume_bloc.dart';
 
 abstract class CostumeListEvent {}
 
-final class InitDataEvent extends CostumeListEvent {}
+final class InitDataEvent extends CostumeListEvent {
+  final Options? options;
+
+  InitDataEvent({
+    this.options,
+  });
+
+  InitDataEvent copyWith({
+    Options? options,
+  }) {
+    return InitDataEvent(options: options ?? this.options);
+  }
+}
 
 final class AddCostumeEvent extends CostumeListEvent {
   final Costume? costume;

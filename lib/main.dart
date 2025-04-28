@@ -8,7 +8,7 @@ import 'theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DatabaseHelper().database;
+  await DatabaseHelper.database;
   setupLocator();
 
   runApp(const MyApp());
