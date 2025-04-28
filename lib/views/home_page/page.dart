@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:folk_robe/locator.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/views/core_page.dart';
-import 'package:folk_robe/views/costumes_type_page/page.dart';
+import 'package:folk_robe/views/gender_page/page.dart';
 import 'package:folk_robe/views/home_page/widgets/main_options_card.dart';
 
 class HomePage extends StatelessWidget {
@@ -40,7 +40,7 @@ class RowOfCustomCards extends StatelessWidget {
           title: 'Костюми',
           imagePath: "assets/folklore_dress.png",
           onTap: () => locator<NavigationService>().push(
-              MaterialPageRoute(builder: (context) => CostumesTypePage())),
+              MaterialPageRoute(builder: (context) => GenderPage())),
         ),
         MainOptionCard(
           title: 'Танцьори',
