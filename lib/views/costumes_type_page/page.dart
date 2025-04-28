@@ -14,43 +14,37 @@ class CostumesTypePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CorePage(
-      appBarTitle: 'Изберете флоклорната област',
-      child: ListViewOfCostumes(
-        options: [
-          Options.shopski,
-          Options.trakiski,
-        ],
-      ),
+      appBarTitle: 'Изберете фолклорната област',
+      child: const ListViewOfCostumes(),
     );
   }
 }
 
 class ListViewOfCostumes extends StatelessWidget {
-  final List<Options> options;
-
-  const ListViewOfCostumes({
-    super.key,
-    required this.options,
-  });
+  const ListViewOfCostumes({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final options = Options.values;
+
     return ListView.separated(
-      itemBuilder: (context, index) => CostumeTypeItem(
-        title: options[index].optionName,
-        onTap: () => locator<NavigationService>().push(
-          MaterialPageRoute(
-            builder: (context) => BlocProvider(
-              create: (context) => CostumeListBloc(
-                  selectedOption:
-                      index == 0 ? Options.shopski : Options.trakiski),
-              child: CostumeListPage(),
+      itemCount: options.length,
+      separatorBuilder: (context, index) => const SizedBox(height: 6),
+      itemBuilder: (context, index) {
+        final option = options[index];
+
+        return CostumeTypeItem(
+          title: option.optionName,
+          onTap: () => locator<NavigationService>().push(
+            MaterialPageRoute(
+              builder: (context) => BlocProvider(
+                create: (_) => CostumeListBloc(selectedOption: option),
+                child: const CostumeListPage(),
+              ),
             ),
           ),
-        ),
-      ),
-      separatorBuilder: (context, index) => const SizedBox(height: 5),
-      itemCount: options.length,
+        );
+      },
     );
   }
 }
