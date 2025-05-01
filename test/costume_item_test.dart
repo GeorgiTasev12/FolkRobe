@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:folk_robe/common/common_list_tile/common_list_tile.dart';
+import 'package:folk_robe/common/common_list_tile.dart';
 import 'package:folk_robe/theme/app_theme.dart';
 
 void main() {
