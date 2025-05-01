@@ -23,8 +23,13 @@ class GenderCard extends StatelessWidget {
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25),
+            side: BorderSide(
+              color: context.appTheme.colors.outline,
+              width: 3,
+            ),
           ),
           color: context.appTheme.colors.surfaceContainer,
+          elevation: 5,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -37,8 +42,8 @@ class GenderCard extends StatelessWidget {
               Text(
                 title,
                 style: context.appTheme.textStyles.titleMedium.copyWith(
-                  color: context.appTheme.colors.onSurfaceContainer
-                )
+                  color: context.appTheme.colors.onSurfaceContainer,
+                ),
               ),
             ],
           ),
