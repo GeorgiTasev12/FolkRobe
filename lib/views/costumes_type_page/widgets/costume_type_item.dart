@@ -26,9 +26,9 @@ class CostumeTypeItem extends StatelessWidget {
           child: Center(
             child: Text(
               title,
-              style: context.appTheme.textStyles.titleMedium.copyWith(
+              style: context.appTheme.textStyles.titleLarge.copyWith(
                 fontSize: 17,
-                fontWeight: FontWeight.w300,
+                fontWeight: FontWeight.w400,
                 color: context.appTheme.colors.onSurfaceContainer,
               ),
             ),
