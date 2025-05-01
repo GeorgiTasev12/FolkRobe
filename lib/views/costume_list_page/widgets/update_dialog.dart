@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:folk_robe/common/common_textfield.dart';
 import 'package:folk_robe/locator.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
@@ -19,8 +20,7 @@ class UpdateDialog extends StatelessWidget {
         return AlertDialog(
           title: const Text('Моля, въведете реквизит за промяна.'),
           backgroundColor: context.appTheme.colors.surfaceContainer,
-          content: TextField(
-            controller: state.textController,
+          content: CommonTextfield(
             onChanged: (text) => state.textController?.text = text,
           ),
           actions: [
