@@ -21,8 +21,15 @@ class MainOptionCard extends StatelessWidget {
         width: 190,
         height: 360,
         child: Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+            side: BorderSide(
+              color: context.appTheme.colors.outline,
+              width: 3,
+            ),
+          ),
           color: context.appTheme.colors.surfaceContainer,
+          elevation: 5,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

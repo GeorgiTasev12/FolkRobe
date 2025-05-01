@@ -2,34 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:folk_robe/theme/app_theme.dart';
 
 class AppColors {
-  final Color? background;
-  final Color? surfaceContainer;
-  final Color? primary;
-  final Color? warning;
-  final Color? error;
-  final Color? onSurfaceContainer;
-  final Color? secondary;
+  final Color background;
+  final Color surfaceContainer;
+  final Color outline;
+  final Color primary;
+  final Color warning;
+  final Color error;
+  final Color onSurfaceContainer;
+  final Color secondary;
 
   AppColors({
-    this.background,
-    this.surfaceContainer,
-    this.primary,
-    this.warning,
-    this.error,
-    this.onSurfaceContainer,
-    this.secondary,
+    required this.background,
+    required this.surfaceContainer,
+    required this.primary,
+    required this.outline,
+    required this.warning,
+    required this.error,
+    required this.onSurfaceContainer,
+    required this.secondary,
   });
 
   static AppColors lerp(AppColors a, AppColors b, double t) {
     return AppColors(
-      background: Color.lerp(a.background, b.background, t),
-      primary: Color.lerp(a.primary, b.primary, t),
-      surfaceContainer: Color.lerp(a.surfaceContainer, b.surfaceContainer, t),
-      warning: Color.lerp(a.warning, b.warning, t),
-      error: Color.lerp(a.error, b.error, t),
+      background:
+          Color.lerp(a.background, b.background, t) ?? Colors.transparent,
+      primary: Color.lerp(a.primary, b.primary, t) ?? Colors.transparent,
+      surfaceContainer: Color.lerp(a.surfaceContainer, b.surfaceContainer, t) ??
+          Colors.transparent,
+      warning: Color.lerp(a.warning, b.warning, t) ?? Colors.transparent,
+      outline: Color.lerp(a.outline, b.outline, t) ?? Colors.transparent,
+      error: Color.lerp(a.error, b.error, t) ?? Colors.transparent,
       onSurfaceContainer:
-          Color.lerp(a.onSurfaceContainer, b.onSurfaceContainer, t),
-      secondary: Color.lerp(a.secondary, b.secondary, t),
+          Color.lerp(a.onSurfaceContainer, b.onSurfaceContainer, t) ??
+              Colors.transparent,
+      secondary: Color.lerp(a.secondary, b.secondary, t) ?? Colors.transparent,
     );
   }
 }
