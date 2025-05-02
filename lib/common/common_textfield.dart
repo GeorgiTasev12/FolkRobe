@@ -15,7 +15,7 @@ class CommonTextfield extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CostumeListBloc, CostumeListState>(
+    return BlocBuilder<CostumeBloc, CostumeState>(
       builder: (context, state) => TextField(
         onChanged: onChanged,
         controller: state.textController,

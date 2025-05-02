@@ -15,9 +15,9 @@ class DeleteDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<CostumeListBloc>();
+    final bloc = context.read<CostumeBloc>();
 
-    return BlocBuilder<CostumeListBloc, CostumeListState>(
+    return BlocBuilder<CostumeBloc, CostumeState>(
       bloc: bloc,
       buildWhen: (previous, current) => previous.id != current.id,
       builder: (context, state) {

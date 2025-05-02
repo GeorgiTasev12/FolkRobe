@@ -16,14 +16,14 @@ class CostumeListPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<CostumeListBloc>();
+    final bloc = context.read<CostumeBloc>();
 
     useEffect(() {
       bloc.add(InitDataEvent(options: Options.shopski));
       return null;
     }, const []);
 
-    return BlocBuilder<CostumeListBloc, CostumeListState>(
+    return BlocBuilder<CostumeBloc, CostumeState>(
       buildWhen: (previous, current) =>
           previous.costumeList != current.costumeList,
       builder: (context, state) {
@@ -32,7 +32,7 @@ class CostumeListPage extends HookWidget {
           floatingActionButton: ShowAddCostumeButton(),
           child: state.costumeList?.isEmpty ?? false
               ? EmptyInfoText()
-              : BlocBuilder<CostumeListBloc, CostumeListState>(
+              : BlocBuilder<CostumeBloc, CostumeState>(
                   bloc: bloc,
                   buildWhen: (previous, current) =>
                       previous.costumeList != current.costumeList,

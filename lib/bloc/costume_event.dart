@@ -1,8 +1,8 @@
 part of 'costume_bloc.dart';
 
-abstract class CostumeListEvent {}
+abstract class CostumeEvent {}
 
-final class InitDataEvent extends CostumeListEvent {
+final class InitDataEvent extends CostumeEvent {
   final Options? options;
 
   InitDataEvent({
@@ -16,7 +16,7 @@ final class InitDataEvent extends CostumeListEvent {
   }
 }
 
-final class AddCostumeEvent extends CostumeListEvent {
+final class AddCostumeEvent extends CostumeEvent {
   final Costume? costume;
   final String title;
 
@@ -36,7 +36,7 @@ final class AddCostumeEvent extends CostumeListEvent {
   }
 }
 
-class UpdateCostumeEvent extends CostumeListEvent {
+class UpdateCostumeEvent extends CostumeEvent {
   final String? title;
   final int? id;
 
@@ -56,7 +56,7 @@ class UpdateCostumeEvent extends CostumeListEvent {
   }
 }
 
-final class RemoveCostumeEvent extends CostumeListEvent {
+final class RemoveCostumeEvent extends CostumeEvent {
   final int? id;
 
   RemoveCostumeEvent({
