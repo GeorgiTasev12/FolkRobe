@@ -4,7 +4,7 @@ import 'package:folk_robe/common/common_textfield.dart';
 import 'package:folk_robe/locator.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
-import 'package:folk_robe/views/costume_list_page/bloc/costume_bloc.dart';
+import 'package:folk_robe/bloc/costume_bloc.dart';
 
 class UpdateDialog extends StatelessWidget {
   final int index;

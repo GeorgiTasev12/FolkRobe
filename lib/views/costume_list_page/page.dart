@@ -5,7 +5,7 @@ import 'package:folk_robe/common/common_list_tile.dart';
 import 'package:folk_robe/models/options.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 import 'package:folk_robe/views/core_page.dart';
-import 'package:folk_robe/views/costume_list_page/bloc/costume_bloc.dart';
+import 'package:folk_robe/bloc/costume_bloc.dart';
 import 'package:folk_robe/views/costume_list_page/widgets/delete_dialog.dart';
 import 'package:folk_robe/views/costume_list_page/widgets/empty_info_text.dart';
 import 'package:folk_robe/views/costume_list_page/widgets/add_dialog.dart';
@@ -34,11 +34,12 @@ class CostumeListPage extends HookWidget {
               ? EmptyInfoText()
               : BlocBuilder<CostumeListBloc, CostumeListState>(
                   bloc: bloc,
-                  buildWhen: (previous, current) => previous.costumeList != current.costumeList,
+                  buildWhen: (previous, current) =>
+                      previous.costumeList != current.costumeList,
                   builder: (context, state) {
                     return ListView.separated(
                       itemCount: state.costumeList?.length ?? 0,
-                      separatorBuilder: (context, index) =>
+                      separatorBuilder: (_, index) =>
                           const SizedBox(height: 15),
                       itemBuilder: (context, index) {
                         return CommonListTile(
@@ -54,7 +55,7 @@ class CostumeListPage extends HookWidget {
                                 child: IconButton(
                                   onPressed: () => showDialog(
                                     context: context,
-                                    builder: (context) => BlocProvider.value(
+                                    builder: (_) => BlocProvider.value(
                                       value: bloc,
                                       child: UpdateDialog(
                                           index: state.costumeList?[index].id ??
@@ -76,7 +77,7 @@ class CostumeListPage extends HookWidget {
                                 child: IconButton(
                                   onPressed: () => showDialog(
                                     context: context,
-                                    builder: (context) => BlocProvider.value(
+                                    builder: (_) => BlocProvider.value(
                                       value: bloc,
                                       child: DeleteDialog(
                                           index: state.costumeList?[index].id ??
@@ -85,7 +86,8 @@ class CostumeListPage extends HookWidget {
                                   ),
                                   icon: Icon(
                                     Icons.delete,
-                                    color: context.appTheme.colors.primary,
+                                    color: context
+                                        .appTheme.colors.surfaceContainer,
                                   ),
                                 ),
                               ),

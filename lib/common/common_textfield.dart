@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:folk_robe/helpers/regex_helper.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
-import 'package:folk_robe/views/costume_list_page/bloc/costume_bloc.dart';
+import 'package:folk_robe/bloc/costume_bloc.dart';
 
 class CommonTextfield extends StatelessWidget {
   final void Function(String)? onChanged;

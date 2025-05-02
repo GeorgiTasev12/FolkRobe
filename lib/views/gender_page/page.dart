@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:folk_robe/locator.dart';
+import 'package:folk_robe/models/options.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/views/core_page.dart';
 import 'package:folk_robe/views/costumes_type_page/page.dart';
@@ -43,14 +44,18 @@ class RowOfGenderCards extends StatelessWidget {
           icon: Icons.male_rounded,
           onTap: () => locator<NavigationService>().push(
             MaterialPageRoute(
-              builder: (context) => CostumesTypePage(),
+              builder: (context) => CostumesTypePage(genderType: GenderType.male,),
             ),
           ),      
         ),
-        const GenderCard(
+        GenderCard(
           title: 'Женски',
           icon: Icons.female_rounded,
-          onTap: null,
+          onTap: () => locator<NavigationService>().push(
+            MaterialPageRoute(
+              builder: (context) => CostumesTypePage(genderType: GenderType.female),
+            ),
+          ),
         ),
       ],
     );
