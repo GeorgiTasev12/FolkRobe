@@ -13,25 +13,23 @@ class CostumeTypeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ListTile(
       onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: Container(
-          height: 50,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-            color: context.appTheme.colors.surfaceContainer,
-          ),
-          child: Center(
-            child: Text(
-              title,
-              style: context.appTheme.textStyles.titleLarge.copyWith(
-                fontSize: 17,
-                fontWeight: FontWeight.w400,
-                color: context.appTheme.colors.onSurfaceContainer,
-              ),
-            ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(25),
+        side: BorderSide(
+          color: context.appTheme.colors.outline,
+          width: 1,
+        ),
+      ),
+      tileColor: context.appTheme.colors.surfaceContainer,
+      title: Center(
+        child: Text(
+          title,
+          style: context.appTheme.textStyles.titleLarge.copyWith(
+            fontSize: 17,
+            fontWeight: FontWeight.w400,
+            color: context.appTheme.colors.onSurfaceContainer,
           ),
         ),
       ),

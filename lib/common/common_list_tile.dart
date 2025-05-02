@@ -31,6 +31,10 @@ class CommonListTile extends StatelessWidget {
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(25),
+        side: BorderSide(
+          color: context.appTheme.colors.outline,
+          width: 1,
+        ),
       ),
     );
   }
