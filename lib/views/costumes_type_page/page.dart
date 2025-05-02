@@ -9,25 +9,20 @@ import 'package:folk_robe/views/costume_list_page/page.dart';
 import 'package:folk_robe/views/costumes_type_page/widgets/costume_type_item.dart';
 
 class CostumesTypePage extends StatelessWidget {
-  const CostumesTypePage({super.key});
+  final GenderType genderType;
 
-  @override
-  Widget build(BuildContext context) {
-    return CorePage(
-      appBarTitle: 'Изберете фолклорната област',
-      child: const ListViewOfCostumes(),
-    );
-  }
-}
-
-class ListViewOfCostumes extends StatelessWidget {
-  const ListViewOfCostumes({super.key});
+  const CostumesTypePage({
+    super.key,
+    required this.genderType,
+  });
 
   @override
   Widget build(BuildContext context) {
     final options = Options.values;
 
-    return ListView.separated(
+    return CorePage(
+      appBarTitle: 'Изберете фолклорната област',
+      child: ListView.separated(
       itemCount: options.length,
       separatorBuilder: (context, index) => const SizedBox(height: 6),
       itemBuilder: (context, index) {
@@ -38,13 +33,17 @@ class ListViewOfCostumes extends StatelessWidget {
           onTap: () => locator<NavigationService>().push(
             MaterialPageRoute(
               builder: (context) => BlocProvider(
-                create: (_) => CostumeListBloc(selectedOption: option),
+                create: (_) => CostumeListBloc(
+                  selectedOption: option,
+                  genderType: genderType,
+                ),
                 child: const CostumeListPage(),
               ),
             ),
           ),
         );
       },
+    ),
     );
   }
 }

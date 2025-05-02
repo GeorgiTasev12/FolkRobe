@@ -12,8 +12,12 @@ part 'costume_state.dart';
 
 class CostumeListBloc extends Bloc<CostumeListEvent, CostumeListState> {
   final Options selectedOption;
+  final GenderType genderType;
 
-  CostumeListBloc({required this.selectedOption}) : super(CostumeListState(
+  CostumeListBloc({
+    required this.selectedOption,
+    required this.genderType,
+  }) : super(CostumeListState(
           textController: TextEditingController(),
         )) {
     on<InitDataEvent>(_onInitData);
@@ -28,8 +32,10 @@ class CostumeListBloc extends Bloc<CostumeListEvent, CostumeListState> {
     return super.close();
   }
 
-  Future<void> _onInitData(InitDataEvent event, Emitter<CostumeListState> emit) async {
-    final costumes = await DatabaseHelper().queryData(selectedOption);
+  Future<void> _onInitData(
+      InitDataEvent event, Emitter<CostumeListState> emit) async {
+    final costumes = await DatabaseHelper()
+        .queryData(selectedOption, genderType);
     emit(state.copyWith(
         costumeList: costumes.map((e) => Costume.fromMap(e)).toList()));
   }
@@ -38,9 +44,11 @@ class CostumeListBloc extends Bloc<CostumeListEvent, CostumeListState> {
       previous.costumeList != current.costumeList ||
       previous.textController != current.textController;
 
-  Future<void> _onAddCostume(AddCostumeEvent event, Emitter<CostumeListState> emit) async {
+  Future<void> _onAddCostume(
+      AddCostumeEvent event, Emitter<CostumeListState> emit) async {
     final costume = Costume(title: event.title);
-    final newId = await DatabaseHelper().insertCostume(selectedOption, costume);
+    final newId = await DatabaseHelper()
+        .insertCostume(selectedOption, costume, genderType);
 
     final costumeWithId = costume.copyWith(
       id: newId,
@@ -49,10 +57,16 @@ class CostumeListBloc extends Bloc<CostumeListEvent, CostumeListState> {
     emit(state.copyWith(costume: costumeWithId));
   }
 
-  Future<void> _onRemoveCostume(RemoveCostumeEvent event, Emitter<CostumeListState> emit) async {
-    await DatabaseHelper().deleteCostume(selectedOption, event.id ?? 0);
+  Future<void> _onRemoveCostume(
+      RemoveCostumeEvent event, Emitter<CostumeListState> emit) async {
+    await DatabaseHelper().deleteCostume(
+      selectedOption,
+      event.id ?? 0,
+      genderType,
+    );
 
-    final updatedList = await DatabaseHelper().getAllCostumes(selectedOption);
+    final updatedList = await DatabaseHelper()
+        .getAllCostumes(selectedOption, genderType);
 
     emit(state.copyWith(
       costumeList: updatedList,
@@ -60,11 +74,14 @@ class CostumeListBloc extends Bloc<CostumeListEvent, CostumeListState> {
     ));
   }
 
-  FutureOr<void> _onUpdateCostume(UpdateCostumeEvent event, Emitter<CostumeListState> emit) async {
+  FutureOr<void> _onUpdateCostume(
+      UpdateCostumeEvent event, Emitter<CostumeListState> emit) async {
     final updatedCostume = Costume(id: event.id, title: event.title ?? '');
-    await DatabaseHelper().updateCostume(selectedOption, updatedCostume);
+    await DatabaseHelper().updateCostume(
+        selectedOption, updatedCostume, genderType);
 
-    final updatedList = await DatabaseHelper().getAllCostumes(selectedOption);
+    final updatedList = await DatabaseHelper()
+        .getAllCostumes(selectedOption, genderType);
 
     emit(state.copyWith(
       costumeList: updatedList,

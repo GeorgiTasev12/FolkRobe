@@ -27,61 +27,68 @@ class DatabaseHelper {
   }
 
   static Future<Database> get database async {
-  if (_database != null) return _database!;
+    if (_database != null) return _database!;
 
-  final databasesPath = await getDatabasesPath();
-  final path = join(databasesPath, Constants.databaseName);
+    final databasesPath = await getDatabasesPath();
+    final path = join(databasesPath, Constants.databaseName);
 
-  _database = await openDatabase(
-    path,
-    version: 2, // <<<< Make sure this is HIGHER than old version
-    onCreate: (db, version) async {
-      await Future.wait(
-        Options.values.map((option) {
-          return db.execute('CREATE TABLE IF NOT EXISTS ${option.tableName} ('
-              'id INTEGER PRIMARY KEY AUTOINCREMENT,'
-              'title TEXT'
-              ')');
-        }),
-      );
-    },
-    onUpgrade: (db, oldVersion, newVersion) async {
-      await Future.wait(
-        Options.values.map((option) {
-          return db.execute('CREATE TABLE IF NOT EXISTS ${option.tableName} ('
-              'id INTEGER PRIMARY KEY AUTOINCREMENT,'
-              'title TEXT'
-              ')');
-        }),
-      );
-    },
-  );
+    _database = await openDatabase(
+      path,
+      version: 2,
+      onCreate: (db, version) async {
+        await Future.wait(
+          GenderType.values.expand((gender) => Options.values.map((option) {
+                final tableName = option.tableName(gender);
 
-  return _database!;
-}
+                return db.execute('CREATE TABLE IF NOT EXISTS $tableName ('
+                    'id INTEGER PRIMARY KEY AUTOINCREMENT,'
+                    'title TEXT'
+                    ')');
+              })),
+        );
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        await Future.wait(
+          GenderType.values.expand((gender) => Options.values.map((option) {
+                final tableName = option.tableName(gender);
 
-  Future<int> insertCostume(Options option, Costume costume) async {
+                return db.execute('CREATE TABLE IF NOT EXISTS $tableName ('
+                    'id INTEGER PRIMARY KEY AUTOINCREMENT,'
+                    'title TEXT'
+                    ')');
+              })),
+        );
+      },
+    );
+
+    return _database!;
+  }
+
+  Future<int> insertCostume(
+      Options option, Costume costume, GenderType gender) async {
     final db = await database;
 
     try {
-      return await db.insert(option.tableName, costume.toMap());
+      return await db.insert(option.tableName(gender), costume.toMap());
     } on DatabaseException catch (e) {
       throw Exception(e);
     }
   }
 
-  Future<List<Map<String, dynamic>>> queryData(Options option) async {
+  Future<List<Map<String, dynamic>>> queryData(
+      Options option, GenderType gender) async {
     final db = await database;
 
     try {
-      return await db.query(option.tableName);
+      return await db.query(option.tableName(gender));
     } on DatabaseException catch (e) {
       throw Exception(e);
     }
   }
 
-  Future<List<Costume>> getAllCostumes(Options option) async {
-    final List<Map<String, dynamic>> queries = await queryData(option);
+  Future<List<Costume>> getAllCostumes(
+      Options option, GenderType gender) async {
+    final List<Map<String, dynamic>> queries = await queryData(option, gender);
 
     try {
       return queries.map((e) => Costume.fromMap(e)).toList();
@@ -90,12 +97,13 @@ class DatabaseHelper {
     }
   }
 
-  Future<int> updateCostume(Options option, Costume costume) async {
+  Future<int> updateCostume(
+      Options option, Costume costume, GenderType gender) async {
     final db = await database;
 
     try {
       return await db.update(
-        option.tableName,
+        option.tableName(gender),
         costume.toMap(),
         where: 'id = ?',
         whereArgs: [costume.id],
@@ -105,12 +113,12 @@ class DatabaseHelper {
     }
   }
 
-  Future<int> deleteCostume(Options option, int id) async {
+  Future<int> deleteCostume(Options option, int id, GenderType gender) async {
     final db = await database;
 
     try {
       return await db.delete(
-        option.tableName,
+        option.tableName(gender),
         where: 'id = ?',
         whereArgs: [id],
       );
