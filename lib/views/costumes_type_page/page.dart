@@ -33,7 +33,7 @@ class CostumesTypePage extends StatelessWidget {
             onTap: () => locator<NavigationService>().push(
               MaterialPageRoute(
                 builder: (context) => BlocProvider(
-                  create: (_) => CostumeListBloc(
+                  create: (_) => CostumeBloc(
                     selectedOption: option,
                     genderType: genderType,
                   ),

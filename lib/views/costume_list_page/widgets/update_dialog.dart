@@ -13,9 +13,9 @@ class UpdateDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CostumeListBloc, CostumeListState>(
+    return BlocBuilder<CostumeBloc, CostumeState>(
       builder: (context, state) {
-        final bloc = context.read<CostumeListBloc>();
+        final bloc = context.read<CostumeBloc>();
 
         return AlertDialog(
           title: const Text('Моля, въведете реквизит за промяна.'),

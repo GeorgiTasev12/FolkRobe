@@ -1,26 +1,26 @@
 part of 'costume_bloc.dart';
 
-final class CostumeListState extends Equatable {
+final class CostumeState extends Equatable {
   final Costume? costume;
   final List<Costume>? costumeList;
   final int? id;
   final TextEditingController? textController;
 
-  const CostumeListState({
+  const CostumeState({
     this.costume,
     this.costumeList,
     this.id,
     this.textController,
   });
 
-  CostumeListState copyWith({
+  CostumeState copyWith({
     Costume? costume,
     List<Costume>? costumeList,
     int? id,
     TextEditingController? textController,
     List<Map<String, dynamic>>? listMapOfCostumes,
   }) {
-    return CostumeListState(
+    return CostumeState(
       costume: costume ?? this.costume,
       costumeList: costumeList ?? this.costumeList,
       id: id ?? this.id,
@@ -30,9 +30,9 @@ final class CostumeListState extends Equatable {
 
   @override
   List<Object?> get props => [
-    costume,
-    costumeList,
-    id,
-    textController,
-  ];
+        costume,
+        costumeList,
+        id,
+        textController,
+      ];
 }
