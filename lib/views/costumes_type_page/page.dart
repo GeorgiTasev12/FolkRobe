@@ -23,27 +23,27 @@ class CostumesTypePage extends StatelessWidget {
     return CorePage(
       appBarTitle: 'Изберете фолклорната област',
       child: ListView.separated(
-      itemCount: options.length,
-      separatorBuilder: (context, index) => const SizedBox(height: 6),
-      itemBuilder: (context, index) {
-        final option = options[index];
+        itemCount: options.length,
+        separatorBuilder: (context, index) => const SizedBox(height: 10),
+        itemBuilder: (context, index) {
+          final option = options[index];
 
-        return CostumeTypeItem(
-          title: option.optionName,
-          onTap: () => locator<NavigationService>().push(
-            MaterialPageRoute(
-              builder: (context) => BlocProvider(
-                create: (_) => CostumeListBloc(
-                  selectedOption: option,
-                  genderType: genderType,
+          return CostumeTypeItem(
+            title: option.optionName,
+            onTap: () => locator<NavigationService>().push(
+              MaterialPageRoute(
+                builder: (context) => BlocProvider(
+                  create: (_) => CostumeListBloc(
+                    selectedOption: option,
+                    genderType: genderType,
+                  ),
+                  child: const CostumeListPage(),
                 ),
-                child: const CostumeListPage(),
               ),
             ),
-          ),
-        );
-      },
-    ),
+          );
+        },
+      ),
     );
   }
 }
