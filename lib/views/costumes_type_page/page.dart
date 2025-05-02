@@ -4,7 +4,7 @@ import 'package:folk_robe/locator.dart';
 import 'package:folk_robe/models/options.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/views/core_page.dart';
-import 'package:folk_robe/views/costume_list_page/bloc/costume_bloc.dart';
+import 'package:folk_robe/bloc/costume_bloc.dart';
 import 'package:folk_robe/views/costume_list_page/page.dart';
 import 'package:folk_robe/views/costumes_type_page/widgets/costume_type_item.dart';
 
