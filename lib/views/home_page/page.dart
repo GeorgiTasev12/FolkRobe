@@ -16,38 +16,30 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Flexible(
-              child: RowOfCustomCards(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Flexible(
+                  child: MainOptionCard(
+                    title: 'Костюми',
+                    imagePath: "assets/folklore_dress.png",
+                    onTap: () => locator<NavigationService>().push(
+                      MaterialPageRoute(builder: (context) => GenderPage()),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: MainOptionCard(
+                    title: 'Танцьори',
+                    imagePath: "assets/folklore_dancers.png",
+                    onTap: null,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
       ),
-    );
-  }
-}
-
-class RowOfCustomCards extends StatelessWidget {
-  const RowOfCustomCards({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        MainOptionCard(
-          title: 'Костюми',
-          imagePath: "assets/folklore_dress.png",
-          onTap: () => locator<NavigationService>().push(
-              MaterialPageRoute(builder: (context) => GenderPage())),
-        ),
-        MainOptionCard(
-          title: 'Танцьори',
-          imagePath: "assets/folklore_dancers.png",
-          onTap: () {},
-        ),
-      ],
     );
   }
 }

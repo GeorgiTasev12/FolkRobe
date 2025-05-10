@@ -18,7 +18,7 @@ class MainOptionCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => onTap?.call(),
       child: SizedBox(
-        width: 190,
+        width: 180,
         height: 360,
         child: Card(
           shape: RoundedRectangleBorder(
@@ -46,8 +46,8 @@ class MainOptionCard extends StatelessWidget {
               Text(
                 title,
                 style: context.appTheme.textStyles.titleMedium.copyWith(
-                  color: context.appTheme.colors.onSurfaceContainer,
-                ),
+                    color: context.appTheme.colors.onSurfaceContainer,
+                    fontWeight: FontWeight.w300),
               ),
             ],
           ),
