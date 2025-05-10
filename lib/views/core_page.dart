@@ -5,26 +5,38 @@ import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 
 class CorePage extends StatelessWidget {
   final Widget child;
+  final void Function()? onFABPressed;
   final bool? hasAppBar;
   final String? appBarTitle;
   final bool? hasAppBarTitle;
   final bool? hasFAB;
-  final Widget? floatingActionButton;
 
   const CorePage({
     super.key,
     required this.child,
+    this.onFABPressed,
     this.appBarTitle,
     this.hasAppBar = true,
     this.hasAppBarTitle = true,
     this.hasFAB = false,
-    this.floatingActionButton,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: hasFAB ?? false ? floatingActionButton : null,
+      floatingActionButton: hasFAB ?? false
+          ? FloatingActionButton(
+              backgroundColor: context.appTheme.colors.surfaceContainer,
+              onPressed: onFABPressed,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: Icon(
+                Icons.add,
+                color: context.appTheme.colors.onSurfaceContainer,
+              ),
+            )
+          : null,
       appBar: hasAppBar ?? false
           ? AppBar(
               automaticallyImplyLeading: false,

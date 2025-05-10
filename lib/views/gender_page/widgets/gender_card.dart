@@ -43,6 +43,7 @@ class GenderCard extends StatelessWidget {
                 title,
                 style: context.appTheme.textStyles.titleMedium.copyWith(
                   color: context.appTheme.colors.onSurfaceContainer,
+                  fontWeight: FontWeight.w300,
                 ),
               ),
             ],
