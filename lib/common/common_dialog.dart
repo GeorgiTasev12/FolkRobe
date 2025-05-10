@@ -1,27 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:folk_robe/bloc/costume_bloc.dart';
 import 'package:folk_robe/common/common_textfield.dart';
 import 'package:folk_robe/locator.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
-import 'package:folk_robe/bloc/costume_bloc.dart';
 
-class UpdateDialog extends StatelessWidget {
-  final int index;
+class CommonDialog extends StatelessWidget {
+  final void Function() onPressed;
 
-  const UpdateDialog({super.key, required this.index});
+  const CommonDialog({
+    super.key,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CostumeBloc, CostumeState>(
-      builder: (context, state) {
-        final bloc = context.read<CostumeBloc>();
+    final bloc = context.read<CostumeBloc>();
 
+    return BlocBuilder<CostumeBloc, CostumeState>(
+      bloc: bloc,
+      buildWhen: (previous, current) =>
+          previous.textController != current.textController ||
+          previous.costumeList != current.costumeList,
+      builder: (context, state) {
         return AlertDialog(
-          title: const Text('Моля, въведете реквизит за промяна.'),
+          title: const Text('Моля, въведете реквизит.'),
           backgroundColor: context.appTheme.colors.surfaceContainer,
-          content: CommonTextfield(
-            onChanged: (text) => state.textController?.text = text,
+          content: BlocProvider.value(
+            value: bloc,
+            child: CommonTextfield(),
           ),
           actions: [
             TextButton(
@@ -35,17 +43,12 @@ class UpdateDialog extends StatelessWidget {
               ),
             ),
             FilledButton(
-              onPressed: () {
-                bloc.add(UpdateCostumeEvent(
-                    title: state.textController?.text ?? "", id: index));
-                bloc.add(InitDataEvent());
-                locator<NavigationService>().pop();
-              },
+              onPressed: onPressed,
               style: FilledButton.styleFrom(
                 backgroundColor: context.appTheme.colors.secondary,
               ),
               child: Text(
-                'Запази', // Save button
+                'Запази',
                 style:
                     TextStyle(color: context.appTheme.colors.surfaceContainer),
               ),
