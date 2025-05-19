@@ -35,6 +35,7 @@ class CommonDialog extends StatelessWidget {
                   previous.nameTextController != current.nameTextController,
               builder: (context, state) {
                 return Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CommonTextfield(
