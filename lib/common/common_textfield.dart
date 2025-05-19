@@ -6,11 +6,17 @@ import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 import 'package:folk_robe/bloc/costume_bloc.dart';
 
 class CommonTextfield extends StatelessWidget {
+  final TextEditingController textController;
   final void Function(String)? onChanged;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? formatters;
 
   const CommonTextfield({
     super.key,
+    required this.textController,
     this.onChanged,
+    this.keyboardType,
+    this.formatters,
   });
 
   @override
@@ -18,7 +24,7 @@ class CommonTextfield extends StatelessWidget {
     return BlocBuilder<CostumeBloc, CostumeState>(
       builder: (context, state) => TextField(
         onChanged: onChanged,
-        controller: state.textController,
+        controller: textController,
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
@@ -35,10 +41,11 @@ class CommonTextfield extends StatelessWidget {
           ),
         ),
         cursorColor: context.appTheme.colors.secondary,
-        keyboardType: TextInputType.text,
-        inputFormatters: [
-          FilteringTextInputFormatter.allow(RegexHelper.wordsOnly),
-        ],
+        keyboardType: keyboardType ?? TextInputType.text,
+        inputFormatters: formatters ??
+            [
+              FilteringTextInputFormatter.allow(RegexHelper.wordsOnly),
+            ],
       ),
     );
   }

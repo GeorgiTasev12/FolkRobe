@@ -3,12 +3,14 @@ import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 
 class CommonListTile extends StatelessWidget {
   final String title;
+  final String? quantity;
   final EdgeInsetsGeometry? contentPadding;
   final List<Widget>? suffixWidgets;
 
   const CommonListTile({
     super.key,
     required this.title,
+    this.quantity,
     this.contentPadding,
     this.suffixWidgets,
   });
@@ -16,12 +18,32 @@ class CommonListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(
-        title,
-        style: context.appTheme.textStyles.titleMedium.copyWith(
-          fontWeight: FontWeight.w300,
-          color: context.appTheme.colors.onSurfaceContainer,
-        ),
+      title: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (quantity != null && (quantity?.isNotEmpty ?? false))
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Бр: ${quantity.toString()}',
+                  style: context.appTheme.textStyles.titleMedium.copyWith(
+                    fontWeight: FontWeight.w400,
+                    color: context.appTheme.colors.onSurfaceContainer,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(width: 8),
+              ],
+            ),
+          Text(
+            title,
+            style: context.appTheme.textStyles.titleMedium.copyWith(
+              fontWeight: FontWeight.w300,
+              color: context.appTheme.colors.onSurfaceContainer,
+            ),
+          ),
+        ],
       ),
       contentPadding: contentPadding ?? EdgeInsets.zero,
       tileColor: context.appTheme.colors.surfaceContainer,

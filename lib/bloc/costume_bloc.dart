@@ -18,7 +18,8 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
     required this.selectedOption,
     required this.genderType,
   }) : super(CostumeState(
-          textController: TextEditingController(),
+          nameTextController: TextEditingController(),
+          quantityTextController: TextEditingController(),
         )) {
     on<InitDataEvent>(_onInitData);
     on<AddCostumeEvent>(_onAddCostume);
@@ -28,7 +29,7 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
 
   @override
   Future<void> close() {
-    state.textController?.dispose();
+    state.nameTextController?.dispose();
     return super.close();
   }
 
@@ -42,11 +43,14 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
 
   bool buildWhen(CostumeState previous, CostumeState current) =>
       previous.costumeList != current.costumeList ||
-      previous.textController != current.textController;
+      previous.nameTextController != current.nameTextController;
 
   Future<void> _onAddCostume(
       AddCostumeEvent event, Emitter<CostumeState> emit) async {
-    final costume = Costume(title: event.title);
+    final costume = Costume(
+      title: event.title,
+      quantity: int.tryParse(event.quantity ?? ''),
+    );
     final newId = await DatabaseHelper()
         .insertCostume(selectedOption, costume, genderType);
 
@@ -54,7 +58,11 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
       id: newId,
     );
 
-    emit(state.copyWith(costume: costumeWithId));
+    emit(
+      state.copyWith(
+        costume: costumeWithId,
+      ),
+    );
   }
 
   Future<void> _onRemoveCostume(
@@ -76,7 +84,11 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
 
   FutureOr<void> _onUpdateCostume(
       UpdateCostumeEvent event, Emitter<CostumeState> emit) async {
-    final updatedCostume = Costume(id: event.id, title: event.title ?? '');
+    final updatedCostume = Costume(
+      id: event.id,
+      title: event.title ?? '',
+      quantity: int.tryParse(event.quantity ?? ''),
+    );
     await DatabaseHelper()
         .updateCostume(selectedOption, updatedCostume, genderType);
 

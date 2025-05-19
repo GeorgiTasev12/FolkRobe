@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:folk_robe/bloc/costume_bloc.dart';
 import 'package:folk_robe/common/common_textfield.dart';
@@ -21,7 +22,7 @@ class CommonDialog extends StatelessWidget {
     return BlocBuilder<CostumeBloc, CostumeState>(
       bloc: bloc,
       buildWhen: (previous, current) =>
-          previous.textController != current.textController ||
+          previous.nameTextController != current.nameTextController ||
           previous.costumeList != current.costumeList,
       builder: (context, state) {
         return AlertDialog(
@@ -29,12 +30,49 @@ class CommonDialog extends StatelessWidget {
           backgroundColor: context.appTheme.colors.surfaceContainer,
           content: BlocProvider.value(
             value: bloc,
-            child: CommonTextfield(),
+            child: BlocBuilder<CostumeBloc, CostumeState>(
+              buildWhen: (previous, current) =>
+                  previous.nameTextController != current.nameTextController,
+              builder: (context, state) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CommonTextfield(
+                      textController:
+                          state.nameTextController ?? TextEditingController(),
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Text(
+                          'Брой: ',
+                          style: context.appTheme.textStyles.bodyLarge.copyWith(
+                            color: context.appTheme.colors.onSurfaceContainer,
+                          ),
+                        ),
+                        Flexible(
+                          child: CommonTextfield(
+                            textController: state.quantityTextController ??
+                                TextEditingController(),
+                            keyboardType: TextInputType.number,
+                            formatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                );
+              },
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () {
-                state.textController?.clear();
+                state.nameTextController?.clear();
+                state.quantityTextController?.clear();
                 locator<NavigationService>().pop();
               },
               child: Text(
