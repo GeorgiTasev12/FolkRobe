@@ -38,7 +38,7 @@ class CostumeListPage extends HookWidget {
                 child: CommonDialog(
                   onPressed: () {
                     bloc.add(AddCostumeEvent(
-                        title: state.textController?.text ?? ""));
+                        title: state.nameTextController?.text ?? ""));
                     bloc.add(InitDataEvent());
                     locator<NavigationService>().pop();
                   },
@@ -75,7 +75,8 @@ class CostumeListPage extends HookWidget {
                                       value: bloc,
                                       child: CommonDialog(onPressed: () {
                                         bloc.add(UpdateCostumeEvent(
-                                            title: state.textController?.text ??
+                                            title: state
+                                                    .nameTextController?.text ??
                                                 "",
                                             id: state.costumeList?[index].id));
                                         bloc.add(InitDataEvent());

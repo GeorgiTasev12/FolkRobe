@@ -18,7 +18,8 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
     required this.selectedOption,
     required this.genderType,
   }) : super(CostumeState(
-          textController: TextEditingController(),
+          nameTextController: TextEditingController(),
+          quantityTextController: TextEditingController(),
         )) {
     on<InitDataEvent>(_onInitData);
     on<AddCostumeEvent>(_onAddCostume);
@@ -28,7 +29,7 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
 
   @override
   Future<void> close() {
-    state.textController?.dispose();
+    state.nameTextController?.dispose();
     return super.close();
   }
 
@@ -42,8 +43,10 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
 
   bool buildWhen(CostumeState previous, CostumeState current) =>
       previous.costumeList != current.costumeList ||
-      previous.textController != current.textController;
+      previous.nameTextController != current.nameTextController;
 
+  //TODO: We need a column called quantity within the SQLite querries for adding
+  // and display it alongside the name of the costume
   Future<void> _onAddCostume(
       AddCostumeEvent event, Emitter<CostumeState> emit) async {
     final costume = Costume(title: event.title);
