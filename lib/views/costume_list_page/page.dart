@@ -38,7 +38,9 @@ class CostumeListPage extends HookWidget {
                 child: CommonDialog(
                   onPressed: () {
                     bloc.add(AddCostumeEvent(
-                        title: state.nameTextController?.text ?? ""));
+                      title: state.nameTextController?.text ?? "",
+                      quantity: state.quantityTextController?.text,
+                    ));
                     bloc.add(InitDataEvent());
                     locator<NavigationService>().pop();
                   },
@@ -60,6 +62,9 @@ class CostumeListPage extends HookWidget {
                       itemBuilder: (context, index) {
                         return CommonListTile(
                           title: state.costumeList?[index].title ?? '',
+                          quantity: state.costumeList?[index].quantity != null
+                              ? state.costumeList![index].quantity.toString()
+                              : null,
                           contentPadding: const EdgeInsets.only(
                             right: 5,
                             left: 15,
@@ -75,10 +80,13 @@ class CostumeListPage extends HookWidget {
                                       value: bloc,
                                       child: CommonDialog(onPressed: () {
                                         bloc.add(UpdateCostumeEvent(
-                                            title: state
-                                                    .nameTextController?.text ??
-                                                "",
-                                            id: state.costumeList?[index].id));
+                                          id: state.costumeList?[index].id,
+                                          title:
+                                              state.nameTextController?.text ??
+                                                  "",
+                                          quantity: state
+                                              .quantityTextController?.text,
+                                        ));
                                         bloc.add(InitDataEvent());
                                         locator<NavigationService>().pop();
                                       }),

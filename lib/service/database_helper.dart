@@ -7,24 +7,13 @@ import 'package:path/path.dart';
 class DatabaseHelper {
   static Database? _database;
 
-  Future<Database> get databaseTest async {
-    if (_database != null) return _database!;
+  // static Future<void> deleteDatabaseFile() async {
+  //   final databasesPath = await getDatabasesPath();
+  //   final path = join(databasesPath, Constants.databaseName);
 
-    final databasesPath = await getDatabasesPath();
-    final path = join(databasesPath, Constants.databaseName);
-
-    _database = await openDatabase(
-      path,
-      version: 1,
-      onCreate: (db, version) async {
-        await db.execute('CREATE TABLE ${Constants.tableName} ('
-            'id INTEGER PRIMARY KEY AUTOINCREMENT,'
-            'title TEXT'
-            ')');
-      },
-    );
-    return _database!;
-  }
+  //   await deleteDatabase(path);
+  //   _database = null; // Reset cached instance
+  // }
 
   static Future<Database> get database async {
     if (_database != null) return _database!;
@@ -42,7 +31,8 @@ class DatabaseHelper {
 
                 return db.execute('CREATE TABLE IF NOT EXISTS $tableName ('
                     'id INTEGER PRIMARY KEY AUTOINCREMENT,'
-                    'title TEXT'
+                    'title TEXT,'
+                    'quantity INTEGER NULL'
                     ')');
               })),
         );
