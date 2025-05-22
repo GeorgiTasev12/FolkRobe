@@ -6,6 +6,8 @@ final class CostumeState extends Equatable {
   final int? id;
   final TextEditingController? nameTextController;
   final TextEditingController? quantityTextController;
+  final bool isNameNotEmpty;
+  final bool isQuantityNotEmpty;
 
   const CostumeState({
     this.costume,
@@ -13,12 +15,16 @@ final class CostumeState extends Equatable {
     this.id,
     this.nameTextController,
     this.quantityTextController,
+    this.isNameNotEmpty = false,
+    this.isQuantityNotEmpty = false,
   });
 
   CostumeState copyWith({
     Costume? costume,
     List<Costume>? costumeList,
     int? id,
+    bool? isNameNotEmpty,
+    bool? isQuantityNotEmpty,
     TextEditingController? nameTextController,
     TextEditingController? quantityTextController,
     List<Map<String, dynamic>>? listMapOfCostumes,
@@ -28,7 +34,10 @@ final class CostumeState extends Equatable {
       costumeList: costumeList ?? this.costumeList,
       id: id ?? this.id,
       nameTextController: nameTextController ?? this.nameTextController,
-      quantityTextController: quantityTextController ?? this.quantityTextController,
+      quantityTextController:
+          quantityTextController ?? this.quantityTextController,
+      isNameNotEmpty: isNameNotEmpty ?? this.isNameNotEmpty,
+      isQuantityNotEmpty: isQuantityNotEmpty ?? this.isQuantityNotEmpty,
     );
   }
 
@@ -37,6 +46,8 @@ final class CostumeState extends Equatable {
         costume,
         costumeList,
         id,
+        isNameNotEmpty,
+        isQuantityNotEmpty,
         nameTextController,
         quantityTextController,
       ];

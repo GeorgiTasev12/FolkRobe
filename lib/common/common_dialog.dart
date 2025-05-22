@@ -32,7 +32,7 @@ class CommonDialog extends StatelessWidget {
             value: bloc,
             child: BlocBuilder<CostumeBloc, CostumeState>(
               buildWhen: (previous, current) =>
-                  previous.nameTextController != current.nameTextController,
+                  bloc.buildWhen(previous, current),
               builder: (context, state) {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
@@ -41,6 +41,15 @@ class CommonDialog extends StatelessWidget {
                     CommonTextfield(
                       textController:
                           state.nameTextController ?? TextEditingController(),
+                      isClearIconVisible: state.isNameNotEmpty,
+                      onIconButtonPress: () => bloc.add(
+                        OnNameClearEvent(
+                          textController: state.nameTextController ??
+                              TextEditingController(),
+                        ),
+                      ),
+                      onChanged: (text) =>
+                          bloc.add(OnNameChangedEvent(text: text)),
                     ),
                     const SizedBox(height: 12),
                     Row(
@@ -59,6 +68,16 @@ class CommonDialog extends StatelessWidget {
                             formatters: [
                               FilteringTextInputFormatter.digitsOnly,
                             ],
+                            isClearIconVisible: state.isQuantityNotEmpty,
+                            onIconButtonPress: () => bloc.add(
+                              OnQuantityClearEvent(
+                                textController: state.quantityTextController ??
+                                    TextEditingController(),
+                              ),
+                            ),
+                            onChanged: (number) => context
+                                .read<CostumeBloc>()
+                                .add(OnQuantityChangedEvent(number: number)),
                           ),
                         )
                       ],
@@ -71,8 +90,7 @@ class CommonDialog extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                state.nameTextController?.clear();
-                state.quantityTextController?.clear();
+                bloc.add(OnCloseDialogEvent());
                 locator<NavigationService>().pop();
               },
               child: Text(
