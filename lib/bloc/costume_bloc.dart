@@ -25,6 +25,11 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
     on<AddCostumeEvent>(_onAddCostume);
     on<UpdateCostumeEvent>(_onUpdateCostume);
     on<RemoveCostumeEvent>(_onRemoveCostume);
+    on<OnNameChangedEvent>(_onNameChanged);
+    on<OnQuantityChangedEvent>(_onQuantityChanged);
+    on<OnNameClearEvent>(_onNameClear);
+    on<OnQuantityClearEvent>(_onQuantityClear);
+    on<OnCloseDialogEvent>(_onCloseDialog);
   }
 
   @override
@@ -43,7 +48,9 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
 
   bool buildWhen(CostumeState previous, CostumeState current) =>
       previous.costumeList != current.costumeList ||
-      previous.nameTextController != current.nameTextController;
+      previous.nameTextController != current.nameTextController ||
+      previous.isNameNotEmpty != current.isNameNotEmpty ||
+      previous.isQuantityNotEmpty != current.isQuantityNotEmpty;
 
   Future<void> _onAddCostume(
       AddCostumeEvent event, Emitter<CostumeState> emit) async {
@@ -98,6 +105,52 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
     emit(state.copyWith(
       costumeList: updatedList,
       costume: updatedCostume,
+    ));
+  }
+
+  void _onNameChanged(OnNameChangedEvent event, Emitter<CostumeState> emit) {
+    emit(state.copyWith(
+      isNameNotEmpty: event.text.isNotEmpty ? true : false,
+    ));
+  }
+
+  void _onQuantityChanged(
+      OnQuantityChangedEvent event, Emitter<CostumeState> emit) {
+    emit(state.copyWith(
+      isQuantityNotEmpty: event.number.isNotEmpty ? true : false,
+    ));
+  }
+
+  void _onNameClear(OnNameClearEvent event, Emitter<CostumeState> emit) {
+    final controller = event.textController;
+    controller.clear();
+
+    emit(state.copyWith(
+      nameTextController: controller,
+      isNameNotEmpty: false,
+    ));
+  }
+
+  void _onQuantityClear(
+      OnQuantityClearEvent event, Emitter<CostumeState> emit) {
+    final controller = event.textController;
+    controller.clear();
+
+    emit(
+      state.copyWith(
+        quantityTextController: controller,
+        isQuantityNotEmpty: false,
+      ),
+    );
+  }
+
+  void _onCloseDialog(OnCloseDialogEvent event, Emitter<CostumeState> emit) {
+    state.nameTextController?.clear();
+    state.quantityTextController?.clear();
+
+    emit(state.copyWith(
+      isNameNotEmpty: false,
+      isQuantityNotEmpty: false,
     ));
   }
 }

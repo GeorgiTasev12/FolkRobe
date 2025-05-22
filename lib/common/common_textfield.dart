@@ -8,15 +8,19 @@ import 'package:folk_robe/bloc/costume_bloc.dart';
 class CommonTextfield extends StatelessWidget {
   final TextEditingController textController;
   final void Function(String)? onChanged;
+  final void Function()? onIconButtonPress;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? formatters;
+  final bool isClearIconVisible;
 
   const CommonTextfield({
     super.key,
     required this.textController,
     this.onChanged,
+    this.onIconButtonPress,
     this.keyboardType,
     this.formatters,
+    this.isClearIconVisible = false,
   });
 
   @override
@@ -39,6 +43,15 @@ class CommonTextfield extends StatelessWidget {
               width: 2,
             ),
           ),
+          suffixIcon: isClearIconVisible
+              ? IconButton(
+                  onPressed: onIconButtonPress,
+                  icon: Icon(
+                    Icons.cancel_outlined,
+                    color: context.appTheme.colors.onSurfaceContainer,
+                  ),
+                )
+              : null,
         ),
         cursorColor: context.appTheme.colors.secondary,
         keyboardType: keyboardType ?? TextInputType.text,

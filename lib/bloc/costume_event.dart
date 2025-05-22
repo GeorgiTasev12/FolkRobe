@@ -16,6 +16,59 @@ final class InitDataEvent extends CostumeEvent {
   }
 }
 
+final class OnNameChangedEvent extends CostumeEvent {
+  final String text;
+
+  OnNameChangedEvent({
+    required this.text,
+  });
+
+  OnNameChangedEvent copyWith({String? text}) {
+    return OnNameChangedEvent(text: text ?? this.text);
+  }
+}
+
+final class OnQuantityChangedEvent extends CostumeEvent {
+  final String number;
+
+  OnQuantityChangedEvent({
+    required this.number,
+  });
+
+  OnQuantityChangedEvent copyWith({String? number}) {
+    return OnQuantityChangedEvent(number: number ?? this.number);
+  }
+}
+
+final class OnNameClearEvent extends CostumeEvent {
+  final TextEditingController textController;
+
+  OnNameClearEvent({required this.textController});
+
+  OnNameClearEvent copyWith({TextEditingController? textController}) {
+    return OnNameClearEvent(
+        textController: textController ?? this.textController);
+  }
+}
+
+final class OnQuantityClearEvent extends CostumeEvent {
+  final TextEditingController textController;
+
+  OnQuantityClearEvent({
+    required this.textController,
+  });
+
+  OnQuantityClearEvent copyWith({
+    TextEditingController? textController,
+  }) {
+    return OnQuantityClearEvent(
+      textController: textController ?? this.textController,
+    );
+  }
+}
+
+final class OnCloseDialogEvent extends CostumeEvent {}
+
 final class AddCostumeEvent extends CostumeEvent {
   final Costume? costume;
   final String title;
