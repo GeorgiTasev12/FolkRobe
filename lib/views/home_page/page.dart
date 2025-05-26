@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:folk_robe/locator.dart';
-import 'package:folk_robe/models/options.dart';
 import 'package:folk_robe/models/page_source.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/views/core_page.dart';
