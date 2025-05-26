@@ -4,7 +4,7 @@ import 'package:folk_robe/models/options.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class DatabaseHelper {
+class DatabaseCostumeHelper {
   static Database? _database;
 
   // static Future<void> deleteDatabaseFile() async {
