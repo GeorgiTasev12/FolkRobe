@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:folk_robe/dao/costume.dart';
 import 'package:folk_robe/models/options.dart';
-import 'package:folk_robe/service/database_helper.dart';
+import 'package:folk_robe/service/database_costume_helper.dart';
 
 part 'costume_event.dart';
 part 'costume_state.dart';
@@ -41,7 +41,7 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
   Future<void> _onInitData(
       InitDataEvent event, Emitter<CostumeState> emit) async {
     final costumes =
-        await DatabaseHelper().queryData(selectedOption, genderType);
+        await DatabaseCostumeHelper().queryData(selectedOption, genderType);
     emit(state.copyWith(
         costumeList: costumes.map((e) => Costume.fromMap(e)).toList()));
   }
@@ -58,7 +58,7 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
       title: event.title,
       quantity: int.tryParse(event.quantity ?? ''),
     );
-    final newId = await DatabaseHelper()
+    final newId = await DatabaseCostumeHelper()
         .insertCostume(selectedOption, costume, genderType);
 
     final costumeWithId = costume.copyWith(
@@ -74,14 +74,14 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
 
   Future<void> _onRemoveCostume(
       RemoveCostumeEvent event, Emitter<CostumeState> emit) async {
-    await DatabaseHelper().deleteCostume(
+    await DatabaseCostumeHelper().deleteCostume(
       selectedOption,
       event.id ?? 0,
       genderType,
     );
 
-    final updatedList =
-        await DatabaseHelper().getAllCostumes(selectedOption, genderType);
+    final updatedList = await DatabaseCostumeHelper()
+        .getAllCostumes(selectedOption, genderType);
 
     emit(state.copyWith(
       costumeList: updatedList,
@@ -96,11 +96,11 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
       title: event.title ?? '',
       quantity: int.tryParse(event.quantity ?? ''),
     );
-    await DatabaseHelper()
+    await DatabaseCostumeHelper()
         .updateCostume(selectedOption, updatedCostume, genderType);
 
-    final updatedList =
-        await DatabaseHelper().getAllCostumes(selectedOption, genderType);
+    final updatedList = await DatabaseCostumeHelper()
+        .getAllCostumes(selectedOption, genderType);
 
     emit(state.copyWith(
       costumeList: updatedList,

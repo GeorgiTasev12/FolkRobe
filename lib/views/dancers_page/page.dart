@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:folk_robe/common/common_main_options_card.dart';
+import 'package:folk_robe/locator.dart';
+import 'package:folk_robe/models/page_source.dart';
+import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 import 'package:folk_robe/views/core_page.dart';
+import 'package:folk_robe/views/gender_page/page.dart';
 
 class DancersPage extends StatelessWidget {
   const DancersPage({super.key});
@@ -23,7 +27,13 @@ class DancersPage extends StatelessWidget {
                   size: 60,
                   color: context.appTheme.colors.onSurfaceContainer,
                 ),
-                onTap: null,
+                onTap: () => locator<NavigationService>().push(
+                  MaterialPageRoute(
+                    builder: (context) => GenderPage(
+                      pageSource: PageSource.dancersPage,
+                    ),
+                  ),
+                ),
               ),
             ),
             Flexible(
@@ -34,7 +44,13 @@ class DancersPage extends StatelessWidget {
                   size: 60,
                   color: context.appTheme.colors.onSurfaceContainer,
                 ),
-                onTap: null,
+                onTap: () => locator<NavigationService>().push(
+                  MaterialPageRoute(
+                    builder: (context) => GenderPage(
+                      pageSource: PageSource.ownersPage,
+                    ),
+                  ),
+                ),
               ),
             ),
           ],
