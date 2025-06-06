@@ -1,117 +1,98 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:folk_robe/bloc/costume_bloc.dart';
 import 'package:folk_robe/common/common_textfield.dart';
-import 'package:folk_robe/locator.dart';
-import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 
 class CommonDialog extends StatelessWidget {
-  final void Function() onPressed;
+  final TextEditingController nameTextController;
+  final bool isNameNotEmpty;
+  final void Function() onSavePressed;
+  final void Function() onClosedPressed;
+  final void Function() onNameClearPressed;
+  final void Function(String name) onNameChanged;
+  final TextEditingController? quantityTextController;
+  final bool? isQuantityNotEmpty;
+  final void Function()? onQuantityClearPressed;
+  final void Function(String number)? onNumberChanged;
 
   const CommonDialog({
     super.key,
-    required this.onPressed,
+    required this.onSavePressed,
+    required this.onClosedPressed,
+    required this.onNameClearPressed,
+    required this.onNameChanged,
+    required this.nameTextController,
+    this.isNameNotEmpty = false,
+    this.onNumberChanged,
+    this.quantityTextController,
+    this.isQuantityNotEmpty = false,
+    this.onQuantityClearPressed,
   });
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<CostumeBloc>();
-
-    return BlocBuilder<CostumeBloc, CostumeState>(
-      bloc: bloc,
-      buildWhen: (previous, current) =>
-          previous.nameTextController != current.nameTextController ||
-          previous.costumeList != current.costumeList,
-      builder: (context, state) {
-        return AlertDialog(
-          title: const Text('Моля, въведете реквизит.'),
-          backgroundColor: context.appTheme.colors.surfaceContainer,
-          content: BlocProvider.value(
-            value: bloc,
-            child: BlocBuilder<CostumeBloc, CostumeState>(
-              buildWhen: (previous, current) =>
-                  bloc.buildWhen(previous, current),
-              builder: (context, state) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CommonTextfield(
-                      textController:
-                          state.nameTextController ?? TextEditingController(),
-                      isClearIconVisible: state.isNameNotEmpty,
-                      onIconButtonPress: () => bloc.add(
-                        OnNameClearEvent(
-                          textController: state.nameTextController ??
-                              TextEditingController(),
-                        ),
-                      ),
-                      onChanged: (text) =>
-                          bloc.add(OnNameChangedEvent(text: text)),
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Text(
-                          'Брой: ',
-                          style: context.appTheme.textStyles.bodyLarge.copyWith(
-                            color: context.appTheme.colors.onSurfaceContainer,
-                          ),
-                        ),
-                        Flexible(
-                          child: CommonTextfield(
-                            textController: state.quantityTextController ??
-                                TextEditingController(),
-                            keyboardType: TextInputType.number,
-                            formatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                            ],
-                            isClearIconVisible: state.isQuantityNotEmpty,
-                            onIconButtonPress: () => bloc.add(
-                              OnQuantityClearEvent(
-                                textController: state.quantityTextController ??
-                                    TextEditingController(),
-                              ),
-                            ),
-                            onChanged: (number) => context
-                                .read<CostumeBloc>()
-                                .add(OnQuantityChangedEvent(number: number)),
-                          ),
-                        )
-                      ],
-                    )
-                  ],
-                );
-              },
-            ),
+    return AlertDialog(
+      title: const Text('Моля, въведете реквизит.'),
+      backgroundColor: context.appTheme.colors.surfaceContainer,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CommonTextfield(
+            textController: nameTextController,
+            isClearIconVisible: isNameNotEmpty,
+            onIconButtonPress: onNameClearPressed,
+            onChanged: onNameChanged,
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                bloc.add(OnCloseDialogEvent());
-                locator<NavigationService>().pop();
-              },
-              child: Text(
-                'Затвори',
-                style: TextStyle(color: context.appTheme.colors.secondary),
-              ),
-            ),
-            FilledButton(
-              onPressed: onPressed,
-              style: FilledButton.styleFrom(
-                backgroundColor: context.appTheme.colors.secondary,
-              ),
-              child: Text(
-                'Запази',
-                style:
-                    TextStyle(color: context.appTheme.colors.surfaceContainer),
-              ),
-            ),
-          ],
-        );
-      },
+          const SizedBox(height: 12),
+          if (onNumberChanged != null &&
+              quantityTextController != null &&
+              isQuantityNotEmpty != null &&
+              onQuantityClearPressed != null)
+            Row(
+              children: [
+                Text(
+                  'Брой: ',
+                  style: context.appTheme.textStyles.bodyLarge.copyWith(
+                    color: context.appTheme.colors.onSurfaceContainer,
+                  ),
+                ),
+                Flexible(
+                  child: CommonTextfield(
+                    textController:
+                        quantityTextController ?? TextEditingController(),
+                    keyboardType: TextInputType.number,
+                    formatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    isClearIconVisible: isQuantityNotEmpty ?? false,
+                    onIconButtonPress: onQuantityClearPressed,
+                    onChanged: onNumberChanged,
+                  ),
+                )
+              ],
+            )
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: onClosedPressed,
+          child: Text(
+            'Затвори',
+            style: TextStyle(color: context.appTheme.colors.secondary),
+          ),
+        ),
+        FilledButton(
+          onPressed: onSavePressed,
+          style: FilledButton.styleFrom(
+            backgroundColor: context.appTheme.colors.secondary,
+          ),
+          child: Text(
+            'Запази',
+            style: TextStyle(color: context.appTheme.colors.surfaceContainer),
+          ),
+        ),
+      ],
     );
   }
 }

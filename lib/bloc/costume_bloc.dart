@@ -49,6 +49,7 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
   bool buildWhen(CostumeState previous, CostumeState current) =>
       previous.costumeList != current.costumeList ||
       previous.nameTextController != current.nameTextController ||
+      previous.quantityTextController != current.quantityTextController ||
       previous.isNameNotEmpty != current.isNameNotEmpty ||
       previous.isQuantityNotEmpty != current.isQuantityNotEmpty;
 
@@ -89,7 +90,7 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
     ));
   }
 
-  FutureOr<void> _onUpdateCostume(
+  Future<void> _onUpdateCostume(
       UpdateCostumeEvent event, Emitter<CostumeState> emit) async {
     final updatedCostume = Costume(
       id: event.id,
