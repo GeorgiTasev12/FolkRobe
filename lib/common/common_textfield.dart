@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:folk_robe/helpers/regex_helper.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
-import 'package:folk_robe/bloc/costume_bloc.dart';
 
 class CommonTextfield extends StatelessWidget {
   final TextEditingController textController;
@@ -25,8 +23,7 @@ class CommonTextfield extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CostumeBloc, CostumeState>(
-      builder: (context, state) => TextField(
+    return TextField(
         onChanged: onChanged,
         controller: textController,
         decoration: InputDecoration(
@@ -59,7 +56,6 @@ class CommonTextfield extends StatelessWidget {
             [
               FilteringTextInputFormatter.allow(RegexHelper.wordsOnly),
             ],
-      ),
-    );
+      );
   }
 }

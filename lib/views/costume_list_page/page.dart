@@ -26,7 +26,8 @@ class CostumeListPage extends HookWidget {
 
     return BlocBuilder<CostumeBloc, CostumeState>(
       buildWhen: (previous, current) =>
-          previous.costumeList != current.costumeList,
+          previous.costumeList != current.costumeList || 
+          previous.id != current.id,
       builder: (context, state) {
         return CorePage(
           hasFAB: true,
@@ -36,7 +37,10 @@ class CostumeListPage extends HookWidget {
               return BlocProvider.value(
                 value: bloc,
                 child: BlocBuilder<CostumeBloc, CostumeState>(
-                  buildWhen: (previous, current) => bloc.buildWhen(previous, current),
+                  buildWhen: (previous, current) => previous.nameTextController != current.nameTextController ||
+                      previous.quantityTextController != current.quantityTextController ||
+                      previous.isNameNotEmpty != current.isNameNotEmpty ||
+                      previous.isQuantityNotEmpty != current.isQuantityNotEmpty,
                   builder: (context, state) {
                     return CommonDialog(
                       onSavePressed: () {
