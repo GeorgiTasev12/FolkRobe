@@ -9,7 +9,7 @@ import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 import 'package:folk_robe/views/core_page.dart';
 import 'package:folk_robe/bloc/costume_bloc.dart';
-import 'package:folk_robe/views/costume_list_page/widgets/delete_dialog.dart';
+import 'package:folk_robe/common/common_delete_dialog.dart';
 import 'package:folk_robe/views/costume_list_page/widgets/empty_info_text.dart';
 
 class CostumeListPage extends HookWidget {
