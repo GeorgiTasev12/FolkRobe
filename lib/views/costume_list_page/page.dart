@@ -9,7 +9,7 @@ import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 import 'package:folk_robe/views/core_page.dart';
 import 'package:folk_robe/bloc/costume_bloc.dart';
-import 'package:folk_robe/views/costume_list_page/widgets/delete_dialog.dart';
+import 'package:folk_robe/common/common_delete_dialog.dart';
 import 'package:folk_robe/views/costume_list_page/widgets/empty_info_text.dart';
 
 class CostumeListPage extends HookWidget {
@@ -26,7 +26,8 @@ class CostumeListPage extends HookWidget {
 
     return BlocBuilder<CostumeBloc, CostumeState>(
       buildWhen: (previous, current) =>
-          previous.costumeList != current.costumeList,
+          previous.costumeList != current.costumeList || 
+          previous.id != current.id,
       builder: (context, state) {
         return CorePage(
           hasFAB: true,
@@ -35,14 +36,50 @@ class CostumeListPage extends HookWidget {
             builder: (context) {
               return BlocProvider.value(
                 value: bloc,
-                child: CommonDialog(
-                  onPressed: () {
-                    bloc.add(AddCostumeEvent(
-                      title: state.nameTextController?.text ?? "",
-                      quantity: state.quantityTextController?.text,
-                    ));
-                    bloc.add(InitDataEvent());
-                    locator<NavigationService>().pop();
+                child: BlocBuilder<CostumeBloc, CostumeState>(
+                  buildWhen: (previous, current) => previous.nameTextController != current.nameTextController ||
+                      previous.quantityTextController != current.quantityTextController ||
+                      previous.isNameNotEmpty != current.isNameNotEmpty ||
+                      previous.isQuantityNotEmpty != current.isQuantityNotEmpty,
+                  builder: (context, state) {
+                    return CommonDialog(
+                      onSavePressed: () {
+                        bloc.add(AddCostumeEvent(
+                          title: state.nameTextController?.text ?? "",
+                          quantity: state.quantityTextController?.text,
+                        ));
+                        bloc.add(InitDataEvent());
+                        locator<NavigationService>().pop();
+                      },
+                      onClosedPressed: () {
+                        bloc.add(OnCloseDialogEvent());
+                        locator<NavigationService>().pop();
+                      },
+                      onNameClearPressed: () => bloc.add(
+                        OnNameClearEvent(
+                          textController: state.nameTextController ??
+                              TextEditingController(),
+                        ),
+                      ),
+                      onQuantityClearPressed: () => bloc.add(
+                        OnQuantityClearEvent(
+                          textController: state.quantityTextController ??
+                              TextEditingController(),
+                        ),
+                      ),
+                      onNameChanged: (String name) => bloc.add(
+                        OnNameChangedEvent(text: name),
+                      ),
+                      onNumberChanged: (String number) => bloc.add(
+                        OnQuantityChangedEvent(number: number),
+                      ),
+                      nameTextController:
+                          state.nameTextController ?? TextEditingController(),
+                      quantityTextController: state.quantityTextController ??
+                          TextEditingController(),
+                      isNameNotEmpty: state.isNameNotEmpty,
+                      isQuantityNotEmpty: state.isQuantityNotEmpty,
+                    );
                   },
                 ),
               );
@@ -53,7 +90,8 @@ class CostumeListPage extends HookWidget {
               : BlocBuilder<CostumeBloc, CostumeState>(
                   bloc: bloc,
                   buildWhen: (previous, current) =>
-                      previous.costumeList != current.costumeList,
+                      previous.costumeList != current.costumeList ||
+                      previous.id != current.id,
                   builder: (context, state) {
                     return ListView.separated(
                       itemCount: state.costumeList?.length ?? 0,
@@ -78,18 +116,54 @@ class CostumeListPage extends HookWidget {
                                     context: context,
                                     builder: (_) => BlocProvider.value(
                                       value: bloc,
-                                      child: CommonDialog(onPressed: () {
-                                        bloc.add(UpdateCostumeEvent(
-                                          id: state.costumeList?[index].id,
-                                          title:
-                                              state.nameTextController?.text ??
-                                                  "",
-                                          quantity: state
-                                              .quantityTextController?.text,
-                                        ));
-                                        bloc.add(InitDataEvent());
-                                        locator<NavigationService>().pop();
-                                      }),
+                                      child: CommonDialog(
+                                        onSavePressed: () {
+                                          bloc.add(UpdateCostumeEvent(
+                                            id: state.costumeList?[index].id,
+                                            title: state
+                                                    .nameTextController?.text ??
+                                                "",
+                                            quantity: state
+                                                .quantityTextController?.text,
+                                          ));
+                                          bloc.add(InitDataEvent());
+                                          locator<NavigationService>().pop();
+                                        },
+                                        onClosedPressed: () {
+                                          bloc.add(OnCloseDialogEvent());
+                                          locator<NavigationService>().pop();
+                                        },
+                                        onNameClearPressed: () =>
+                                            bloc.add(OnNameClearEvent(
+                                          textController:
+                                              state.nameTextController ??
+                                                  TextEditingController(),
+                                        )),
+                                        onQuantityClearPressed: () => bloc.add(
+                                          OnQuantityClearEvent(
+                                            textController:
+                                                state.quantityTextController ??
+                                                    TextEditingController(),
+                                          ),
+                                        ),
+                                        onNameChanged: (String name) =>
+                                            bloc.add(
+                                          OnNameChangedEvent(text: name),
+                                        ),
+                                        onNumberChanged: (String number) =>
+                                            bloc.add(
+                                          OnQuantityChangedEvent(
+                                              number: number),
+                                        ),
+                                        isNameNotEmpty: state.isNameNotEmpty,
+                                        isQuantityNotEmpty:
+                                            state.isQuantityNotEmpty,
+                                        nameTextController:
+                                            state.nameTextController ??
+                                                TextEditingController(),
+                                        quantityTextController:
+                                            state.quantityTextController,
+                                      ),
                                     ),
                                   ),
                                   icon: Icon(
@@ -107,11 +181,37 @@ class CostumeListPage extends HookWidget {
                                 child: IconButton(
                                   onPressed: () => showDialog(
                                     context: context,
-                                    builder: (_) => BlocProvider.value(
+                                    builder: (context) => BlocProvider.value(
                                       value: bloc,
-                                      child: DeleteDialog(
-                                          index: state.costumeList?[index].id ??
-                                              0),
+                                      child: BlocBuilder<CostumeBloc,
+                                          CostumeState>(
+                                        buildWhen: (previous, current) =>
+                                            previous.id != current.id ||
+                                            previous.costumeList !=
+                                                current.costumeList,
+                                        builder: (context, state) {
+                                          if (state.costumeList == null ||
+                                              index >=
+                                                  state.costumeList!.length) {
+                                            return const SizedBox.shrink();
+                                          }
+                                          return CommonDeleteDialog(
+                                            index:
+                                                state.costumeList![index].id ??
+                                                    0,
+                                            onDeletePressed: () {
+                                              bloc.add(RemoveCostumeEvent(
+                                                id: state.costumeList![index]
+                                                        .id ??
+                                                    0,
+                                              ));
+                                              bloc.add(InitDataEvent());
+                                              locator<NavigationService>()
+                                                  .pop();
+                                            },
+                                          );
+                                        },
+                                      ),
                                     ),
                                   ),
                                   icon: Icon(

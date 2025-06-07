@@ -46,12 +46,6 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
         costumeList: costumes.map((e) => Costume.fromMap(e)).toList()));
   }
 
-  bool buildWhen(CostumeState previous, CostumeState current) =>
-      previous.costumeList != current.costumeList ||
-      previous.nameTextController != current.nameTextController ||
-      previous.isNameNotEmpty != current.isNameNotEmpty ||
-      previous.isQuantityNotEmpty != current.isQuantityNotEmpty;
-
   Future<void> _onAddCostume(
       AddCostumeEvent event, Emitter<CostumeState> emit) async {
     final costume = Costume(
@@ -89,7 +83,7 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
     ));
   }
 
-  FutureOr<void> _onUpdateCostume(
+  Future<void> _onUpdateCostume(
       UpdateCostumeEvent event, Emitter<CostumeState> emit) async {
     final updatedCostume = Costume(
       id: event.id,
