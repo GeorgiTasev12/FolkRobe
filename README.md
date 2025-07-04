@@ -1,62 +1,39 @@
 # FolkRobe
 
-🎭 **FolkRobe** is a mobile inventory app for managing traditional folk dance costumes in cultural community centers (chitalishte).  
-It helps wardrobe managers and ensemble organizers keep track of costume pieces, dancers, and assignments — replacing manual notebooks with a simple digital solution.
+🎭 **FolkRobe** is a mobile application built in Flutter that helps manage traditional folk dance costumes for Bulgarian cultural community centers (chitalishte).
+
+It is designed to assist wardrobe managers and ensemble organizers by providing a simple way to keep track of costume pieces, dancers, and assignments — helping to preserve cultural heritage while making organization easier.
 
 ---
 
 ## 📱 Features
 
-- 📦 **Costume Pieces Inventory:**  
-  - Add, edit, or delete individual pieces like hats, shirts, belts, skirts, shoes, etc.
+- 📦 **Inventory Management**
+  - Maintain a detailed list of costume pieces such as hats, shirts, belts, skirts, shoes, and more.
   
-- 🕺 **Dancer Management:**  
-  - Maintain a roster of active dancers in the ensemble.
-  
-- 🔗 **Assign Costumes:**  
-  - Build complete costumes by combining individual pieces.  
-  - Assign them to dancers for concerts, with a clear record of responsibility.
+- 🕺 **Dancer Roster**
+  - Keep records of active dancers in the ensemble.
 
-- 💾 **Local Storage:**  
-  - Uses SQLite for offline data, so it works even without internet.
+- 🔗 **Costume Assignment**
+  - Assign complete costumes to dancers for concerts and events, with a clear record of responsibility.
 
----
-
-## 🚀 Installation
-
-> ⚠️ Currently built with **Flutter**.
-
-1. Clone this repository:
-git clone https://github.com/GeorgiTasev12/FolkRobe.git
-2. Install dependencies:
-flutter pub get
-3. Run the app on your emulator or connected device:
-flutter run
-
-## 🎯 Use Cases
-
-- 🎭 Folk dance ensembles tracking costumes for concerts & festivals.
-- 🎻 Local chitalishte or community centers managing shared cultural wardrobes.
-- 📝 Avoids losing track of items or over-relying on handwritten notebooks.
+- 💾 **Offline-First**
+  - Uses local storage (SQLite) so it works even without an internet connection.
 
 ---
 
-## ✍️ Future Improvements
+## ⚠️ Note on usage
 
-- 🎺 Having new concerts and record them in the database and assign the existing roster in it.
-- 📑 Make a report document for exportation or view then in app.
-- 📆 History log of which dancer wore which costume and when.
-- ☁️ Optional cloud sync or backup.
+This project is a **personal portfolio demonstration**.  
+It is proprietary software and is **not licensed for reuse, redistribution, or modification**.
 
-## 📜 License
-
-This project is under the MIT License.
+For details, see the `COPYRIGHT.txt` file.
 
 ---
 
-## 🙌 Acknowledgments
+## 🙌 About the developer
 
-Created by Georgi Tasev to support the living tradition of Bulgarian folk dance and help community ensembles organize their costumes more efficiently.
+Created by **Georgi Tasev**, a mobile software developer and long-time folk dancer, to support the living tradition of Bulgarian folklore by applying modern technology.
 
 ---
 
