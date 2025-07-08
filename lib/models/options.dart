@@ -14,7 +14,7 @@ enum Options {
 }
 
 extension OptionTableName on Options {
-  String tableName(GenderType gender) {
+  String tableCostumeName(GenderType gender) {
     final prefix = gender == GenderType.female ? 'female_' : '';
 
     switch (this) {
@@ -34,6 +34,11 @@ extension OptionTableName on Options {
         return '${prefix}costume_pirinski';
     }
   }
+}
+
+String tableDancerName(GenderType gender) {
+    final prefix = gender == GenderType.female ? 'female_' : 'male_';
+    return '${prefix}_dancer';
 }
 
 extension OptionName on Options {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:folk_robe/locator.dart';
 import 'package:folk_robe/models/options.dart';
 import 'package:folk_robe/models/page_source.dart';
@@ -6,6 +7,7 @@ import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/views/core_page.dart';
 import 'package:folk_robe/views/costumes_type_page/page.dart';
 import 'package:folk_robe/views/dancers_list_page/page.dart';
+import 'package:folk_robe/views/dancers_list_page/bloc/dancers_bloc.dart';
 import 'package:folk_robe/views/gender_page/widgets/gender_card.dart';
 import 'package:folk_robe/views/owners_list_page/page.dart';
 
@@ -17,13 +19,13 @@ class GenderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CorePage(
-      appBarTitle: pageSource == PageSource.homePage 
-      ? "Изберете тип носии"
-      : pageSource == PageSource.dancersPage 
-        ? "Изберете тип танцьори" 
-        : pageSource == PageSource.ownersPage 
-          ? "Изберете тип отговорници" 
-          : "",
+      appBarTitle: pageSource == PageSource.homePage
+          ? "Изберете тип носии"
+          : pageSource == PageSource.dancersPage
+              ? "Изберете тип танцьори"
+              : pageSource == PageSource.ownersPage
+                  ? "Изберете тип отговорници"
+                  : "",
       child: Padding(
         padding: EdgeInsets.all(8),
         child: Center(
@@ -47,8 +49,12 @@ class GenderPage extends StatelessWidget {
                     case PageSource.dancersPage:
                       locator<NavigationService>().push(
                         MaterialPageRoute(
-                          builder: (context) => DancersListPage(
-                            genderType: GenderType.male,
+                          builder: (context) => BlocProvider(
+                            create: (context) =>
+                                DancersBloc(genderType: GenderType.male),
+                            child: DancersListPage(
+                              genderType: GenderType.male,
+                            ),
                           ),
                         ),
                       );
@@ -81,8 +87,11 @@ class GenderPage extends StatelessWidget {
                     case PageSource.dancersPage:
                       locator<NavigationService>().push(
                         MaterialPageRoute(
-                          builder: (context) => DancersListPage(
-                            genderType: GenderType.female,
+                          builder: (context) => BlocProvider(
+                            create: (context) => DancersBloc(genderType: GenderType.female),
+                            child: DancersListPage(
+                              genderType: GenderType.female,
+                            ),
                           ),
                         ),
                       );
