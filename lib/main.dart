@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:folk_robe/locator.dart';
 import 'package:folk_robe/service/database_costume_helper.dart';
+import 'package:folk_robe/service/database_dancers_helper.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/views/home_page/page.dart';
 
@@ -8,7 +9,8 @@ import 'theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DatabaseCostumeHelper.database;
+  await DatabaseCostumeHelper().database;
+  await DatabaseDancersHelper().database;
   setupLocator();
 
   runApp(const MyApp());
