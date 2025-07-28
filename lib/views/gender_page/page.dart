@@ -6,10 +6,10 @@ import 'package:folk_robe/models/page_source.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/views/core_page.dart';
 import 'package:folk_robe/views/costumes_type_page/page.dart';
-import 'package:folk_robe/views/dancers_list_page/page.dart';
-import 'package:folk_robe/views/dancers_list_page/bloc/dancers_bloc.dart';
+import 'package:folk_robe/views/dancers_page/dancers_list_page/page.dart';
+import 'package:folk_robe/views/dancers_page/dancers_list_page/bloc/dancers_bloc.dart';
 import 'package:folk_robe/views/gender_page/widgets/gender_card.dart';
-import 'package:folk_robe/views/owners_list_page/page.dart';
+import 'package:folk_robe/views/dancers_page/owners_list_page/page.dart';
 
 class GenderPage extends StatelessWidget {
   final PageSource pageSource;
