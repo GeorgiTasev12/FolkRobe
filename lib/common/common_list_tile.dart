@@ -4,14 +4,14 @@ import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 class CommonListTile extends StatelessWidget {
   final String title;
   final String? quantity;
-  final EdgeInsetsGeometry? contentPadding;
+  final double? contentPadding;
   final List<Widget>? suffixWidgets;
 
   const CommonListTile({
     super.key,
     required this.title,
     this.quantity,
-    this.contentPadding,
+    this.contentPadding = 10,
     this.suffixWidgets,
   });
 
@@ -45,7 +45,9 @@ class CommonListTile extends StatelessWidget {
           ),
         ],
       ),
-      contentPadding: contentPadding ?? EdgeInsets.zero,
+      contentPadding: (contentPadding != null)
+          ? EdgeInsets.symmetric(horizontal: contentPadding ?? 0.0)
+          : EdgeInsets.zero,
       tileColor: context.appTheme.colors.surfaceContainer,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
