@@ -88,8 +88,6 @@ class DancersListPage extends HookWidget {
                   itemBuilder: (context, index) {
                     return CommonListTile(
                       title: state.dancersList?[index].name ?? '',
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 10),
                       suffixWidgets: [
                         CommonCircleIconButton(
                           index: index,
