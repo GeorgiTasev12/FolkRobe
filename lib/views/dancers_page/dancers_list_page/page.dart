@@ -11,7 +11,7 @@ import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 import 'package:folk_robe/views/core_page.dart';
 import 'package:folk_robe/views/costume_list_page/widgets/empty_info_text.dart';
-import 'package:folk_robe/views/dancers_list_page/bloc/dancers_bloc.dart';
+import 'package:folk_robe/views/dancers_page/dancers_list_page/bloc/dancers_bloc.dart';
 
 class DancersListPage extends HookWidget {
   final GenderType genderType;
@@ -88,8 +88,6 @@ class DancersListPage extends HookWidget {
                   itemBuilder: (context, index) {
                     return CommonListTile(
                       title: state.dancersList?[index].name ?? '',
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 10),
                       suffixWidgets: [
                         CommonCircleIconButton(
                           index: index,

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:folk_robe/helpers/screen_size_helper.dart';
 import 'package:folk_robe/locator.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 
 class CorePage extends StatelessWidget {
   final Widget child;
-  final void Function()? onFABPressed;
+  final VoidCallback? onFABPressed;
   final bool? hasAppBar;
   final String? appBarTitle;
   final bool? hasAppBarTitle;
@@ -63,7 +64,10 @@ class CorePage extends StatelessWidget {
           : null,
       backgroundColor: context.appTheme.colors.background,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenSizeHelper(context).horizontalPadding,
+          vertical: 10,
+        ),
         child: child,
       ),
     );

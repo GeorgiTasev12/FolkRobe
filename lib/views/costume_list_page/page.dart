@@ -26,7 +26,7 @@ class CostumeListPage extends HookWidget {
 
     return BlocBuilder<CostumeBloc, CostumeState>(
       buildWhen: (previous, current) =>
-          previous.costumeList != current.costumeList || 
+          previous.costumeList != current.costumeList ||
           previous.id != current.id,
       builder: (context, state) {
         return CorePage(
@@ -103,10 +103,6 @@ class CostumeListPage extends HookWidget {
                           quantity: state.costumeList?[index].quantity != null
                               ? state.costumeList![index].quantity.toString()
                               : null,
-                          contentPadding: const EdgeInsets.only(
-                            right: 5,
-                            left: 15,
-                          ),
                           suffixWidgets: [
                             ClipOval(
                               child: Material(

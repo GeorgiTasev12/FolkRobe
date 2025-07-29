@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:folk_robe/common/common_textfield.dart';
+import 'package:folk_robe/helpers/screen_size_helper.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 
 class CommonDialog extends StatelessWidget {
@@ -31,8 +32,18 @@ class CommonDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = ScreenSizeHelper(context);
+
     return AlertDialog(
-      title: const Text('Моля, въведете реквизит.'),
+      title: Text(
+        'Моля, въведете реквизит.',
+        style: screenSize.isSmall
+            ? context.appTheme.textStyles.titleMedium.copyWith(
+                fontWeight: FontWeight.w400,
+              )
+            : null,
+      ),
+      scrollable: screenSize.isSmall ? true : false,
       backgroundColor: context.appTheme.colors.surfaceContainer,
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -44,7 +55,7 @@ class CommonDialog extends StatelessWidget {
             onIconButtonPress: onNameClearPressed,
             onChanged: onNameChanged,
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: screenSize.isSmall ? 12 : 8),
           if (onNumberChanged != null &&
               quantityTextController != null &&
               isQuantityNotEmpty != null &&
