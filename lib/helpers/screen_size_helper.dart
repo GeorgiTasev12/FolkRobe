@@ -7,8 +7,8 @@ class ScreenSizeHelper {
 
   double get width => MediaQuery.of(context).size.width;
 
-  bool get isSmall => width < 400;
-  bool get isMedium => width >= 400 && width < 800;
+  bool get isSmall => width < 390;
+  bool get isMedium => width >= 390 && width < 800;
   bool get isLarge => width >= 800;
 
   double get horizontalPadding {
