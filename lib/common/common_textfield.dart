@@ -26,6 +26,7 @@ class CommonTextfield extends StatelessWidget {
     return TextField(
         onChanged: onChanged,
         controller: textController,
+        textCapitalization: TextCapitalization.sentences,
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
