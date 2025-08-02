@@ -43,6 +43,7 @@ class CostumeListPage extends HookWidget {
                       previous.isQuantityNotEmpty != current.isQuantityNotEmpty,
                   builder: (context, state) {
                     return CommonDialog(
+                      dialogTitle: 'Моля, въведете реквизит.',
                       onSavePressed: () {
                         bloc.add(AddCostumeEvent(
                           title: state.nameTextController?.text ?? "",
@@ -113,6 +114,7 @@ class CostumeListPage extends HookWidget {
                                     builder: (_) => BlocProvider.value(
                                       value: bloc,
                                       child: CommonDialog(
+                                        dialogTitle: 'Моля, въведете реквизит.',
                                         onSavePressed: () {
                                           bloc.add(UpdateCostumeEvent(
                                             id: state.costumeList?[index].id,

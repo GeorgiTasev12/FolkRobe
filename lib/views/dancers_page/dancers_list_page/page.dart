@@ -43,6 +43,7 @@ class DancersListPage extends HookWidget {
                   previous.isNameNotEmpty != current.isNameNotEmpty,
               builder: (context, state) {
                 return CommonDialog(
+                  dialogTitle: 'Моля, въведете име на танцьора.',
                   onSavePressed: () {
                     bloc.add(AddDancerEvent(
                       name: state.nameTextController?.text ?? "",
@@ -103,6 +104,7 @@ class DancersListPage extends HookWidget {
                               child: BlocBuilder<DancersBloc, DancersState>(
                                 builder: (context, state) {
                                   return CommonDialog(
+                                    dialogTitle: 'Моля, въведете име на танцьора.',
                                     onSavePressed: () {
                                       bloc.add(UpdateDancerEvent(
                                         id: state.dancersList?[index].id,
