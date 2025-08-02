@@ -5,6 +5,7 @@ import 'package:folk_robe/helpers/screen_size_helper.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 
 class CommonDialog extends StatelessWidget {
+  final String dialogTitle;
   final TextEditingController nameTextController;
   final bool isNameNotEmpty;
   final void Function() onSavePressed;
@@ -18,6 +19,7 @@ class CommonDialog extends StatelessWidget {
 
   const CommonDialog({
     super.key,
+    required this.dialogTitle,
     required this.onSavePressed,
     required this.onClosedPressed,
     required this.onNameClearPressed,
@@ -36,7 +38,7 @@ class CommonDialog extends StatelessWidget {
 
     return AlertDialog(
       title: Text(
-        'Моля, въведете реквизит.',
+        dialogTitle,
         style: screenSize.isSmall
             ? context.appTheme.textStyles.titleMedium.copyWith(
                 fontWeight: FontWeight.w400,
