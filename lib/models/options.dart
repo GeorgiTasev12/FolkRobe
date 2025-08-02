@@ -37,7 +37,7 @@ extension OptionTableName on Options {
 }
 
 String tableDancerName(GenderType gender) {
-    final prefix = gender == GenderType.female ? 'female_' : 'male_';
+    final prefix = gender == GenderType.female ? 'female' : 'male';
     return '${prefix}_dancer';
 }
 

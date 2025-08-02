@@ -7,14 +7,14 @@ class Dancer {
   factory Dancer.fromMap(Map<String, dynamic> map) {
     return Dancer(
       id: map['id'] as int?,
-      name: map['title'] as String,
+      name: map['name'] as String,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'title': name,
+      'name': name,
     };
   }
 

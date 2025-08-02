@@ -26,7 +26,7 @@ class DancersListPage extends HookWidget {
     final bloc = context.read<DancersBloc>();
 
     useEffect(() {
-      context.read<DancersBloc>().add(InitDancersEvent());
+      bloc.add(InitDancersEvent());
       return;
     }, const []);
 
