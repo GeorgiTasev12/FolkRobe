@@ -1,0 +1,56 @@
+import 'package:folk_robe/dao/costume.dart';
+import 'package:folk_robe/models/options.dart';
+import 'package:folk_robe/repositories/base_repository.dart';
+import 'package:folk_robe/service/database_costume_helper.dart';
+
+class CostumesRepository extends BaseRepository<Costume> {
+  @override
+  Future<int> add({
+    required Costume item,
+    required GenderType gender,
+    Options? option,
+  }) async {
+    return await DatabaseCostumeHelper().insert(
+      item: item,
+      gender: gender,
+      option: option,
+    );
+  }
+
+  @override
+  Future<int> delete({
+    required int id,
+    required GenderType gender,
+    Options? option,
+  }) async {
+    return await DatabaseCostumeHelper().delete(
+      option: option,
+      id: id,
+      gender: gender,
+    );
+  }
+
+  @override
+  Future<List<Costume>> read(
+      {required GenderType gender, Options? option}) async {
+    return await DatabaseCostumeHelper().getAll(
+      option: option,
+      gender: gender,
+    );
+  }
+
+  @override
+  Future<int> update({
+    required int id,
+    required Costume item,
+    required GenderType gender,
+    Options? option,
+  }) async {
+    return await DatabaseCostumeHelper().update(
+      id: id,
+      option: option,
+      item: item,
+      gender: gender,
+    );
+  }
+}

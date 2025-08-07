@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:folk_robe/dao/costume.dart';
 import 'package:folk_robe/models/options.dart';
-import 'package:folk_robe/service/database_costume_helper.dart';
+import 'package:folk_robe/repositories/costumes_repository.dart';
 
 part 'costume_event.dart';
 part 'costume_state.dart';
@@ -40,7 +40,7 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
 
   Future<void> _onInitData(
       InitDataEvent event, Emitter<CostumeState> emit) async {
-    final costumes = await DatabaseCostumeHelper().getAll(
+    final costumes = await CostumesRepository().read(
       option: selectedOption,
       gender: genderType,
     );
@@ -53,7 +53,7 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
       title: event.title,
       quantity: int.tryParse(event.quantity ?? ''),
     );
-    final newId = await DatabaseCostumeHelper().insert(
+    final newId = await CostumesRepository().add(
       item: costume,
       gender: genderType,
       option: selectedOption,
@@ -72,13 +72,13 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
 
   Future<void> _onRemoveCostume(
       RemoveCostumeEvent event, Emitter<CostumeState> emit) async {
-    await DatabaseCostumeHelper().delete(
+    await CostumesRepository().delete(
       option: selectedOption,
       id: event.id ?? 0,
       gender: genderType,
     );
 
-    final updatedList = await DatabaseCostumeHelper().getAll(
+    final updatedList = await CostumesRepository().read(
       option: selectedOption,
       gender: genderType,
     );
@@ -96,14 +96,14 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
       title: event.title ?? '',
       quantity: int.tryParse(event.quantity ?? ''),
     );
-    await DatabaseCostumeHelper().update(
+    await CostumesRepository().update(
       id: event.id ?? 0,
       option: selectedOption,
       item: updatedCostume,
       gender: genderType,
     );
 
-    final updatedList = await DatabaseCostumeHelper().getAll(
+    final updatedList = await CostumesRepository().read(
       option: selectedOption,
       gender: genderType,
     );
