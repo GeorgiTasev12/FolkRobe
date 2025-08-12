@@ -58,7 +58,7 @@ class DatabaseCostumeHelper extends DatabaseHelper<Costume> {
 
   @override
   String getTableName({required GenderType gender, Options? option}) {
-    return option?.tableCostumeName(gender) ?? Options.shopski.name;
+    return option?.tableCostumeName(gender) ?? Options.shopska.name;
   }
 
   @override
