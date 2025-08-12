@@ -4,7 +4,7 @@ enum GenderType {
 }
 
 enum Options {
-  shopski,
+  shopska,
   trakiski,
   severniashka,
   rodopski,
@@ -15,10 +15,10 @@ enum Options {
 
 extension OptionTableName on Options {
   String tableCostumeName(GenderType gender) {
-    final prefix = gender == GenderType.female ? 'female_' : '';
+    final prefix = gender == GenderType.female ? 'female_' : 'male_';
 
     switch (this) {
-      case Options.shopski:
+      case Options.shopska:
         return '${prefix}costume_shopska';
       case Options.trakiski:
         return '${prefix}costume_trakiski';
@@ -44,7 +44,7 @@ String tableDancerName(GenderType gender) {
 extension OptionName on Options {
   String get optionName {
     switch (this) {
-      case Options.shopski:
+      case Options.shopska:
         return 'Шопски';
       case Options.trakiski:
         return 'Тракийски';

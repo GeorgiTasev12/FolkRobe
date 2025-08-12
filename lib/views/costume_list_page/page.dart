@@ -20,7 +20,7 @@ class CostumeListPage extends HookWidget {
     final bloc = context.read<CostumeBloc>();
 
     useEffect(() {
-      bloc.add(InitDataEvent(options: Options.shopski));
+      bloc.add(InitDataEvent(options: Options.shopska));
       return null;
     }, const []);
 
