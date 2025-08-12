@@ -4,13 +4,15 @@ import 'package:folk_robe/repositories/base_repository.dart';
 import 'package:folk_robe/service/database_dancers_helper.dart';
 
 class DancersRepository extends BaseRepository<Dancer> {
+  final _dancersDB = DatabaseDancersHelper();
+
   @override
   Future<int> add({
     required Dancer item,
     required GenderType gender,
     Options? option,
   }) async {
-    return await DatabaseDancersHelper().insert(item: item, gender: gender);
+    return await _dancersDB.insert(item: item, gender: gender);
   }
 
   @override
@@ -19,7 +21,7 @@ class DancersRepository extends BaseRepository<Dancer> {
     required GenderType gender,
     Options? option,
   }) async {
-    return await DatabaseDancersHelper().delete(
+    return await _dancersDB.delete(
       id: id,
       gender: gender,
     );
@@ -30,7 +32,7 @@ class DancersRepository extends BaseRepository<Dancer> {
     required GenderType gender,
     Options? option,
   }) async {
-    return await DatabaseDancersHelper().getAll(gender: gender);
+    return await _dancersDB.getAll(gender: gender);
   }
 
   @override
@@ -40,7 +42,7 @@ class DancersRepository extends BaseRepository<Dancer> {
     required GenderType gender,
     Options? option,
   }) async {
-    return await DatabaseDancersHelper().update(
+    return await _dancersDB.update(
       item: item,
       gender: gender,
       id: id,

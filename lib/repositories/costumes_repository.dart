@@ -4,13 +4,15 @@ import 'package:folk_robe/repositories/base_repository.dart';
 import 'package:folk_robe/service/database_costume_helper.dart';
 
 class CostumesRepository extends BaseRepository<Costume> {
+  final _costumesDB = DatabaseCostumeHelper();
+
   @override
   Future<int> add({
     required Costume item,
     required GenderType gender,
     Options? option,
   }) async {
-    return await DatabaseCostumeHelper().insert(
+    return await _costumesDB.insert(
       item: item,
       gender: gender,
       option: option,
@@ -23,7 +25,7 @@ class CostumesRepository extends BaseRepository<Costume> {
     required GenderType gender,
     Options? option,
   }) async {
-    return await DatabaseCostumeHelper().delete(
+    return await _costumesDB.delete(
       option: option,
       id: id,
       gender: gender,
@@ -33,7 +35,7 @@ class CostumesRepository extends BaseRepository<Costume> {
   @override
   Future<List<Costume>> read(
       {required GenderType gender, Options? option}) async {
-    return await DatabaseCostumeHelper().getAll(
+    return await _costumesDB.getAll(
       option: option,
       gender: gender,
     );
@@ -46,7 +48,7 @@ class CostumesRepository extends BaseRepository<Costume> {
     required GenderType gender,
     Options? option,
   }) async {
-    return await DatabaseCostumeHelper().update(
+    return await _costumesDB.update(
       id: id,
       option: option,
       item: item,
