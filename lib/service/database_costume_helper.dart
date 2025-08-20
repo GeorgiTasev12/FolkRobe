@@ -27,29 +27,46 @@ class DatabaseCostumeHelper extends DatabaseHelper<Costume> {
       path,
       version: 2,
       onCreate: (db, version) async {
-        await Future.wait(
-          GenderType.values.expand((gender) => Options.values.map((option) {
-                final tableName = option.tableCostumeName(gender);
+        try {
+          await Future.wait(
+            GenderType.values.expand(
+              (gender) => Options.values.map(
+                (option) {
+                  final tableName = option.tableCostumeName(gender);
 
-                return db.execute('CREATE TABLE IF NOT EXISTS $tableName ('
-                    'id INTEGER PRIMARY KEY AUTOINCREMENT,'
-                    'title TEXT,'
-                    'quantity INTEGER NULL'
-                    ')');
-              })),
-        );
+                  return db.execute('CREATE TABLE IF NOT EXISTS $tableName ('
+                      'id INTEGER PRIMARY KEY AUTOINCREMENT,'
+                      'title TEXT,'
+                      'quantity INTEGER NULL'
+                      ')');
+                },
+              ),
+            ),
+          );
+        } on DatabaseException catch (e) {
+          throw Exception(e);
+        }
       },
       onUpgrade: (db, oldVersion, newVersion) async {
-        await Future.wait(
-          GenderType.values.expand((gender) => Options.values.map((option) {
-                final tableName = option.tableCostumeName(gender);
+        try {
+          await Future.wait(
+            GenderType.values.expand(
+              (gender) => Options.values.map(
+                (option) {
+                  final tableName = option.tableCostumeName(gender);
 
-                return db.execute('CREATE TABLE IF NOT EXISTS $tableName ('
-                    'id INTEGER PRIMARY KEY AUTOINCREMENT,'
-                    'title TEXT'
-                    ')');
-              })),
-        );
+                  return db.execute('CREATE TABLE IF NOT EXISTS $tableName ('
+                      'id INTEGER PRIMARY KEY AUTOINCREMENT,'
+                      'title TEXT,'
+                      'quantity INTEGER NULL'
+                      ')');
+                },
+              ),
+            ),
+          );
+        } on DatabaseException catch (e) {
+          throw Exception(e);
+        }
       },
     );
 
@@ -66,6 +83,23 @@ class DatabaseCostumeHelper extends DatabaseHelper<Costume> {
 
   @override
   Map<String, dynamic> toMap(Costume costume) => costume.toMap();
+
+  static Future<List<String>> getCostumes(
+    GenderType gender,
+    Options option,
+  ) async {
+    final prefix = gender == GenderType.female ? 'female' : 'male';
+
+    try {
+      final result = await _database?.rawQuery(
+          'SELECT title,quantity FROM ${prefix}_costume_${option.name}');
+
+      return result?.map((costume) => costume['title'] as String).toList() ??
+          [];
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 
   Future<void> close() async {
     if (_database != null) {

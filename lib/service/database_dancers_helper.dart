@@ -45,6 +45,19 @@ class DatabaseDancersHelper extends DatabaseHelper<Dancer> {
   @override
   String getTableName({required GenderType gender, Options? option}) =>
       tableDancerName(gender);
+  
+  static Future<List<String>> getDancersNames(GenderType gender) async {
+    final prefix = gender == GenderType.female ? 'female' : 'male';
+
+    try {
+      final result =
+          await _database?.rawQuery('SELECT name FROM ${prefix}_dancer');
+
+      return result?.map((dancer) => dancer['name'] as String).toList() ?? [];
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 
   Future<void> close() async {
     if (_database != null) {
