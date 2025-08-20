@@ -37,8 +37,13 @@ extension OptionTableName on Options {
 }
 
 String tableDancerName(GenderType gender) {
-    final prefix = gender == GenderType.female ? 'female' : 'male';
-    return '${prefix}_dancer';
+  final prefix = gender == GenderType.female ? 'female' : 'male';
+  return '${prefix}_dancer';
+}
+
+String tableOwnersName(GenderType gender) {
+  final prefix = gender == GenderType.female ? 'female' : 'male';
+  return '${prefix}_owner';
 }
 
 extension OptionName on Options {
