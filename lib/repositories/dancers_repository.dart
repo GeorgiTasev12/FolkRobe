@@ -48,4 +48,8 @@ class DancersRepository extends BaseRepository<Dancer> {
       id: id,
     );
   }
+
+  static Future<List<String>> getDancers({required GenderType gender}) async {
+    return await DatabaseDancersHelper.getDancersNames(gender);
+  }
 }

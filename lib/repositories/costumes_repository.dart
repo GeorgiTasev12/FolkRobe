@@ -55,4 +55,11 @@ class CostumesRepository extends BaseRepository<Costume> {
       gender: gender,
     );
   }
+
+  static Future<List<String>> getCostumes({
+    required GenderType gender,
+    required Options option,
+  }) async {
+    return await DatabaseCostumeHelper.getCostumes(gender, option);
+  }
 }
