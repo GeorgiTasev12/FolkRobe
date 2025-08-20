@@ -68,8 +68,4 @@ class OwnersRepository extends BaseRepository<Owner> {
       throw Exception(e);
     }
   }
-
-  static Future<void> close() async {
-    await DatabaseOwnersHelper().close();
-  }
 }
