@@ -37,8 +37,11 @@ class CostumeListPage extends HookWidget {
               return BlocProvider.value(
                 value: bloc,
                 child: BlocBuilder<CostumeBloc, CostumeState>(
-                  buildWhen: (previous, current) => previous.nameTextController != current.nameTextController ||
-                      previous.quantityTextController != current.quantityTextController ||
+                  buildWhen: (previous, current) =>
+                      previous.nameTextController !=
+                          current.nameTextController ||
+                      previous.quantityTextController !=
+                          current.quantityTextController ||
                       previous.isNameNotEmpty != current.isNameNotEmpty ||
                       previous.isQuantityNotEmpty != current.isQuantityNotEmpty,
                   builder: (context, state) {
