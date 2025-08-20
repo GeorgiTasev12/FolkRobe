@@ -1,8 +1,10 @@
+import 'package:folk_robe/constants.dart';
+import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:folk_robe/models/options.dart';
 
 abstract class DatabaseHelper<T> {
-  Future<Database> get database;
+  Future<Database> get database => _DatabaseManager().database;
 
   String getTableName({required GenderType gender, Options? option});
 
@@ -12,11 +14,16 @@ abstract class DatabaseHelper<T> {
 
   Future<int> insert({
     required GenderType gender,
-    Options? option,
     required T item,
+    Options? option,
   }) async {
     final db = await database;
-    return await db.insert(getTableName(gender: gender, option: option), toMap(item));
+    return await db.insert(
+        getTableName(
+          gender: gender,
+          option: option,
+        ),
+        toMap(item));
   }
 
   Future<List<T>> getAll({
@@ -24,14 +31,17 @@ abstract class DatabaseHelper<T> {
     Options? option,
   }) async {
     final db = await database;
-    final List<Map<String, dynamic>> result = await db.query(getTableName(gender: gender, option: option));
-    return result.map(fromMap).toList();
+    final result = await db.query(getTableName(
+      gender: gender,
+      option: option,
+    ));
+    return result.map((map) => fromMap(map)).toList();
   }
 
   Future<int> update({
     required GenderType gender,
-    Options? option,
     required T item,
+    Options? option,
     required int id,
   }) async {
     final db = await database;
@@ -54,5 +64,81 @@ abstract class DatabaseHelper<T> {
       where: 'id = ?',
       whereArgs: [id],
     );
+  }
+}
+
+class _DatabaseManager {
+  static final _DatabaseManager _instance = _DatabaseManager._internal();
+  factory _DatabaseManager() => _instance;
+  _DatabaseManager._internal();
+
+  static Database? _database;
+
+  Future<Database> get database async {
+    if (_database != null) return _database!;
+
+    final path = join(await getDatabasesPath(), Constants.databaseName);
+
+    _database = await openDatabase(
+      path,
+      version: 1,
+      onCreate: (db, version) async {
+        // Create all tables
+        await _createCostumeTables(db);
+        await _createOwnerTables(db);
+        await _createDancerTables(db);
+      },
+    );
+
+    return _database!;
+  }
+
+  Future<void> close() async {
+    if (_database != null) {
+      await _database?.close();
+      _database = null;
+    }
+  }
+
+  Future<void> _createCostumeTables(Database db) async {
+    for (var gender in GenderType.values) {
+      for (var option in Options.values) {
+        final table = option.tableCostumeName(gender);
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS $table (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT,
+            quantity INTEGER
+          )
+        ''');
+      }
+    }
+  }
+
+  Future<void> _createOwnerTables(Database db) async {
+    for (var gender in GenderType.values) {
+      final table = tableOwnersName(gender);
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS $table (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          title TEXT,
+          name TEXT,
+          items TEXT,
+          quantity INTEGER
+        )
+      ''');
+    }
+  }
+
+  Future<void> _createDancerTables(Database db) async {
+    for (var gender in GenderType.values) {
+      final table = tableDancerName(gender);
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS $table (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT
+        )
+      ''');
+    }
   }
 }

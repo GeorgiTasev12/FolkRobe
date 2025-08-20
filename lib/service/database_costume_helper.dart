@@ -1,82 +1,17 @@
-import 'package:folk_robe/constants.dart';
+import 'package:folk_robe/app_database.dart';
 import 'package:folk_robe/dao/costume.dart';
 import 'package:folk_robe/helpers/database_helper.dart';
 import 'package:folk_robe/models/options.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 
 class DatabaseCostumeHelper extends DatabaseHelper<Costume> {
-  static Database? _database;
-
-  // static Future<void> deleteDatabaseFile() async {
-  //   final databasesPath = await getDatabasesPath();
-  //   final path = join(databasesPath, Constants.databaseName);
-
-  //   await deleteDatabase(path);
-  //   _database = null; // Reset cached instance
-  // }
+  @override
+  Future<Database> get database async => await AppDatabase.getInstance();
 
   @override
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-
-    final databasesPath = await getDatabasesPath();
-    final path = join(databasesPath, Constants.databaseName);
-
-    _database = await openDatabase(
-      path,
-      version: 2,
-      onCreate: (db, version) async {
-        try {
-          await Future.wait(
-            GenderType.values.expand(
-              (gender) => Options.values.map(
-                (option) {
-                  final tableName = option.tableCostumeName(gender);
-
-                  return db.execute('CREATE TABLE IF NOT EXISTS $tableName ('
-                      'id INTEGER PRIMARY KEY AUTOINCREMENT,'
-                      'title TEXT,'
-                      'quantity INTEGER NULL'
-                      ')');
-                },
-              ),
-            ),
-          );
-        } on DatabaseException catch (e) {
-          throw Exception(e);
-        }
-      },
-      onUpgrade: (db, oldVersion, newVersion) async {
-        try {
-          await Future.wait(
-            GenderType.values.expand(
-              (gender) => Options.values.map(
-                (option) {
-                  final tableName = option.tableCostumeName(gender);
-
-                  return db.execute('CREATE TABLE IF NOT EXISTS $tableName ('
-                      'id INTEGER PRIMARY KEY AUTOINCREMENT,'
-                      'title TEXT,'
-                      'quantity INTEGER NULL'
-                      ')');
-                },
-              ),
-            ),
-          );
-        } on DatabaseException catch (e) {
-          throw Exception(e);
-        }
-      },
-    );
-
-    return _database!;
-  }
-
-  @override
-  String getTableName({required GenderType gender, Options? option}) {
-    return option?.tableCostumeName(gender) ?? Options.shopska.name;
-  }
+  String getTableName({required GenderType gender, Options? option}) =>
+      option?.tableCostumeName(gender) ??
+      Options.shopska.tableCostumeName(gender);
 
   @override
   Costume fromMap(Map<String, dynamic> map) => Costume.fromMap(map);
@@ -84,27 +19,22 @@ class DatabaseCostumeHelper extends DatabaseHelper<Costume> {
   @override
   Map<String, dynamic> toMap(Costume costume) => costume.toMap();
 
+  /// Fetch costume titles
   static Future<List<String>> getCostumes(
     GenderType gender,
     Options option,
   ) async {
     final prefix = gender == GenderType.female ? 'female' : 'male';
+    final tableName = '${prefix}_costume_${option.name}';
 
     try {
-      final result = await _database?.rawQuery(
-          'SELECT title,quantity FROM ${prefix}_costume_${option.name}');
+      final result = await AppDatabase.getInstance().then(
+        (db) => db.rawQuery('SELECT title FROM $tableName'),
+      );
 
-      return result?.map((costume) => costume['title'] as String).toList() ??
-          [];
+      return result.map((costume) => costume['title'] as String).toList();
     } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  Future<void> close() async {
-    if (_database != null) {
-      await _database?.close();
-      _database = null;
+      throw Exception('Failed to fetch costumes from $tableName: $e');
     }
   }
 }
