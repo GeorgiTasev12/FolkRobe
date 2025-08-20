@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:folk_robe/dao/dancer.dart';
 import 'package:folk_robe/models/options.dart';
-import 'package:folk_robe/service/database_dancers_helper.dart';
+import 'package:folk_robe/repositories/dancers_repository.dart';
 
 part 'dancers_event.dart';
 part 'dancers_state.dart';
@@ -27,11 +27,17 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
 
   FutureOr<void> _onInitData(
       InitDancersEvent event, Emitter<DancersState> emit) async {
-    final dancers = await DatabaseDancersHelper().getAll(gender: genderType);
+    final dancers = await DancersRepository().read(gender: genderType);
 
     emit(state.copyWith(
       dancersList: dancers,
     ));
+  }
+
+  @override
+  Future<void> close() {
+    state.nameTextController?.dispose();
+    return super.close();
   }
 
   FutureOr<void> _onAddDancer(
@@ -39,7 +45,7 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
     final dancer = Dancer(name: event.name);
 
     final newId =
-        await DatabaseDancersHelper().insert(item: dancer, gender: genderType);
+        await DancersRepository().add(item: dancer, gender: genderType);
 
     final dancerWithId = dancer.copyWith(id: newId);
 
@@ -55,14 +61,13 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
       name: event.name ?? '',
     );
 
-    await DatabaseDancersHelper().update(
+    await DancersRepository().update(
       item: updatedDancer,
       gender: genderType,
       id: event.id ?? 0,
     );
 
-    final updatedList =
-        await DatabaseDancersHelper().getAll(gender: genderType);
+    final updatedList = await DancersRepository().read(gender: genderType);
 
     emit(state.copyWith(
       dancersList: updatedList,
@@ -72,12 +77,12 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
 
   FutureOr<void> _onRemoveDancer(
       RemoveDancerEvent event, Emitter<DancersState> emit) async {
-    await DatabaseDancersHelper().delete(
+    await DancersRepository().delete(
       id: event.id ?? 0,
       gender: genderType,
     );
 
-    final updatedList = await DatabaseDancersHelper().getAll(gender: genderType);
+    final updatedList = await DancersRepository().read(gender: genderType);
 
     emit(state.copyWith(
       dancersList: updatedList,

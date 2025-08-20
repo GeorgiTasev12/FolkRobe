@@ -10,7 +10,7 @@ import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 import 'package:folk_robe/views/core_page.dart';
 import 'package:folk_robe/views/costume_list_page/bloc/costume_bloc.dart';
 import 'package:folk_robe/common/common_delete_dialog.dart';
-import 'package:folk_robe/views/costume_list_page/widgets/empty_info_text.dart';
+import 'package:folk_robe/common/common_empty_info_text.dart';
 
 class CostumeListPage extends HookWidget {
   const CostumeListPage({super.key});
@@ -20,7 +20,7 @@ class CostumeListPage extends HookWidget {
     final bloc = context.read<CostumeBloc>();
 
     useEffect(() {
-      bloc.add(InitDataEvent(options: Options.shopski));
+      bloc.add(InitDataEvent(options: Options.shopska));
       return null;
     }, const []);
 
@@ -37,8 +37,11 @@ class CostumeListPage extends HookWidget {
               return BlocProvider.value(
                 value: bloc,
                 child: BlocBuilder<CostumeBloc, CostumeState>(
-                  buildWhen: (previous, current) => previous.nameTextController != current.nameTextController ||
-                      previous.quantityTextController != current.quantityTextController ||
+                  buildWhen: (previous, current) =>
+                      previous.nameTextController !=
+                          current.nameTextController ||
+                      previous.quantityTextController !=
+                          current.quantityTextController ||
                       previous.isNameNotEmpty != current.isNameNotEmpty ||
                       previous.isQuantityNotEmpty != current.isQuantityNotEmpty,
                   builder: (context, state) {
@@ -87,7 +90,7 @@ class CostumeListPage extends HookWidget {
             },
           ),
           child: state.costumeList?.isEmpty ?? false
-              ? EmptyInfoText()
+              ? CommonEmptyInfoText(isDancer: false)
               : BlocBuilder<CostumeBloc, CostumeState>(
                   bloc: bloc,
                   buildWhen: (previous, current) =>

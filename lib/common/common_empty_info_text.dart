@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 
-class EmptyInfoText extends StatelessWidget {
-  const EmptyInfoText({
+class CommonEmptyInfoText extends StatelessWidget {
+  final bool isDancer;
+
+  const CommonEmptyInfoText({
     super.key,
+    required this.isDancer,
   });
 
   @override
@@ -15,7 +18,9 @@ class EmptyInfoText extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Имате празен инвентар от риквизити, моля добавте като натискате:',
+              isDancer
+                  ? "Имате празен списък от танцьори, моля добавете като натискате:"
+                  : 'Имате празен инвентар от риквизити, моля добавете като натискате:',
               softWrap: true,
               textAlign: TextAlign.center,
               style: context.appTheme.textStyles.bodyLarge.copyWith(

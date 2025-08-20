@@ -10,7 +10,7 @@ import 'package:folk_robe/models/options.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 import 'package:folk_robe/views/core_page.dart';
-import 'package:folk_robe/views/costume_list_page/widgets/empty_info_text.dart';
+import 'package:folk_robe/common/common_empty_info_text.dart';
 import 'package:folk_robe/views/dancers_page/dancers_list_page/bloc/dancers_bloc.dart';
 
 class DancersListPage extends HookWidget {
@@ -81,7 +81,7 @@ class DancersListPage extends HookWidget {
             previous.isNameNotEmpty != current.isNameNotEmpty,
         builder: (BuildContext context, state) {
           return state.dancersList?.isEmpty ?? false
-              ? const EmptyInfoText()
+              ? const CommonEmptyInfoText(isDancer: true,)
               : ListView.separated(
                   itemCount: state.dancersList?.length ?? 0,
                   separatorBuilder: (context, index) =>
@@ -104,7 +104,8 @@ class DancersListPage extends HookWidget {
                               child: BlocBuilder<DancersBloc, DancersState>(
                                 builder: (context, state) {
                                   return CommonDialog(
-                                    dialogTitle: 'Моля, въведете име на танцьора.',
+                                    dialogTitle:
+                                        'Моля, въведете име на танцьора.',
                                     onSavePressed: () {
                                       bloc.add(UpdateDancerEvent(
                                         id: state.dancersList?[index].id,

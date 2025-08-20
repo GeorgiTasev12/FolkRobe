@@ -18,4 +18,22 @@ class ScreenSizeHelper {
 
     return 32;
   }
+
+  double? getX({required double spacing}) {
+    double? multiplier;
+
+    if (isSmall) {
+      multiplier = 1.5;
+    } else if (isMedium) {
+      multiplier = 1.3;
+    } else if (isLarge) {
+      multiplier = 1;
+    }
+
+    if (multiplier != null) {
+      return (width - horizontalPadding - spacing) / multiplier;
+    } else {
+      return (width - horizontalPadding - spacing);
+    }
+  }
 }
