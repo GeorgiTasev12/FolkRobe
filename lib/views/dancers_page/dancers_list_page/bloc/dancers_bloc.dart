@@ -34,6 +34,12 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
     ));
   }
 
+  @override
+  Future<void> close() {
+    state.nameTextController?.dispose();
+    return super.close();
+  }
+
   FutureOr<void> _onAddDancer(
       AddDancerEvent event, Emitter<DancersState> emit) async {
     final dancer = Dancer(name: event.name);
@@ -61,8 +67,7 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
       id: event.id ?? 0,
     );
 
-    final updatedList =
-        await DancersRepository().read(gender: genderType);
+    final updatedList = await DancersRepository().read(gender: genderType);
 
     emit(state.copyWith(
       dancersList: updatedList,
