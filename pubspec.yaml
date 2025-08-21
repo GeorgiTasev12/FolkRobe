@@ -69,6 +69,7 @@ flutter:
   assets:
     - assets/folklore_dancers.png
     - assets/folklore_dress.png
+    - assets/front-cover_logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
