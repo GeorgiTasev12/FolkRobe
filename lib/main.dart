@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:folk_robe/app_database.dart';
 import 'package:folk_robe/locator.dart';
 import 'package:folk_robe/service/navigation_service.dart';
-import 'package:folk_robe/views/home_page/page.dart';
+import 'package:folk_robe/views/splash_screen_page/page.dart';
 
 import 'theme/app_theme.dart';
 
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
       navigatorKey: NavigationService.navigatorKey,
-      home: const HomePage(),
+      home: const SplashScreenPage(),
     );
   }
 }
