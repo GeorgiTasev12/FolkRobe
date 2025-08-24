@@ -123,92 +123,96 @@ class GenderPage extends StatelessWidget {
                   ],
                 )
               : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    GenderCard(
-                      title: 'Мъжки',
-                      icon: Icons.male_rounded,
-                      onTap: () {
-                        switch (pageSource) {
-                          case PageSource.homePage:
-                            locator<NavigationService>().push(
-                              MaterialPageRoute(
-                                builder: (context) => CostumesTypePage(
-                                  genderType: GenderType.male,
-                                ),
-                              ),
-                            );
-                            break;
-                          case PageSource.dancersPage:
-                            locator<NavigationService>().push(
-                              MaterialPageRoute(
-                                builder: (context) => BlocProvider(
-                                  create: (context) =>
-                                      DancersBloc(genderType: GenderType.male),
-                                  child: DancersListPage(
+                    Flexible(
+                      child: GenderCard(
+                        title: 'Мъжки',
+                        icon: Icons.male_rounded,
+                        onTap: () {
+                          switch (pageSource) {
+                            case PageSource.homePage:
+                              locator<NavigationService>().push(
+                                MaterialPageRoute(
+                                  builder: (context) => CostumesTypePage(
                                     genderType: GenderType.male,
                                   ),
                                 ),
-                              ),
-                            );
-                            break;
-                          case PageSource.ownersPage:
-                            locator<NavigationService>().push(
-                              MaterialPageRoute(
-                                builder: (context) => BlocProvider(
-                                  create: (context) => OwnersBloc(
-                                    genderType: GenderType.male,
-                                  ),
-                                  child: OwnersListPage(
-                                    genderType: GenderType.male,
+                              );
+                              break;
+                            case PageSource.dancersPage:
+                              locator<NavigationService>().push(
+                                MaterialPageRoute(
+                                  builder: (context) => BlocProvider(
+                                    create: (context) => DancersBloc(
+                                        genderType: GenderType.male),
+                                    child: DancersListPage(
+                                      genderType: GenderType.male,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                            break;
-                        }
-                      },
+                              );
+                              break;
+                            case PageSource.ownersPage:
+                              locator<NavigationService>().push(
+                                MaterialPageRoute(
+                                  builder: (context) => BlocProvider(
+                                    create: (context) => OwnersBloc(
+                                      genderType: GenderType.male,
+                                    ),
+                                    child: OwnersListPage(
+                                      genderType: GenderType.male,
+                                    ),
+                                  ),
+                                ),
+                              );
+                              break;
+                          }
+                        },
+                      ),
                     ),
-                    GenderCard(
-                      title: 'Женски',
-                      icon: Icons.female_rounded,
-                      onTap: () {
-                        switch (pageSource) {
-                          case PageSource.homePage:
-                            locator<NavigationService>().push(
-                              MaterialPageRoute(
-                                builder: (context) => CostumesTypePage(
-                                  genderType: GenderType.female,
-                                ),
-                              ),
-                            );
-                          case PageSource.dancersPage:
-                            locator<NavigationService>().push(
-                              MaterialPageRoute(
-                                builder: (context) => BlocProvider(
-                                  create: (context) => DancersBloc(
-                                      genderType: GenderType.female),
-                                  child: DancersListPage(
+                    Flexible(
+                      child: GenderCard(
+                        title: 'Женски',
+                        icon: Icons.female_rounded,
+                        onTap: () {
+                          switch (pageSource) {
+                            case PageSource.homePage:
+                              locator<NavigationService>().push(
+                                MaterialPageRoute(
+                                  builder: (context) => CostumesTypePage(
                                     genderType: GenderType.female,
                                   ),
                                 ),
-                              ),
-                            );
-                          case PageSource.ownersPage:
-                            locator<NavigationService>().push(
-                              MaterialPageRoute(
-                                builder: (context) => BlocProvider(
-                                  create: (context) => OwnersBloc(
-                                    genderType: GenderType.female,
-                                  ),
-                                  child: OwnersListPage(
-                                    genderType: GenderType.female,
+                              );
+                            case PageSource.dancersPage:
+                              locator<NavigationService>().push(
+                                MaterialPageRoute(
+                                  builder: (context) => BlocProvider(
+                                    create: (context) => DancersBloc(
+                                        genderType: GenderType.female),
+                                    child: DancersListPage(
+                                      genderType: GenderType.female,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                        }
-                      },
+                              );
+                            case PageSource.ownersPage:
+                              locator<NavigationService>().push(
+                                MaterialPageRoute(
+                                  builder: (context) => BlocProvider(
+                                    create: (context) => OwnersBloc(
+                                      genderType: GenderType.female,
+                                    ),
+                                    child: OwnersListPage(
+                                      genderType: GenderType.female,
+                                    ),
+                                  ),
+                                ),
+                              );
+                          }
+                        },
+                      ),
                     ),
                   ],
                 ),
