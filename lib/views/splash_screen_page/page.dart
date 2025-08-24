@@ -28,7 +28,7 @@ class SplashScreenPage extends HookWidget {
       });
 
       Future.delayed(const Duration(seconds: 6), () {
-        locator<NavigationService>().push(
+        locator<NavigationService>().pushReplacement(
           MaterialPageRoute(builder: (_) => const HomePage()),
         );
       });
