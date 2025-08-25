@@ -26,11 +26,15 @@ class CostumeListPage extends HookWidget {
 
     return BlocBuilder<CostumeBloc, CostumeState>(
       buildWhen: (previous, current) =>
-          previous.costumeList != current.costumeList ||
-          previous.id != current.id,
+          previous.id != current.id ||
+          previous.allCostumesList != current.allCostumesList ||
+          previous.costumeFiltered != current.costumeFiltered ||
+          previous.searchTextController != current.searchTextController,
       builder: (context, state) {
         return CorePage(
           hasFAB: true,
+          hasAppBarTitle: true,
+          appBarTitle: 'Костюми',
           onFABPressed: () => showDialog(
             context: context,
             builder: (context) {
@@ -89,24 +93,55 @@ class CostumeListPage extends HookWidget {
               );
             },
           ),
-          child: state.costumeList?.isEmpty ?? false
+          hasSearchBar: true,
+          onSearchChanged: (value) =>
+              bloc.add(SearchCostumeEvent(query: value)),
+          searchTextController: state.searchTextController,
+          suffixingSearchIcon: state.searchTextController?.text.isNotEmpty ??
+                  false
+              ? IconButton(
+                  icon: Icon(
+                    Icons.cancel_outlined,
+                    color: context.appTheme.colors.onSurfaceContainer,
+                  ),
+                  onPressed: () => bloc.add(
+                    OnSearchClearEvent(
+                      textController:
+                          state.searchTextController ?? TextEditingController(),
+                    ),
+                  ),
+                )
+              : null,
+          child: state.allCostumesList?.isEmpty ?? false
               ? CommonEmptyInfoText(isDancer: false)
               : BlocBuilder<CostumeBloc, CostumeState>(
                   bloc: bloc,
                   buildWhen: (previous, current) =>
-                      previous.costumeList != current.costumeList ||
-                      previous.id != current.id,
+                      previous.allCostumesList != current.allCostumesList ||
+                      previous.id != current.id ||
+                      previous.costumeFiltered != current.costumeFiltered,
                   builder: (context, state) {
+                    final displayList =
+                        state.costumeFiltered ?? state.allCostumesList ?? [];
+
+                    if (displayList.isEmpty) {
+                      return Text(
+                        'Няма резултати..',
+                        style: context.appTheme.textStyles.titleMedium.copyWith(
+                          color: context.appTheme.colors.primary,
+                        ),
+                      );
+                    }
+
                     return ListView.separated(
-                      itemCount: state.costumeList?.length ?? 0,
-                      separatorBuilder: (_, index) =>
-                          const SizedBox(height: 15),
+                      itemCount: displayList.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 15),
                       itemBuilder: (context, index) {
+                        final costume = displayList[index];
+
                         return CommonListTile(
-                          title: state.costumeList?[index].title ?? '',
-                          quantity: state.costumeList?[index].quantity != null
-                              ? state.costumeList![index].quantity.toString()
-                              : null,
+                          title: costume.title,
+                          quantity: costume.quantity.toString(),
                           suffixWidgets: [
                             ClipOval(
                               child: Material(
@@ -120,7 +155,8 @@ class CostumeListPage extends HookWidget {
                                         dialogTitle: 'Моля, въведете реквизит.',
                                         onSavePressed: () {
                                           bloc.add(UpdateCostumeEvent(
-                                            id: state.costumeList?[index].id,
+                                            id: state
+                                                .allCostumesList?[index].id,
                                             title: state
                                                     .nameTextController?.text ??
                                                 "",
@@ -188,21 +224,25 @@ class CostumeListPage extends HookWidget {
                                           CostumeState>(
                                         buildWhen: (previous, current) =>
                                             previous.id != current.id ||
-                                            previous.costumeList !=
-                                                current.costumeList,
+                                            previous.allCostumesList !=
+                                                current.allCostumesList ||
+                                            previous.costumeFiltered !=
+                                                current.costumeFiltered,
                                         builder: (context, state) {
-                                          if (state.costumeList == null ||
+                                          if (state.allCostumesList == null ||
                                               index >=
-                                                  state.costumeList!.length) {
+                                                  state.allCostumesList!
+                                                      .length) {
                                             return const SizedBox.shrink();
                                           }
                                           return CommonDeleteDialog(
-                                            index:
-                                                state.costumeList![index].id ??
-                                                    0,
+                                            index: state.allCostumesList![index]
+                                                    .id ??
+                                                0,
                                             onDeletePressed: () {
                                               bloc.add(RemoveCostumeEvent(
-                                                id: state.costumeList![index]
+                                                id: state
+                                                        .allCostumesList![index]
                                                         .id ??
                                                     0,
                                               ));
