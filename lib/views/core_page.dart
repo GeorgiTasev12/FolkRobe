@@ -99,7 +99,13 @@ class CorePage extends StatelessWidget {
           : null,
       backgroundColor: context.appTheme.colors.background,
       body: Padding(
-        padding: EdgeInsets.symmetric(
+        padding: (hasSearchBar ?? false)
+            ? EdgeInsets.only(
+                left: ScreenSizeHelper(context).horizontalPadding,
+                right: ScreenSizeHelper(context).horizontalPadding,
+                top: 15,
+              )
+            : EdgeInsets.symmetric(
           horizontal: ScreenSizeHelper(context).horizontalPadding,
           vertical: 10,
         ),
