@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:folk_robe/common/common_divider.dart';
+import 'package:folk_robe/common/common_textfield.dart';
 import 'package:folk_robe/helpers/screen_size_helper.dart';
 import 'package:folk_robe/locator.dart';
 import 'package:folk_robe/service/navigation_service.dart';
@@ -106,9 +108,9 @@ class CorePage extends StatelessWidget {
                 top: 15,
               )
             : EdgeInsets.symmetric(
-          horizontal: ScreenSizeHelper(context).horizontalPadding,
-          vertical: 10,
-        ),
+                horizontal: ScreenSizeHelper(context).horizontalPadding,
+                vertical: 10,
+              ),
         child: child,
       ),
     );
