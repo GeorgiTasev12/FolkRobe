@@ -11,6 +11,10 @@ class CorePage extends StatelessWidget {
   final String? appBarTitle;
   final bool? hasAppBarTitle;
   final bool? hasFAB;
+  final bool? hasSearchBar;
+  final ValueChanged<String>? onSearchChanged;
+  final IconButton? suffixingSearchIcon;
+  final TextEditingController? searchTextController;
 
   const CorePage({
     super.key,
@@ -20,6 +24,10 @@ class CorePage extends StatelessWidget {
     this.hasAppBar = true,
     this.hasAppBarTitle = true,
     this.hasFAB = false,
+    this.hasSearchBar = false,
+    this.onSearchChanged,
+    this.suffixingSearchIcon,
+    this.searchTextController,
   });
 
   @override
@@ -57,6 +65,33 @@ class CorePage extends StatelessWidget {
                           fontSize: 18,
                           color: context.appTheme.colors.primary,
                         ),
+                      ),
+                    )
+                  : null,
+              bottom: hasSearchBar ?? false
+                  ? PreferredSize(
+                      preferredSize: const Size.fromHeight(60),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: CommonTextfield(
+                              textController: searchTextController ??
+                                  TextEditingController(),
+                              onChanged: onSearchChanged,
+                              hintText: 'Търси...',
+                              suffixIconButton: suffixingSearchIcon,
+                              prefixIcon: Icon(
+                                Icons.search_rounded,
+                                color:
+                                    context.appTheme.colors.onSurfaceContainer,
+                              ),
+                              isSearchTextField: true,
+                            ),
+                          ),
+                          CommonDivider(),
+                        ],
                       ),
                     )
                   : null,
