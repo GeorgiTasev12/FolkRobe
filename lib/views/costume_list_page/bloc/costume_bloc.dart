@@ -180,9 +180,8 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
     }
 
     final filtered = state.allCostumesList
-            ?.where((c) => c.title.toLowerCase().contains(query))
-            .toList() ??
-        [];
+            ?.where((costume) => costume.title.toLowerCase().contains(query))
+            .toList();
 
     emit(state.copyWith(
       costumeFiltered: filtered,
@@ -195,7 +194,6 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
     final controller = event.textController;
     controller.clear();
 
-    // Reset filtered list
     emit(state.copyWith(
       costumeFiltered: null,
       querySearch: '',
