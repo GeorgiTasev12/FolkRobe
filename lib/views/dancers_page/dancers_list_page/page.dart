@@ -99,10 +99,19 @@ class DancersListPage extends HookWidget {
             : BlocBuilder<DancersBloc, DancersState>(
                 buildWhen: (previous, current) =>
                     previous.allDancersList != current.allDancersList ||
-                    previous.dancersFiltered != current.dancersFiltered,
+                    previous.dancersFiltered != current.dancersFiltered ||
+                    previous.isLoading != current.isLoading,
                 builder: (context, state) {
                   final displayList =
                       state.dancersFiltered ?? state.allDancersList ?? [];
+
+                  if (state.isLoading) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: context.appTheme.colors.primary,
+                      ),
+                    );
+                  }
 
                   if (displayList.isEmpty) {
                     return Center(
