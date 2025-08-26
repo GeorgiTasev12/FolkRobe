@@ -117,10 +117,13 @@ class CostumeListPage extends HookWidget {
                         state.costumeFiltered ?? state.allCostumesList ?? [];
 
                     if (displayList.isEmpty) {
-                      return Text(
-                        'Няма резултати..',
-                        style: context.appTheme.textStyles.titleMedium.copyWith(
-                          color: context.appTheme.colors.primary,
+                      return Center(
+                        child: Text(
+                          'Няма резултати..',
+                          style:
+                              context.appTheme.textStyles.titleMedium.copyWith(
+                            color: context.appTheme.colors.primary,
+                          ),
                         ),
                       );
                     }
@@ -133,7 +136,9 @@ class CostumeListPage extends HookWidget {
 
                         return CommonListTile(
                           title: costume.title,
-                          quantity: costume.quantity.toString(),
+                          quantity: (costume.quantity != null)
+                              ? costume.quantity.toString()
+                              : null,
                           suffixWidgets: [
                             ClipOval(
                               child: Material(
