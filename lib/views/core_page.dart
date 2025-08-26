@@ -17,6 +17,8 @@ class CorePage extends StatelessWidget {
   final ValueChanged<String>? onSearchChanged;
   final IconButton? suffixingSearchIcon;
   final TextEditingController? searchTextController;
+  final bool? isSuffixIconVisible;
+  final VoidCallback? onSuffixPressed;
 
   const CorePage({
     super.key,
@@ -30,6 +32,8 @@ class CorePage extends StatelessWidget {
     this.onSearchChanged,
     this.suffixingSearchIcon,
     this.searchTextController,
+    this.isSuffixIconVisible,
+    this.onSuffixPressed,
   });
 
   @override
@@ -83,7 +87,16 @@ class CorePage extends StatelessWidget {
                                   TextEditingController(),
                               onChanged: onSearchChanged,
                               hintText: 'Търси...',
-                              suffixIconButton: suffixingSearchIcon,
+                              suffixIconButton: isSuffixIconVisible ?? false
+                                  ? IconButton(
+                                      icon: Icon(
+                                        Icons.cancel_outlined,
+                                        color: context
+                                            .appTheme.colors.onSurfaceContainer,
+                                      ),
+                                      onPressed: onSuffixPressed,
+                                    )
+                                  : null,
                               prefixIcon: Icon(
                                 Icons.search_rounded,
                                 color:

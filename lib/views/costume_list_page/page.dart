@@ -97,21 +97,13 @@ class CostumeListPage extends HookWidget {
           onSearchChanged: (value) =>
               bloc.add(SearchCostumeEvent(query: value)),
           searchTextController: state.searchTextController,
-          suffixingSearchIcon: state.searchTextController?.text.isNotEmpty ??
-                  false
-              ? IconButton(
-                  icon: Icon(
-                    Icons.cancel_outlined,
-                    color: context.appTheme.colors.onSurfaceContainer,
-                  ),
-                  onPressed: () => bloc.add(
-                    OnSearchClearEvent(
-                      textController:
-                          state.searchTextController ?? TextEditingController(),
-                    ),
-                  ),
-                )
-              : null,
+          isSuffixIconVisible: state.querySearch?.isNotEmpty,
+          onSuffixPressed: () => bloc.add(
+            OnSearchClearEvent(
+              textController:
+                  state.searchTextController ?? TextEditingController(),
+            ),
+          ),
           child: state.allCostumesList?.isEmpty ?? false
               ? CommonEmptyInfoText(isDancer: false)
               : BlocBuilder<CostumeBloc, CostumeState>(
@@ -155,8 +147,7 @@ class CostumeListPage extends HookWidget {
                                         dialogTitle: 'Моля, въведете реквизит.',
                                         onSavePressed: () {
                                           bloc.add(UpdateCostumeEvent(
-                                            id: state
-                                                .allCostumesList?[index].id,
+                                            id: costume.id,
                                             title: state
                                                     .nameTextController?.text ??
                                                 "",
