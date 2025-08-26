@@ -49,6 +49,18 @@ class OwnerDropdownMenu<T> extends StatelessWidget {
                       ),
                     ),
                   ),
+                  minimumSize: WidgetStateProperty.all(
+                    Size(
+                      ScreenSizeHelper(context).width * 0.6,
+                      40,
+                    ),
+                  ),
+                  maximumSize: WidgetStateProperty.all(
+                    Size(
+                      ScreenSizeHelper(context).width * 0.8,
+                      double.infinity,
+                    ),
+                  ),
                 ),
               ),
             ),
