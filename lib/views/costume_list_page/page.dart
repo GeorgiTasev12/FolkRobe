@@ -227,15 +227,10 @@ class CostumeListPage extends HookWidget {
                                             return const SizedBox.shrink();
                                           }
                                           return CommonDeleteDialog(
-                                            index: state.allCostumesList![index]
-                                                    .id ??
-                                                0,
+                                            index: costume.id ?? 0,
                                             onDeletePressed: () {
                                               bloc.add(RemoveCostumeEvent(
-                                                id: state
-                                                        .allCostumesList![index]
-                                                        .id ??
-                                                    0,
+                                                id: costume.id ?? 0,
                                               ));
                                               bloc.add(InitDataEvent());
                                               locator<NavigationService>()
