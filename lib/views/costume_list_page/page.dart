@@ -111,10 +111,19 @@ class CostumeListPage extends HookWidget {
                   buildWhen: (previous, current) =>
                       previous.allCostumesList != current.allCostumesList ||
                       previous.id != current.id ||
-                      previous.costumeFiltered != current.costumeFiltered,
+                      previous.costumeFiltered != current.costumeFiltered ||
+                      previous.isLoading != current.isLoading,
                   builder: (context, state) {
                     final displayList =
                         state.costumeFiltered ?? state.allCostumesList ?? [];
+
+                    if (state.isLoading) {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: context.appTheme.colors.primary,
+                        ),
+                      );
+                    }
 
                     if (displayList.isEmpty) {
                       return Center(

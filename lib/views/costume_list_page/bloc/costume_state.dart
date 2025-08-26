@@ -11,6 +11,7 @@ final class CostumeState extends Equatable {
   final bool isQuantityNotEmpty;
   final String? querySearch;
   final TextEditingController? searchTextController;
+  final bool isLoading;
 
   const CostumeState({
     this.costume,
@@ -23,6 +24,7 @@ final class CostumeState extends Equatable {
     this.querySearch,
     this.costumeFiltered,
     this.searchTextController,
+    this.isLoading = false,
   });
 
   CostumeState copyWith({
@@ -37,6 +39,7 @@ final class CostumeState extends Equatable {
     List<Map<String, dynamic>>? listMapOfCostumes,
     String? querySearch,
     TextEditingController? searchTextController,
+    bool? isLoading,
   }) {
     return CostumeState(
       costume: costume ?? this.costume,
@@ -50,6 +53,7 @@ final class CostumeState extends Equatable {
       isQuantityNotEmpty: isQuantityNotEmpty ?? this.isQuantityNotEmpty,
       querySearch: querySearch ?? this.querySearch,
       searchTextController: searchTextController ?? this.searchTextController,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 
@@ -65,5 +69,6 @@ final class CostumeState extends Equatable {
         quantityTextController,
         querySearch,
         searchTextController,
+        isLoading,
       ];
 }

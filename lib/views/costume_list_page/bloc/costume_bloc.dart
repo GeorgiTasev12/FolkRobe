@@ -38,11 +38,17 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
   @override
   Future<void> close() {
     state.nameTextController?.dispose();
+    state.quantityTextController?.dispose();
+    state.searchTextController?.dispose();
     return super.close();
   }
 
   Future<void> _onInitData(
-      InitDataEvent event, Emitter<CostumeState> emit) async {
+    InitDataEvent event,
+    Emitter<CostumeState> emit,
+  ) async {
+    emit(state.copyWith(isLoading: true));
+
     final costumes = await CostumesRepository().read(
       option: selectedOption,
       gender: genderType,
@@ -52,11 +58,14 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
       allCostumesList: costumes,
       costumeFiltered: costumes,
       querySearch: "",
+      isLoading: false,
     ));
   }
 
   Future<void> _onAddCostume(
-      AddCostumeEvent event, Emitter<CostumeState> emit) async {
+    AddCostumeEvent event,
+    Emitter<CostumeState> emit,
+  ) async {
     final costume = Costume(
       title: event.title,
       quantity: int.tryParse(event.quantity ?? ''),
@@ -79,7 +88,9 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
   }
 
   Future<void> _onRemoveCostume(
-      RemoveCostumeEvent event, Emitter<CostumeState> emit) async {
+    RemoveCostumeEvent event,
+    Emitter<CostumeState> emit,
+  ) async {
     await CostumesRepository().delete(
       option: selectedOption,
       id: event.id ?? 0,
@@ -98,7 +109,9 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
   }
 
   Future<void> _onUpdateCostume(
-      UpdateCostumeEvent event, Emitter<CostumeState> emit) async {
+    UpdateCostumeEvent event,
+    Emitter<CostumeState> emit,
+  ) async {
     final updatedCostume = Costume(
       id: event.id,
       title: event.title ?? '',
@@ -122,20 +135,28 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
     ));
   }
 
-  void _onNameChanged(OnNameChangedEvent event, Emitter<CostumeState> emit) {
+  void _onNameChanged(
+    OnNameChangedEvent event,
+    Emitter<CostumeState> emit,
+  ) {
     emit(state.copyWith(
       isNameNotEmpty: event.text.isNotEmpty ? true : false,
     ));
   }
 
   void _onQuantityChanged(
-      OnQuantityChangedEvent event, Emitter<CostumeState> emit) {
+    OnQuantityChangedEvent event,
+    Emitter<CostumeState> emit,
+  ) {
     emit(state.copyWith(
       isQuantityNotEmpty: event.number.isNotEmpty ? true : false,
     ));
   }
 
-  void _onNameClear(OnNameClearEvent event, Emitter<CostumeState> emit) {
+  void _onNameClear(
+    OnNameClearEvent event,
+    Emitter<CostumeState> emit,
+  ) {
     final controller = event.textController;
     controller.clear();
 
@@ -146,7 +167,9 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
   }
 
   void _onQuantityClear(
-      OnQuantityClearEvent event, Emitter<CostumeState> emit) {
+    OnQuantityClearEvent event,
+    Emitter<CostumeState> emit,
+  ) {
     final controller = event.textController;
     controller.clear();
 
@@ -158,7 +181,10 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
     );
   }
 
-  void _onCloseDialog(OnCloseDialogEvent event, Emitter<CostumeState> emit) {
+  void _onCloseDialog(
+    OnCloseDialogEvent event,
+    Emitter<CostumeState> emit,
+  ) {
     state.nameTextController?.clear();
     state.quantityTextController?.clear();
 
@@ -169,7 +195,9 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
   }
 
   FutureOr<void> _onSearchCostume(
-      SearchCostumeEvent event, Emitter<CostumeState> emit) {
+    SearchCostumeEvent event,
+    Emitter<CostumeState> emit,
+  ) {
     final query = event.query.trim().toLowerCase();
 
     if (query.isEmpty) {
@@ -180,8 +208,8 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
     }
 
     final filtered = state.allCostumesList
-            ?.where((costume) => costume.title.toLowerCase().contains(query))
-            .toList();
+        ?.where((costume) => costume.title.toLowerCase().contains(query))
+        .toList();
 
     emit(state.copyWith(
       costumeFiltered: filtered,
@@ -190,7 +218,9 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
   }
 
   FutureOr<void> _onSearchClear(
-      OnSearchClearEvent event, Emitter<CostumeState> emit) {
+    OnSearchClearEvent event,
+    Emitter<CostumeState> emit,
+  ) {
     final controller = event.textController;
     controller.clear();
 
