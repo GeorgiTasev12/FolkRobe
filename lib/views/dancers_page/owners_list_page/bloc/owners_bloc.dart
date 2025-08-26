@@ -19,6 +19,7 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     required this.genderType,
   }) : super(OwnersState(
           pageController: PageController(initialPage: 0),
+          searchTextController: TextEditingController(),
         )) {
     on<InitOwnersEvent>(_onInit);
     on<AddTemporaryOwnerEvent>(_onAddTemporaryOwner);
@@ -29,6 +30,8 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     on<StartEditOwnerEvent>(_onStartEditOwner);
     on<SwitchPageEvent>(_onSwitchPage);
     on<ToggleCheckEvent>(_onToggleCheck);
+    on<SearchOwnerEvent>(_onSearchOwners);
+    on<OnSearchClearEvent>(_onSearchClear);
   }
 
   bool buildWhen(OwnersState previous, OwnersState current) =>
@@ -38,8 +41,10 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
       previous.isDancerSelected != current.isDancerSelected ||
       previous.dancersNames != current.dancersNames ||
       previous.costumesTitles != current.costumesTitles ||
-      previous.ownersList != current.ownersList ||
-      previous.id != current.id;
+      previous.allOwnersList != current.allOwnersList ||
+      previous.id != current.id ||
+      previous.ownersFiltered != current.ownersFiltered ||
+      previous.querySearch != current.querySearch;
 
   bool filledButtonBuildWhen(OwnersState previous, OwnersState current) =>
       previous.isOwnerEdit != current.isOwnerEdit ||
@@ -65,8 +70,10 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     emit(
       state.copyWith(
         dancersNames: names,
-        ownersList: owners,
+        allOwnersList: owners,
+        ownersFiltered: owners,
         isLoading: false,
+        querySearch: "",
       ),
     );
   }
@@ -125,7 +132,7 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     Emitter<OwnersState> emit,
   ) async {
     final ownerIndex = state.editingOwnerIndex ?? 0;
-    final ownerToEdit = state.ownersList?[ownerIndex];
+    final ownerToEdit = state.allOwnersList?[ownerIndex];
 
     if (ownerToEdit == null) return;
 
@@ -162,7 +169,7 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     final updatedList = await OwnersRepository().read(gender: genderType);
 
     emit(state.copyWith(
-      ownersList: updatedList,
+      allOwnersList: updatedList,
       owner: updatedOwner,
       selectedItems: selectedItems,
       checkedCostumeIndexes: state.checkedCostumeIndexes,
@@ -183,9 +190,11 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     );
 
     emit(state.copyWith(
-      ownersList: updatedList,
+      allOwnersList: updatedList,
       id: event.id,
     ));
+
+    add(InitOwnersEvent());
   }
 
   FutureOr<void> _onSelectedRegion(
@@ -257,5 +266,44 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
       checkedCostumeIndexes: newSet,
       selectedItems: selectedItems,
     ));
+  }
+
+  FutureOr<void> _onSearchOwners(
+    SearchOwnerEvent event,
+    Emitter<OwnersState> emit,
+  ) {
+    final query = event.query.trim().toLowerCase();
+
+    if (query.isEmpty) {
+      emit(state.copyWith(
+        ownersFiltered: null,
+        querySearch: '',
+      ));
+    }
+
+    final filtered = state.allOwnersList
+        ?.where((dancer) => dancer.name.toLowerCase().contains(query))
+        .toList();
+
+    emit(state.copyWith(
+      ownersFiltered: filtered,
+      querySearch: query,
+    ));
+  }
+
+  FutureOr<void> _onSearchClear(
+    OnSearchClearEvent event,
+    Emitter<OwnersState> emit,
+  ) {
+    final controller = event.textController;
+    controller.clear();
+
+    emit(state.copyWith(
+      ownersFiltered: null,
+      querySearch: '',
+      searchTextController: controller,
+    ));
+
+    add(InitOwnersEvent());
   }
 }

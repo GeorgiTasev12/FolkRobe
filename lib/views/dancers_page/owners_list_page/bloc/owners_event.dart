@@ -71,3 +71,19 @@ final class RemoveTemporaryOwnerEvent extends OwnersEvent {
 
   RemoveTemporaryOwnerEvent({required this.id});
 }
+
+final class SearchOwnerEvent extends OwnersEvent {
+  final String query;
+
+  SearchOwnerEvent({
+    required this.query,
+  });
+}
+
+final class OnSearchClearEvent extends OwnersEvent {
+  final TextEditingController textController;
+
+  OnSearchClearEvent({
+    required this.textController,
+  });
+}

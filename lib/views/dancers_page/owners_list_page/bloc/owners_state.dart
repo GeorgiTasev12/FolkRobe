@@ -1,7 +1,8 @@
 part of 'owners_bloc.dart';
 
 final class OwnersState extends Equatable {
-  final List<Owner>? ownersList;
+  final List<Owner>? allOwnersList;
+  final List<Owner>? ownersFiltered;
   final Owner? owner;
   final int? id;
   final Options? selectedRegion;
@@ -19,9 +20,12 @@ final class OwnersState extends Equatable {
   final int? editingOwnerIndex;
   final List<String>? selectedItems;
   final Set<int> checkedCostumeIndexes;
+  final String? querySearch;
+  final TextEditingController? searchTextController;
 
   const OwnersState({
-    this.ownersList,
+    this.allOwnersList,
+    this.ownersFiltered,
     this.owner,
     this.id,
     this.selectedRegion,
@@ -39,10 +43,13 @@ final class OwnersState extends Equatable {
     this.editingOwnerIndex,
     this.selectedItems,
     this.checkedCostumeIndexes = const {},
+    this.querySearch,
+    this.searchTextController,
   });
 
   OwnersState copyWith({
-    List<Owner>? ownersList,
+    List<Owner>? allOwnersList,
+    List<Owner>? ownersFiltered,
     Owner? owner,
     int? id,
     Options? selectedRegion,
@@ -61,33 +68,39 @@ final class OwnersState extends Equatable {
     String? selectedDancerValue,
     int? editingOwnerIndex,
     List<String>? selectedItems,
+    String? querySearch,
+    TextEditingController? searchTextController,
   }) {
     return OwnersState(
-      ownersList: ownersList ?? this.ownersList,
-      owner: owner ?? this.owner,
-      id: id ?? this.id,
-      selectedRegion: selectedRegion ?? this.selectedRegion,
-      pageIndex: pageIndex ?? this.pageIndex,
-      dancersNames: dancersNames ?? this.dancersNames,
-      costumesTitles: costumesTitles ?? this.costumesTitles,
-      isRegionSelected: isRegionSelected ?? this.isRegionSelected,
-      isDancerSelected: isDancerSelected ?? this.isDancerSelected,
-      pageController: pageController ?? this.pageController,
-      isFABVisible: isFABVisible ?? this.isFABVisible,
-      isLoading: isLoading ?? this.isLoading,
-      isOwnerEdit: isOwnerEdit ?? this.isOwnerEdit,
-      selectedRegionValue: selectedRegionValue ?? this.selectedRegionValue,
-      selectedDancerValue: selectedDancerValue ?? this.selectedDancerValue,
-      editingOwnerIndex: editingOwnerIndex ?? this.editingOwnerIndex,
-      selectedItems: selectedItems ?? this.selectedItems,
-      checkedCostumeIndexes:
-          checkedCostumeIndexes ?? this.checkedCostumeIndexes,
-    );
+        allOwnersList: allOwnersList ?? this.allOwnersList,
+        ownersFiltered: ownersFiltered ?? this.ownersFiltered,
+        owner: owner ?? this.owner,
+        id: id ?? this.id,
+        selectedRegion: selectedRegion ?? this.selectedRegion,
+        pageIndex: pageIndex ?? this.pageIndex,
+        dancersNames: dancersNames ?? this.dancersNames,
+        costumesTitles: costumesTitles ?? this.costumesTitles,
+        isRegionSelected: isRegionSelected ?? this.isRegionSelected,
+        isDancerSelected: isDancerSelected ?? this.isDancerSelected,
+        pageController: pageController ?? this.pageController,
+        isFABVisible: isFABVisible ?? this.isFABVisible,
+        isLoading: isLoading ?? this.isLoading,
+        isOwnerEdit: isOwnerEdit ?? this.isOwnerEdit,
+        selectedRegionValue: selectedRegionValue ?? this.selectedRegionValue,
+        selectedDancerValue: selectedDancerValue ?? this.selectedDancerValue,
+        editingOwnerIndex: editingOwnerIndex ?? this.editingOwnerIndex,
+        selectedItems: selectedItems ?? this.selectedItems,
+        checkedCostumeIndexes:
+            checkedCostumeIndexes ?? this.checkedCostumeIndexes,
+        querySearch: querySearch ?? this.querySearch,
+        searchTextController:
+            searchTextController ?? this.searchTextController);
   }
 
   @override
   List<Object?> get props => [
-        ownersList,
+        allOwnersList,
+        ownersFiltered,
         owner,
         id,
         selectedRegion,
@@ -105,5 +118,7 @@ final class OwnersState extends Equatable {
         editingOwnerIndex,
         selectedItems,
         checkedCostumeIndexes,
+        querySearch,
+        searchTextController,
       ];
 }

@@ -6,7 +6,6 @@ import 'package:folk_robe/models/options.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 import 'package:folk_robe/views/core_page.dart';
 import 'package:folk_robe/views/dancers_page/owners_list_page/bloc/owners_bloc.dart';
-import 'package:folk_robe/views/dancers_page/owners_list_page/widgets/empty_info.dart';
 import 'package:folk_robe/views/dancers_page/owners_list_page/widgets/owner_dropdown_menu.dart';
 import 'package:folk_robe/views/dancers_page/owners_list_page/widgets/missing_costumes_text.dart';
 import 'package:folk_robe/views/dancers_page/owners_list_page/widgets/owner_listtitle.dart';
@@ -33,10 +32,24 @@ class OwnersListPage extends HookWidget {
       bloc: bloc,
       buildWhen: (previous, current) => bloc.buildWhen(previous, current),
       builder: (context, state) {
+        final displayList = state.ownersFiltered ?? state.allOwnersList ?? [];
+
         return CorePage(
+          hasAppBarTitle: true,
+          appBarTitle: "Отговорници",
           hasFAB: state.isFABVisible,
           onFABPressed: () => bloc.add(
             SwitchPageEvent(pageIndex: 1, isOwnerEdit: false),
+          ),
+          hasSearchBar: state.pageIndex != 0 ? false : true,
+          onSearchChanged: (value) => bloc.add(SearchOwnerEvent(query: value)),
+          searchTextController: state.searchTextController,
+          isSuffixIconVisible: state.searchTextController?.text.isNotEmpty,
+          onSuffixPressed: () => bloc.add(
+            OnSearchClearEvent(
+              textController:
+                  state.searchTextController ?? TextEditingController(),
+            ),
           ),
           child: PageView(
             controller: state.pageController,
@@ -163,8 +176,7 @@ class OwnersListPage extends HookWidget {
                                 onPressed: state.checkedCostumeIndexes.isNotEmpty
                                     ? () {
                                         if (state.isOwnerEdit) {
-                                          final editingOwnerId = state
-                                              .ownersList?[
+                                          final editingOwnerId = displayList[
                                                   state.editingOwnerIndex ?? 0]
                                               .id;
 
