@@ -35,8 +35,8 @@ class AppTheme extends ThemeExtension<AppTheme> {
       brightness: Brightness.light,
       textSelectionTheme: const TextSelectionThemeData(
         selectionColor: Color(0xFFCECECE),
-        selectionHandleColor: Color(0xFF0055FF),
-        cursorColor: Color(0xFF0055FF),
+        selectionHandleColor: Color(0xFF91201E),
+        cursorColor: Color(0xFF91201E),
       ),
       extensions: [
         AppTheme(
@@ -60,8 +60,8 @@ class AppTheme extends ThemeExtension<AppTheme> {
       brightness: Brightness.dark,
       textSelectionTheme: const TextSelectionThemeData(
         selectionColor: Color(0xFF808080),
-        selectionHandleColor: Color(0xFF82B1FF),
-        cursorColor: Color(0xFF82B1FF),
+        selectionHandleColor: Color(0xFFFFB3B3),
+        cursorColor: Color(0xFFFFB3B3),
       ),
       extensions: [
         AppTheme(
