@@ -9,7 +9,7 @@ import 'package:folk_robe/views/dancers_page/owners_list_page/bloc/owners_bloc.d
 import 'package:folk_robe/views/dancers_page/owners_list_page/widgets/owner_dropdown_menu.dart';
 import 'package:folk_robe/views/dancers_page/owners_list_page/widgets/missing_costumes_text.dart';
 import 'package:folk_robe/views/dancers_page/owners_list_page/widgets/owner_listtitle.dart';
-import 'package:folk_robe/views/dancers_page/owners_list_page/widgets/temp_owner_listtile.dart';
+import 'package:folk_robe/views/dancers_page/owners_list_page/widgets/owners_listview.dart';
 
 class OwnersListPage extends HookWidget {
   final GenderType genderType;
@@ -56,30 +56,7 @@ class OwnersListPage extends HookWidget {
             physics: NeverScrollableScrollPhysics(),
             scrollDirection: Axis.horizontal,
             children: [
-              if (state.isLoading)
-                Center(
-                  child: CircularProgressIndicator(
-                    color: context.appTheme.colors.primary,
-                  ),
-                )
-              else
-                state.ownersList?.isNotEmpty ?? false
-                    ? ListView.separated(
-                        itemCount: state.ownersList?.length ?? 0,
-                        separatorBuilder: (context, idnex) =>
-                            const SizedBox(height: 10),
-                        itemBuilder: (context, index) => TempOwnerListTile(
-                          index: index,
-                          genderType: genderType,
-                        ),
-                      )
-                    : Center(
-                        child: genderType != GenderType.male
-                            ? EmptyInfoText(
-                                genderText: "женски отговорнички",
-                              )
-                            : EmptyInfoText(genderText: "мъжки отговорници"),
-                      ),
+              OwnersListView(genderType: genderType),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -127,7 +104,7 @@ class OwnersListPage extends HookWidget {
                             ? (state.costumesTitles?.isNotEmpty ?? false)
                                 ? ListView.separated(
                                     itemCount: state.costumesTitles!.length,
-                                    separatorBuilder: (context, index) =>
+                                    separatorBuilder: (_, __) =>
                                         const SizedBox(height: 12),
                                     itemBuilder: (context, index) =>
                                         OwnersListTile(

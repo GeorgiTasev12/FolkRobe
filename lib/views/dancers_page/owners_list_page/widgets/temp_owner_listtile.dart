@@ -25,19 +25,24 @@ class TempOwnerListTile extends StatelessWidget {
     return BlocBuilder<OwnersBloc, OwnersState>(
       bloc: bloc,
       buildWhen: (previous, current) =>
-          previous.ownersList != current.ownersList ||
+          previous.allOwnersList != current.allOwnersList ||
           previous.id != current.id ||
-          previous.selectedItems != current.selectedItems,
+          previous.selectedItems != current.selectedItems ||
+          previous.ownersFiltered != current.ownersFiltered ||
+          previous.querySearch != current.querySearch,
       builder: (context, state) {
+        final displayList = state.ownersFiltered ?? state.allOwnersList ?? [];
+        final owner = displayList[index];
+
         return ListTile(
           title: Text(
-            state.ownersList?[index].name ?? '',
+            owner.name,
             style: context.appTheme.textStyles.titleLarge.copyWith(
               color: context.appTheme.colors.onSurfaceContainer,
             ),
           ),
           subtitle: Text(
-            'Носия: ${state.ownersList?[index].title}',
+            'Носия: ${owner.title}',
             style: context.appTheme.textStyles.bodyLarge.copyWith(
               color: context.appTheme.colors.onSurfaceContainer,
             ),
@@ -72,7 +77,7 @@ class TempOwnerListTile extends StatelessWidget {
                       context: context,
                       backgroundColor: context.appTheme.colors.surfaceContainer,
                       builder: (context) {
-                        final ownersList = state.ownersList?[index];
+                        final ownersList = state.allOwnersList?[index];
                         final itemsList = (ownersList?.items.isEmpty ?? true)
                             ? []
                             : ownersList!.items.split(', ');
@@ -90,7 +95,7 @@ class TempOwnerListTile extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    state.ownersList?[index].name ??
+                                    state.allOwnersList?[index].name ??
                                         'Dancer not found.',
                                     style: context
                                         .appTheme.textStyles.titleLarge
@@ -120,7 +125,7 @@ class TempOwnerListTile extends StatelessWidget {
                             CommonDivider(),
                             const SizedBox(height: 5),
                             Text(
-                              state.ownersList?[index].title ??
+                              state.allOwnersList?[index].title ??
                                   'Missing region title.',
                               style: context.appTheme.textStyles.titleLarge
                                   .copyWith(
@@ -168,7 +173,7 @@ class TempOwnerListTile extends StatelessWidget {
                         child: DeleteOwnerDialog(
                           onDeletePressed: () {
                             bloc.add(RemoveTemporaryOwnerEvent(
-                                id: state.ownersList?[index].id ?? 0));
+                                id: owner.id ?? 0));
                             locator<NavigationService>().pop();
                           },
                         ),
