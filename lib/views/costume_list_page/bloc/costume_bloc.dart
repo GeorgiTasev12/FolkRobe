@@ -20,6 +20,7 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
   }) : super(CostumeState(
           nameTextController: TextEditingController(),
           quantityTextController: TextEditingController(),
+          searchTextController: TextEditingController(),
         )) {
     on<InitDataEvent>(_onInitData);
     on<AddCostumeEvent>(_onAddCostume);
@@ -30,6 +31,8 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
     on<OnNameClearEvent>(_onNameClear);
     on<OnQuantityClearEvent>(_onQuantityClear);
     on<OnCloseDialogEvent>(_onCloseDialog);
+    on<SearchCostumeEvent>(_onSearchCostume);
+    on<OnSearchClearEvent>(_onSearchClear);
   }
 
   @override
@@ -44,7 +47,12 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
       option: selectedOption,
       gender: genderType,
     );
-    emit(state.copyWith(costumeList: costumes));
+
+    emit(state.copyWith(
+      allCostumesList: costumes,
+      costumeFiltered: costumes,
+      querySearch: "",
+    ));
   }
 
   Future<void> _onAddCostume(
@@ -84,7 +92,7 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
     );
 
     emit(state.copyWith(
-      costumeList: updatedList,
+      allCostumesList: updatedList,
       id: event.id,
     ));
   }
@@ -109,7 +117,7 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
     );
 
     emit(state.copyWith(
-      costumeList: updatedList,
+      allCostumesList: updatedList,
       costume: updatedCostume,
     ));
   }
@@ -158,5 +166,40 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
       isNameNotEmpty: false,
       isQuantityNotEmpty: false,
     ));
+  }
+
+  FutureOr<void> _onSearchCostume(
+      SearchCostumeEvent event, Emitter<CostumeState> emit) {
+    final query = event.query.trim().toLowerCase();
+
+    if (query.isEmpty) {
+      emit(state.copyWith(
+        costumeFiltered: null,
+        querySearch: '',
+      ));
+    }
+
+    final filtered = state.allCostumesList
+            ?.where((costume) => costume.title.toLowerCase().contains(query))
+            .toList();
+
+    emit(state.copyWith(
+      costumeFiltered: filtered,
+      querySearch: query,
+    ));
+  }
+
+  FutureOr<void> _onSearchClear(
+      OnSearchClearEvent event, Emitter<CostumeState> emit) {
+    final controller = event.textController;
+    controller.clear();
+
+    emit(state.copyWith(
+      costumeFiltered: null,
+      querySearch: '',
+      searchTextController: controller,
+    ));
+
+    add(InitDataEvent());
   }
 }

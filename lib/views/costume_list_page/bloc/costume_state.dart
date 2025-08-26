@@ -2,53 +2,68 @@ part of 'costume_bloc.dart';
 
 final class CostumeState extends Equatable {
   final Costume? costume;
-  final List<Costume>? costumeList;
+  final List<Costume>? allCostumesList;
+  final List<Costume>? costumeFiltered;
   final int? id;
   final TextEditingController? nameTextController;
   final TextEditingController? quantityTextController;
   final bool isNameNotEmpty;
   final bool isQuantityNotEmpty;
+  final String? querySearch;
+  final TextEditingController? searchTextController;
 
   const CostumeState({
     this.costume,
-    this.costumeList,
+    this.allCostumesList,
     this.id,
     this.nameTextController,
     this.quantityTextController,
     this.isNameNotEmpty = false,
     this.isQuantityNotEmpty = false,
+    this.querySearch,
+    this.costumeFiltered,
+    this.searchTextController,
   });
 
   CostumeState copyWith({
     Costume? costume,
-    List<Costume>? costumeList,
+    List<Costume>? allCostumesList,
+    List<Costume>? costumeFiltered,
     int? id,
     bool? isNameNotEmpty,
     bool? isQuantityNotEmpty,
     TextEditingController? nameTextController,
     TextEditingController? quantityTextController,
     List<Map<String, dynamic>>? listMapOfCostumes,
+    String? querySearch,
+    TextEditingController? searchTextController,
   }) {
     return CostumeState(
       costume: costume ?? this.costume,
-      costumeList: costumeList ?? this.costumeList,
+      allCostumesList: allCostumesList ?? this.allCostumesList,
+      costumeFiltered: costumeFiltered ?? this.costumeFiltered,
       id: id ?? this.id,
       nameTextController: nameTextController ?? this.nameTextController,
       quantityTextController:
           quantityTextController ?? this.quantityTextController,
       isNameNotEmpty: isNameNotEmpty ?? this.isNameNotEmpty,
       isQuantityNotEmpty: isQuantityNotEmpty ?? this.isQuantityNotEmpty,
+      querySearch: querySearch ?? this.querySearch,
+      searchTextController: searchTextController ?? this.searchTextController,
     );
   }
 
   @override
   List<Object?> get props => [
         costume,
-        costumeList,
+        allCostumesList,
+        costumeFiltered,
         id,
         isNameNotEmpty,
         isQuantityNotEmpty,
         nameTextController,
         quantityTextController,
+        querySearch,
+        searchTextController,
       ];
 }

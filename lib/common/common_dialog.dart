@@ -56,6 +56,7 @@ class CommonDialog extends StatelessWidget {
             isClearIconVisible: isNameNotEmpty,
             onIconButtonPress: onNameClearPressed,
             onChanged: onNameChanged,
+            isSearchTextField: false,
           ),
           SizedBox(height: screenSize.isSmall ? 12 : 8),
           if (onNumberChanged != null &&

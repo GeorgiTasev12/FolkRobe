@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:folk_robe/common/common_divider.dart';
+import 'package:folk_robe/common/common_textfield.dart';
 import 'package:folk_robe/helpers/screen_size_helper.dart';
 import 'package:folk_robe/locator.dart';
 import 'package:folk_robe/service/navigation_service.dart';
@@ -11,6 +13,12 @@ class CorePage extends StatelessWidget {
   final String? appBarTitle;
   final bool? hasAppBarTitle;
   final bool? hasFAB;
+  final bool? hasSearchBar;
+  final ValueChanged<String>? onSearchChanged;
+  final IconButton? suffixingSearchIcon;
+  final TextEditingController? searchTextController;
+  final bool? isSuffixIconVisible;
+  final VoidCallback? onSuffixPressed;
 
   const CorePage({
     super.key,
@@ -20,6 +28,12 @@ class CorePage extends StatelessWidget {
     this.hasAppBar = true,
     this.hasAppBarTitle = true,
     this.hasFAB = false,
+    this.hasSearchBar = false,
+    this.onSearchChanged,
+    this.suffixingSearchIcon,
+    this.searchTextController,
+    this.isSuffixIconVisible,
+    this.onSuffixPressed,
   });
 
   @override
@@ -60,14 +74,56 @@ class CorePage extends StatelessWidget {
                       ),
                     )
                   : null,
+              bottom: hasSearchBar ?? false
+                  ? PreferredSize(
+                      preferredSize: const Size.fromHeight(60),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: CommonTextfield(
+                              textController: searchTextController ??
+                                  TextEditingController(),
+                              onChanged: onSearchChanged,
+                              hintText: 'Търси...',
+                              suffixIconButton: isSuffixIconVisible ?? false
+                                  ? IconButton(
+                                      icon: Icon(
+                                        Icons.cancel_outlined,
+                                        color: context
+                                            .appTheme.colors.onSurfaceContainer,
+                                      ),
+                                      onPressed: onSuffixPressed,
+                                    )
+                                  : null,
+                              prefixIcon: Icon(
+                                Icons.search_rounded,
+                                color:
+                                    context.appTheme.colors.onSurfaceContainer,
+                              ),
+                              isSearchTextField: true,
+                            ),
+                          ),
+                          CommonDivider(),
+                        ],
+                      ),
+                    )
+                  : null,
             )
           : null,
       backgroundColor: context.appTheme.colors.background,
       body: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: ScreenSizeHelper(context).horizontalPadding,
-          vertical: 10,
-        ),
+        padding: (hasSearchBar ?? false)
+            ? EdgeInsets.only(
+                left: ScreenSizeHelper(context).horizontalPadding,
+                right: ScreenSizeHelper(context).horizontalPadding,
+                top: 15,
+              )
+            : EdgeInsets.symmetric(
+                horizontal: ScreenSizeHelper(context).horizontalPadding,
+                vertical: 10,
+              ),
         child: child,
       ),
     );

@@ -128,3 +128,17 @@ final class RemoveCostumeEvent extends CostumeEvent {
     );
   }
 }
+
+final class SearchCostumeEvent extends CostumeEvent {
+  final String query;
+
+  SearchCostumeEvent({required this.query});
+}
+
+final class OnSearchClearEvent extends CostumeEvent {
+  final TextEditingController textController;
+
+  OnSearchClearEvent({
+    required this.textController,
+  });
+}
