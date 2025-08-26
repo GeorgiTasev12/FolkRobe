@@ -15,7 +15,10 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
 
   DancersBloc({
     required this.genderType,
-  }) : super(DancersState(nameTextController: TextEditingController())) {
+  }) : super(DancersState(
+          nameTextController: TextEditingController(),
+          searchTextController: TextEditingController(),
+        )) {
     on<InitDancersEvent>(_onInitData);
     on<AddDancerEvent>(_onAddDancer);
     on<UpdateDancerEvent>(_onUpdateDancer);
@@ -23,6 +26,8 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
     on<OnNameChangedEvent>(_onNameChanged);
     on<OnNameClearEvent>(_onNameClear);
     on<OnCloseDialogEvent>(_onCloseDialog);
+    on<SearchDancerEvent>(_onSearchDancer);
+    on<OnSearchClearEvent>(_onSearchClear);
   }
 
   FutureOr<void> _onInitData(
@@ -30,7 +35,9 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
     final dancers = await DancersRepository().read(gender: genderType);
 
     emit(state.copyWith(
-      dancersList: dancers,
+      allDancersList: dancers,
+      dancersFiltered: dancers,
+      querySearch: "",
     ));
   }
 
@@ -70,7 +77,7 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
     final updatedList = await DancersRepository().read(gender: genderType);
 
     emit(state.copyWith(
-      dancersList: updatedList,
+      allDancersList: updatedList,
       dancer: updatedDancer,
     ));
   }
@@ -85,7 +92,7 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
     final updatedList = await DancersRepository().read(gender: genderType);
 
     emit(state.copyWith(
-      dancersList: updatedList,
+      allDancersList: updatedList,
       id: event.id,
     ));
   }
@@ -112,5 +119,44 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
     emit(state.copyWith(
       isNameNotEmpty: false,
     ));
+  }
+
+  FutureOr<void> _onSearchDancer(
+    SearchDancerEvent event,
+    Emitter<DancersState> emit,
+  ) {
+    final query = event.query.trim().toLowerCase();
+
+    if (query.isEmpty) {
+      emit(state.copyWith(
+        dancersFiltered: null,
+        querySearch: '',
+      ));
+    }
+
+    final filtered = state.allDancersList
+        ?.where((dancer) => dancer.name.toLowerCase().contains(query))
+        .toList();
+
+    emit(state.copyWith(
+      dancersFiltered: filtered,
+      querySearch: query,
+    ));
+  }
+
+  FutureOr<void> _onSearchClear(
+    OnSearchClearEvent event,
+    Emitter<DancersState> emit,
+  ) {
+    final controller = event.textController;
+    controller.clear();
+
+    emit(state.copyWith(
+      dancersFiltered: null,
+      querySearch: '',
+      searchTextController: controller,
+    ));
+
+    add(InitDancersEvent());
   }
 }

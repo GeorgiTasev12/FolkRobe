@@ -89,3 +89,17 @@ final class OnNameClearEvent extends DancersEvent {
 }
 
 final class OnCloseDialogEvent extends DancersEvent {}
+
+final class SearchDancerEvent extends DancersEvent {
+  final String query;
+
+  SearchDancerEvent({required this.query});
+}
+
+final class OnSearchClearEvent extends DancersEvent {
+  final TextEditingController textController;
+
+  OnSearchClearEvent({
+    required this.textController,
+  });
+}

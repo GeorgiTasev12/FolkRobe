@@ -30,156 +30,201 @@ class DancersListPage extends HookWidget {
       return;
     }, const []);
 
-    return CorePage(
-      hasFAB: true,
-      onFABPressed: () => showDialog(
-        context: context,
-        builder: (context) {
-          return BlocProvider.value(
-            value: bloc,
-            child: BlocBuilder<DancersBloc, DancersState>(
-              buildWhen: (previous, current) =>
-                  previous.nameTextController != current.nameTextController ||
-                  previous.isNameNotEmpty != current.isNameNotEmpty,
-              builder: (context, state) {
-                return CommonDialog(
-                  dialogTitle: 'Моля, въведете име на танцьора.',
-                  onSavePressed: () {
-                    bloc.add(AddDancerEvent(
-                      name: state.nameTextController?.text ?? "",
-                    ));
-                    bloc.add(InitDancersEvent());
-                    locator<NavigationService>().pop();
-                  },
-                  onClosedPressed: () {
-                    bloc.add(OnCloseDialogEvent());
-                    locator<NavigationService>().pop();
-                  },
-                  onNameClearPressed: () => bloc.add(
-                    OnNameClearEvent(
-                      textController:
-                          state.nameTextController ?? TextEditingController(),
+    return BlocBuilder<DancersBloc, DancersState>(
+      buildWhen: (previous, current) =>
+          previous.allDancersList != current.allDancersList ||
+          previous.nameTextController != current.nameTextController ||
+          previous.isNameNotEmpty != current.isNameNotEmpty ||
+          previous.searchTextController != current.searchTextController ||
+          previous.querySearch != current.querySearch,
+      builder: (context, state) => CorePage(
+        hasFAB: true,
+        hasAppBarTitle: true,
+        appBarTitle: 'Танцьори',
+        onFABPressed: () => showDialog(
+          context: context,
+          builder: (context) {
+            return BlocProvider.value(
+              value: bloc,
+              child: BlocBuilder<DancersBloc, DancersState>(
+                buildWhen: (previous, current) =>
+                    previous.nameTextController != current.nameTextController ||
+                    previous.isNameNotEmpty != current.isNameNotEmpty,
+                builder: (context, state) {
+                  return CommonDialog(
+                    dialogTitle: 'Моля, въведете име на танцьора.',
+                    onSavePressed: () {
+                      bloc.add(AddDancerEvent(
+                        name: state.nameTextController?.text ?? "",
+                      ));
+                      bloc.add(InitDancersEvent());
+                      locator<NavigationService>().pop();
+                    },
+                    onClosedPressed: () {
+                      bloc.add(OnCloseDialogEvent());
+                      locator<NavigationService>().pop();
+                    },
+                    onNameClearPressed: () => bloc.add(
+                      OnNameClearEvent(
+                        textController:
+                            state.nameTextController ?? TextEditingController(),
+                      ),
                     ),
-                  ),
-                  onNameChanged: (String name) => bloc.add(
-                    OnNameChangedEvent(text: name),
-                  ),
-                  nameTextController:
-                      state.nameTextController ?? TextEditingController(),
-                  isNameNotEmpty: state.isNameNotEmpty,
-                );
-              },
-            ),
-          );
-        },
-      ),
-      child: BlocBuilder<DancersBloc, DancersState>(
-        buildWhen: (previous, current) =>
-            previous.dancer != current.dancer ||
-            previous.dancersList != current.dancersList ||
-            previous.nameTextController != current.nameTextController ||
-            previous.isNameNotEmpty != current.isNameNotEmpty,
-        builder: (BuildContext context, state) {
-          return state.dancersList?.isEmpty ?? false
-              ? const CommonEmptyInfoText(isDancer: true,)
-              : ListView.separated(
-                  itemCount: state.dancersList?.length ?? 0,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 8),
-                  itemBuilder: (context, index) {
-                    return CommonListTile(
-                      title: state.dancersList?[index].name ?? '',
-                      suffixWidgets: [
-                        CommonCircleIconButton(
-                          index: index,
-                          icon: Icon(
-                            Icons.edit,
-                            color: context.appTheme.colors.surfaceContainer,
-                          ),
-                          backgroundColor: context.appTheme.colors.warning,
-                          onPressed: () => showDialog(
-                            context: context,
-                            builder: (_) => BlocProvider.value(
-                              value: bloc,
-                              child: BlocBuilder<DancersBloc, DancersState>(
-                                builder: (context, state) {
-                                  return CommonDialog(
-                                    dialogTitle:
-                                        'Моля, въведете име на танцьора.',
-                                    onSavePressed: () {
-                                      bloc.add(UpdateDancerEvent(
-                                        id: state.dancersList?[index].id,
-                                        name: state.nameTextController?.text ??
-                                            "",
-                                      ));
-                                      bloc.add(InitDancersEvent());
-                                      locator<NavigationService>().pop();
-                                    },
-                                    onClosedPressed: () {
-                                      bloc.add(OnCloseDialogEvent());
-                                      locator<NavigationService>().pop();
-                                    },
-                                    onNameClearPressed: () =>
-                                        bloc.add(OnNameClearEvent(
-                                      textController:
+                    onNameChanged: (String name) => bloc.add(
+                      OnNameChangedEvent(text: name),
+                    ),
+                    nameTextController:
+                        state.nameTextController ?? TextEditingController(),
+                    isNameNotEmpty: state.isNameNotEmpty,
+                  );
+                },
+              ),
+            );
+          },
+        ),
+        hasSearchBar: true,
+        onSearchChanged: (value) => bloc.add(SearchDancerEvent(query: value)),
+        searchTextController: state.searchTextController,
+        isSuffixIconVisible: state.searchTextController?.text.isNotEmpty,
+        onSuffixPressed: () => bloc.add(
+          OnSearchClearEvent(
+            textController:
+                state.searchTextController ?? TextEditingController(),
+          ),
+        ),
+        child: state.allDancersList?.isEmpty ?? false
+            ? const CommonEmptyInfoText(
+                isDancer: true,
+              )
+            : BlocBuilder<DancersBloc, DancersState>(
+                buildWhen: (previous, current) =>
+                    previous.allDancersList != current.allDancersList ||
+                    previous.dancersFiltered != current.dancersFiltered,
+                builder: (context, state) {
+                  final displayList =
+                      state.dancersFiltered ?? state.allDancersList ?? [];
+
+                  if (displayList.isEmpty) {
+                    return Center(
+                      child: Text(
+                        'Няма резултати..',
+                        style: context.appTheme.textStyles.titleMedium.copyWith(
+                          color: context.appTheme.colors.primary,
+                        ),
+                      ),
+                    );
+                  }
+
+                  return ListView.separated(
+                    itemCount: displayList.length,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 8),
+                    itemBuilder: (context, index) {
+                      final dancer = displayList[index];
+
+                      return CommonListTile(
+                        title: dancer.name,
+                        suffixWidgets: [
+                          CommonCircleIconButton(
+                            index: index,
+                            icon: Icon(
+                              Icons.edit,
+                              color: context.appTheme.colors.surfaceContainer,
+                            ),
+                            backgroundColor: context.appTheme.colors.warning,
+                            onPressed: () => showDialog(
+                              context: context,
+                              builder: (_) => BlocProvider.value(
+                                value: bloc,
+                                child: BlocBuilder<DancersBloc, DancersState>(
+                                  builder: (context, state) {
+                                    return CommonDialog(
+                                      dialogTitle:
+                                          'Моля, въведете име на танцьора.',
+                                      onSavePressed: () {
+                                        bloc.add(UpdateDancerEvent(
+                                          id: dancer.id,
+                                          name:
+                                              state.nameTextController?.text ??
+                                                  "",
+                                        ));
+                                        bloc.add(InitDancersEvent());
+                                        locator<NavigationService>().pop();
+                                      },
+                                      onClosedPressed: () {
+                                        bloc.add(OnCloseDialogEvent());
+                                        locator<NavigationService>().pop();
+                                      },
+                                      onNameClearPressed: () =>
+                                          bloc.add(OnNameClearEvent(
+                                        textController:
+                                            state.nameTextController ??
+                                                TextEditingController(),
+                                      )),
+                                      onNameChanged: (String name) => bloc.add(
+                                        OnNameChangedEvent(text: name),
+                                      ),
+                                      isNameNotEmpty: state.isNameNotEmpty,
+                                      nameTextController:
                                           state.nameTextController ??
                                               TextEditingController(),
-                                    )),
-                                    onNameChanged: (String name) => bloc.add(
-                                      OnNameChangedEvent(text: name),
-                                    ),
-                                    isNameNotEmpty: state.isNameNotEmpty,
-                                    nameTextController:
-                                        state.nameTextController ??
-                                            TextEditingController(),
-                                  );
-                                },
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 16),
-                        CommonCircleIconButton(
-                          index: index,
-                          icon: Icon(
-                            Icons.delete,
-                            color: context.appTheme.colors.surfaceContainer,
-                          ),
-                          backgroundColor: context.appTheme.colors.error,
-                          onPressed: () => showDialog(
-                            context: context,
-                            builder: (context) => BlocProvider.value(
-                              value: bloc,
-                              child: BlocBuilder<DancersBloc, DancersState>(
-                                buildWhen: (previous, current) =>
-                                    previous.id != current.id ||
-                                    previous.dancersList != current.dancersList,
-                                builder: (context, state) {
-                                  if (state.dancersList == null ||
-                                      index >=
-                                          (state.dancersList?.length ?? 0)) {
-                                    return const SizedBox.shrink();
-                                  }
-                                  return CommonDeleteDialog(
-                                    index: state.dancersList?[index].id ?? 0,
-                                    onDeletePressed: () {
-                                      bloc.add(RemoveDancerEvent(
-                                        id: state.dancersList?[index].id ?? 0,
-                                      ));
-                                      bloc.add(InitDancersEvent());
-                                      locator<NavigationService>().pop();
-                                    },
-                                  );
-                                },
+                          const SizedBox(width: 16),
+                          CommonCircleIconButton(
+                            index: index,
+                            icon: Icon(
+                              Icons.delete,
+                              color: context.appTheme.colors.surfaceContainer,
+                            ),
+                            backgroundColor: context.appTheme.colors.error,
+                            onPressed: () => showDialog(
+                              context: context,
+                              builder: (context) => BlocProvider.value(
+                                value: bloc,
+                                child: BlocBuilder<DancersBloc, DancersState>(
+                                  buildWhen: (previous, current) =>
+                                      previous.id != current.id ||
+                                      previous.allDancersList !=
+                                          current.allDancersList ||
+                                      previous.dancersFiltered !=
+                                          current.dancersFiltered ||
+                                      previous.querySearch !=
+                                          current.querySearch,
+                                  builder: (context, state) {
+                                    final displayList = state.dancersFiltered ??
+                                        state.allDancersList ??
+                                        [];
+                                    final dancer = displayList[index];
+
+                                    if (index >= displayList.length) {
+                                      return const SizedBox.shrink();
+                                    }
+                                    return CommonDeleteDialog(
+                                      index: dancer.id ?? 0,
+                                      onDeletePressed: () {
+                                        bloc.add(RemoveDancerEvent(
+                                          id: dancer.id ?? 0,
+                                        ));
+                                        bloc.add(InitDancersEvent());
+                                        locator<NavigationService>().pop();
+                                      },
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    );
-                  },
-                );
-        },
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
       ),
     );
   }
