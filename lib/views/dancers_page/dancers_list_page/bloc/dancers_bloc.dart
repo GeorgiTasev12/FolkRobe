@@ -31,13 +31,18 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
   }
 
   FutureOr<void> _onInitData(
-      InitDancersEvent event, Emitter<DancersState> emit) async {
+    InitDancersEvent event,
+    Emitter<DancersState> emit,
+  ) async {
+    emit(state.copyWith(isLoading: true));
+
     final dancers = await DancersRepository().read(gender: genderType);
 
     emit(state.copyWith(
       allDancersList: dancers,
       dancersFiltered: dancers,
       querySearch: "",
+      isLoading: false,
     ));
   }
 
@@ -48,7 +53,9 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
   }
 
   FutureOr<void> _onAddDancer(
-      AddDancerEvent event, Emitter<DancersState> emit) async {
+    AddDancerEvent event,
+    Emitter<DancersState> emit,
+  ) async {
     final dancer = Dancer(name: event.name);
 
     final newId =
@@ -62,7 +69,9 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
   }
 
   FutureOr<void> _onUpdateDancer(
-      UpdateDancerEvent event, Emitter<DancersState> emit) async {
+    UpdateDancerEvent event,
+    Emitter<DancersState> emit,
+  ) async {
     final updatedDancer = Dancer(
       id: event.id,
       name: event.name ?? '',
@@ -83,7 +92,9 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
   }
 
   FutureOr<void> _onRemoveDancer(
-      RemoveDancerEvent event, Emitter<DancersState> emit) async {
+    RemoveDancerEvent event,
+    Emitter<DancersState> emit,
+  ) async {
     await DancersRepository().delete(
       id: event.id ?? 0,
       gender: genderType,
@@ -97,13 +108,19 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
     ));
   }
 
-  void _onNameChanged(OnNameChangedEvent event, Emitter<DancersState> emit) {
+  void _onNameChanged(
+    OnNameChangedEvent event,
+    Emitter<DancersState> emit,
+  ) {
     emit(state.copyWith(
       isNameNotEmpty: event.text.isNotEmpty ? true : false,
     ));
   }
 
-  void _onNameClear(OnNameClearEvent event, Emitter<DancersState> emit) {
+  void _onNameClear(
+    OnNameClearEvent event,
+    Emitter<DancersState> emit,
+  ) {
     final controller = event.textController;
     controller.clear();
 
@@ -113,7 +130,10 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
     ));
   }
 
-  void _onCloseDialog(OnCloseDialogEvent event, Emitter<DancersState> emit) {
+  void _onCloseDialog(
+    OnCloseDialogEvent event,
+    Emitter<DancersState> emit,
+  ) {
     state.nameTextController?.clear();
 
     emit(state.copyWith(

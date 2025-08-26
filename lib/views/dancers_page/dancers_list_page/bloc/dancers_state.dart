@@ -9,6 +9,7 @@ final class DancersState extends Equatable {
   final bool isNameNotEmpty;
   final String? querySearch;
   final TextEditingController? searchTextController;
+  final bool isLoading;
 
   const DancersState({
     this.dancer,
@@ -19,6 +20,7 @@ final class DancersState extends Equatable {
     this.isNameNotEmpty = false,
     this.querySearch,
     this.searchTextController,
+    this.isLoading = false,
   });
 
   DancersState copyWith({
@@ -30,6 +32,7 @@ final class DancersState extends Equatable {
     bool? isNameNotEmpty,
     String? querySearch,
     TextEditingController? searchTextController,
+    bool? isLoading,
   }) {
     return DancersState(
       dancer: dancer ?? this.dancer,
@@ -40,6 +43,7 @@ final class DancersState extends Equatable {
       isNameNotEmpty: isNameNotEmpty ?? this.isNameNotEmpty,
       querySearch: querySearch ?? this.querySearch,
       searchTextController: searchTextController ?? this.searchTextController,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 
@@ -53,5 +57,6 @@ final class DancersState extends Equatable {
         isNameNotEmpty,
         querySearch,
         searchTextController,
+        isLoading,
       ];
 }
