@@ -48,6 +48,20 @@ class SplashScreenPage extends HookWidget {
             curve: Curves.easeInOutCubic,
             child: Image.asset(
               "assets/front-cover_logo.png",
+              errorBuilder: (context, error, stackTrace) => Column(
+                children: [
+                  Icon(
+                    Icons.error,
+                    color: context.appTheme.colors.error,
+                  ),
+                  Text(
+                    'Missing image or icon.',
+                    style: context.appTheme.textStyles.labelMedium.copyWith(
+                      color: context.appTheme.colors.error,
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 15),
