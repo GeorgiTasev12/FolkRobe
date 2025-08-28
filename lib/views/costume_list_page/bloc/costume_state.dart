@@ -12,6 +12,8 @@ final class CostumeState extends Equatable {
   final String? querySearch;
   final TextEditingController? searchTextController;
   final bool isLoading;
+  final Status status;
+  final String? snackbarMessage;
 
   const CostumeState({
     this.costume,
@@ -25,6 +27,8 @@ final class CostumeState extends Equatable {
     this.costumeFiltered,
     this.searchTextController,
     this.isLoading = false,
+    this.status = Status.initial,
+    this.snackbarMessage,
   });
 
   CostumeState copyWith({
@@ -40,6 +44,8 @@ final class CostumeState extends Equatable {
     String? querySearch,
     TextEditingController? searchTextController,
     bool? isLoading,
+    Status? status,
+    String? snackbarMessage
   }) {
     return CostumeState(
       costume: costume ?? this.costume,
@@ -54,6 +60,8 @@ final class CostumeState extends Equatable {
       querySearch: querySearch ?? this.querySearch,
       searchTextController: searchTextController ?? this.searchTextController,
       isLoading: isLoading ?? this.isLoading,
+      status: status ?? this.status,
+      snackbarMessage: snackbarMessage ?? this.snackbarMessage,
     );
   }
 
@@ -70,5 +78,7 @@ final class CostumeState extends Equatable {
         querySearch,
         searchTextController,
         isLoading,
+        status,
+        snackbarMessage,
       ];
 }

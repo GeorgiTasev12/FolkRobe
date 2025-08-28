@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:folk_robe/dao/dancer.dart';
 import 'package:folk_robe/models/options.dart';
+import 'package:folk_robe/models/status.dart';
 import 'package:folk_robe/repositories/dancers_repository.dart';
 
 part 'dancers_event.dart';
@@ -56,15 +57,31 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
     AddDancerEvent event,
     Emitter<DancersState> emit,
   ) async {
-    final dancer = Dancer(name: event.name);
+    try {
+      final dancer = Dancer(name: event.name);
 
-    final newId =
-        await DancersRepository().add(item: dancer, gender: genderType);
+      final newId =
+          await DancersRepository().add(item: dancer, gender: genderType);
 
-    final dancerWithId = dancer.copyWith(id: newId);
+      final dancerWithId = dancer.copyWith(id: newId);
+
+      emit(state.copyWith(
+        dancer: dancerWithId,
+        status: Status.success,
+        snackbarMessage:
+            "Успешно сте записали ${genderType == GenderType.male ? 'танцьорът' : 'танцьорката'} в списъка!",
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: Status.error,
+        snackbarMessage: "Възникна грешка, моля опитайте по-късно.",
+      ));
+      throw Exception(e);
+    }
 
     emit(state.copyWith(
-      dancer: dancerWithId,
+      status: Status.initial,
+      snackbarMessage: null,
     ));
   }
 
@@ -72,22 +89,38 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
     UpdateDancerEvent event,
     Emitter<DancersState> emit,
   ) async {
-    final updatedDancer = Dancer(
-      id: event.id,
-      name: event.name ?? '',
-    );
+    try {
+      final updatedDancer = Dancer(
+        id: event.id,
+        name: event.name ?? '',
+      );
 
-    await DancersRepository().update(
-      item: updatedDancer,
-      gender: genderType,
-      id: event.id ?? 0,
-    );
+      await DancersRepository().update(
+        item: updatedDancer,
+        gender: genderType,
+        id: event.id ?? 0,
+      );
 
-    final updatedList = await DancersRepository().read(gender: genderType);
+      final updatedList = await DancersRepository().read(gender: genderType);
+
+      emit(state.copyWith(
+        allDancersList: updatedList,
+        dancer: updatedDancer,
+        status: Status.success,
+        snackbarMessage:
+            "Успешно сте преименували ${genderType == GenderType.male ? 'танцьорът' : 'танцьорката'}!",
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: Status.error,
+        snackbarMessage: "Възникна грешка, моля опитайте по-късно.",
+      ));
+      throw Exception(e);
+    }
 
     emit(state.copyWith(
-      allDancersList: updatedList,
-      dancer: updatedDancer,
+      status: Status.initial,
+      snackbarMessage: null,
     ));
   }
 
@@ -95,16 +128,31 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
     RemoveDancerEvent event,
     Emitter<DancersState> emit,
   ) async {
-    await DancersRepository().delete(
-      id: event.id ?? 0,
-      gender: genderType,
-    );
+    try {
+      await DancersRepository().delete(
+        id: event.id ?? 0,
+        gender: genderType,
+      );
 
-    final updatedList = await DancersRepository().read(gender: genderType);
+      final updatedList = await DancersRepository().read(gender: genderType);
+
+      emit(state.copyWith(
+          allDancersList: updatedList,
+          id: event.id,
+          status: Status.success,
+          snackbarMessage:
+              "Успешно сте премахнали ${genderType == GenderType.male ? 'танцьорът' : 'танцьорката'} от списъка!"));
+    } catch (e) {
+      emit(state.copyWith(
+        status: Status.error,
+        snackbarMessage: "Възникна грешка, моля опитайте по-късно.",
+      ));
+      throw Exception(e);
+    }
 
     emit(state.copyWith(
-      allDancersList: updatedList,
-      id: event.id,
+      status: Status.initial,
+      snackbarMessage: null,
     ));
   }
 
