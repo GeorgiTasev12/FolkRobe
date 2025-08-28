@@ -10,7 +10,7 @@ import 'package:folk_robe/models/status.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 import 'package:folk_robe/views/core_page.dart';
-import 'package:folk_robe/views/costume_list_page/bloc/costume_bloc.dart';
+import 'package:folk_robe/views/costumes_type_page/costume_list_page/bloc/costume_bloc.dart';
 import 'package:folk_robe/common/common_delete_dialog.dart';
 import 'package:folk_robe/common/common_empty_info_text.dart';
 

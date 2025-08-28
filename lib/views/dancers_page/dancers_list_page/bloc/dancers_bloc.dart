@@ -7,6 +7,7 @@ import 'package:folk_robe/dao/dancer.dart';
 import 'package:folk_robe/models/options.dart';
 import 'package:folk_robe/models/status.dart';
 import 'package:folk_robe/repositories/dancers_repository.dart';
+import 'package:sqflite/sqlite_api.dart';
 
 part 'dancers_event.dart';
 part 'dancers_state.dart';
@@ -71,6 +72,12 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
         snackbarMessage:
             "Успешно сте записали ${genderType == GenderType.male ? 'танцьорът' : 'танцьорката'} в списъка!",
       ));
+    } on DatabaseException catch (dbError) {
+      emit(state.copyWith(
+        status: Status.error,
+        snackbarMessage: "Възникна грешка: ${dbError.toString()}",
+      ));
+      throw Exception(dbError);
     } catch (e) {
       emit(state.copyWith(
         status: Status.error,
@@ -110,6 +117,12 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
         snackbarMessage:
             "Успешно сте преименували ${genderType == GenderType.male ? 'танцьорът' : 'танцьорката'}!",
       ));
+    } on DatabaseException catch (dbError) {
+      emit(state.copyWith(
+        status: Status.error,
+        snackbarMessage: "Възникна грешка: ${dbError.toString()}",
+      ));
+      throw Exception(dbError);
     } catch (e) {
       emit(state.copyWith(
         status: Status.error,
@@ -142,6 +155,12 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
           status: Status.success,
           snackbarMessage:
               "Успешно сте премахнали ${genderType == GenderType.male ? 'танцьорът' : 'танцьорката'} от списъка!"));
+    } on DatabaseException catch (dbError) {
+      emit(state.copyWith(
+        status: Status.error,
+        snackbarMessage: "Възникна грешка: ${dbError.toString()}",
+      ));
+      throw Exception(dbError);
     } catch (e) {
       emit(state.copyWith(
         status: Status.error,

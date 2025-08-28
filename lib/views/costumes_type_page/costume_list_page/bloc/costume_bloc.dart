@@ -7,6 +7,7 @@ import 'package:folk_robe/dao/costume.dart';
 import 'package:folk_robe/models/options.dart';
 import 'package:folk_robe/models/status.dart';
 import 'package:folk_robe/repositories/costumes_repository.dart';
+import 'package:sqflite/sqflite.dart';
 
 part 'costume_event.dart';
 part 'costume_state.dart';
@@ -89,6 +90,12 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
           snackbarMessage: "Успешно сте добавили реквизит от костюма!",
         ),
       );
+    } on DatabaseException catch (dbError) {
+      emit(state.copyWith(
+        status: Status.error,
+        snackbarMessage: "Възникна грешка: ${dbError.toString()}",
+      ));
+      throw Exception(dbError);
     } catch (e) {
       emit(state.copyWith(
         status: Status.error,
@@ -125,6 +132,12 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
         status: Status.success,
         snackbarMessage: "Успешно сте премахнали реквизита!",
       ));
+    } on DatabaseException catch (dbError) {
+      emit(state.copyWith(
+        status: Status.error,
+        snackbarMessage: "Възникна грешка: ${dbError.toString()}",
+      ));
+      throw Exception(dbError);
     } catch (e) {
       emit(state.copyWith(
         status: Status.error,
@@ -167,6 +180,13 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
         status: Status.success,
         snackbarMessage: "Успешно сте променили реквизита!",
       ));
+    } on DatabaseException catch (dbError) {
+      emit(state.copyWith(
+        status: Status.error,
+        snackbarMessage: "Възникна грешка: ${dbError.toString()}",
+      ));
+
+      throw Exception(dbError);
     } catch (e) {
       emit(state.copyWith(
         status: Status.error,

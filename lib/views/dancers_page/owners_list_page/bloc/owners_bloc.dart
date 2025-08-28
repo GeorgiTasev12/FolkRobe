@@ -9,6 +9,7 @@ import 'package:folk_robe/models/status.dart';
 import 'package:folk_robe/repositories/costumes_repository.dart';
 import 'package:folk_robe/repositories/dancers_repository.dart';
 import 'package:folk_robe/repositories/owners_repository.dart';
+import 'package:sqflite/sqflite.dart';
 
 part 'owners_event.dart';
 part 'owners_state.dart';
@@ -130,10 +131,18 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
         snackbarMessage:
             "Успешно назначихте временен ${genderType == GenderType.male ? 'отговорник' : 'отговорничка'}!",
       ));
+    } on DatabaseException catch (dbError) {
+      emit(state.copyWith(
+        status: Status.error,
+        snackbarMessage: "Възникна грешка: ${dbError.toString()}",
+      ));
+
+      throw Exception(dbError);
     } catch (e) {
       emit(state.copyWith(
-          status: Status.error,
-          snackbarMessage: "Възникна грешка, моля опитайте по-късно."));
+        status: Status.error,
+        snackbarMessage: "Възникна грешка, моля опитайте по-късно.",
+      ));
 
       throw Exception(e);
     }
@@ -195,10 +204,18 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
         snackbarMessage:
             "Успешно сте променили ${genderType == GenderType.male ? 'отговорника' : 'отговорничката'}!",
       ));
+    } on DatabaseException catch (dbError) {
+      emit(state.copyWith(
+        status: Status.error,
+        snackbarMessage: "Възникна грешка, ${dbError.toString()}",
+      ));
+
+      throw Exception(dbError);
     } catch (e) {
       emit(state.copyWith(
-          status: Status.error,
-          snackbarMessage: "Възникна грешка, моля опитайте по-късно."));
+        status: Status.error,
+        snackbarMessage: "Възникна грешка, моля опитайте по-късно.",
+      ));
 
       throw Exception(e);
     }
@@ -231,10 +248,18 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
               "Успешно сте премахнали ${genderType == GenderType.male ? 'отговорника' : 'отговорничката'}!"));
 
       add(InitOwnersEvent());
+    } on DatabaseException catch (dbError) {
+      emit(state.copyWith(
+        status: Status.error,
+        snackbarMessage: "Възникна грешка: ${dbError.toString()}",
+      ));
+
+      throw Exception(dbError);
     } catch (e) {
       emit(state.copyWith(
-          status: Status.error,
-          snackbarMessage: "Възникна грешка, моля опитайте по-късно."));
+        status: Status.error,
+        snackbarMessage: "Възникна грешка, моля опитайте по-късно.",
+      ));
 
       throw Exception(e);
     }
