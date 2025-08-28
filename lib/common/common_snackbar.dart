@@ -22,7 +22,11 @@ void showCommonSnackbar({
         ? context.appTheme.colors.error
         : context.appTheme.colors.surfaceContainer,
     elevation: 2,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+    ),
     behavior: SnackBarBehavior.floating,
+    margin: EdgeInsets.all(8),
   );
 
   ScaffoldMessenger.of(context).showSnackBar(snackbar);
