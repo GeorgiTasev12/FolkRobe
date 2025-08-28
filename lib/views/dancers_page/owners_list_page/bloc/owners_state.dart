@@ -22,6 +22,8 @@ final class OwnersState extends Equatable {
   final Set<int> checkedCostumeIndexes;
   final String? querySearch;
   final TextEditingController? searchTextController;
+  final Status status;
+  final String? snackbarMessage;
 
   const OwnersState({
     this.allOwnersList,
@@ -45,6 +47,8 @@ final class OwnersState extends Equatable {
     this.checkedCostumeIndexes = const {},
     this.querySearch,
     this.searchTextController,
+    this.status = Status.initial,
+    this.snackbarMessage,
   });
 
   OwnersState copyWith({
@@ -70,31 +74,35 @@ final class OwnersState extends Equatable {
     List<String>? selectedItems,
     String? querySearch,
     TextEditingController? searchTextController,
+    Status? status,
+    String? snackbarMessage,
   }) {
     return OwnersState(
-        allOwnersList: allOwnersList ?? this.allOwnersList,
-        ownersFiltered: ownersFiltered ?? this.ownersFiltered,
-        owner: owner ?? this.owner,
-        id: id ?? this.id,
-        selectedRegion: selectedRegion ?? this.selectedRegion,
-        pageIndex: pageIndex ?? this.pageIndex,
-        dancersNames: dancersNames ?? this.dancersNames,
-        costumesTitles: costumesTitles ?? this.costumesTitles,
-        isRegionSelected: isRegionSelected ?? this.isRegionSelected,
-        isDancerSelected: isDancerSelected ?? this.isDancerSelected,
-        pageController: pageController ?? this.pageController,
-        isFABVisible: isFABVisible ?? this.isFABVisible,
-        isLoading: isLoading ?? this.isLoading,
-        isOwnerEdit: isOwnerEdit ?? this.isOwnerEdit,
-        selectedRegionValue: selectedRegionValue ?? this.selectedRegionValue,
-        selectedDancerValue: selectedDancerValue ?? this.selectedDancerValue,
-        editingOwnerIndex: editingOwnerIndex ?? this.editingOwnerIndex,
-        selectedItems: selectedItems ?? this.selectedItems,
-        checkedCostumeIndexes:
-            checkedCostumeIndexes ?? this.checkedCostumeIndexes,
-        querySearch: querySearch ?? this.querySearch,
-        searchTextController:
-            searchTextController ?? this.searchTextController);
+      allOwnersList: allOwnersList ?? this.allOwnersList,
+      ownersFiltered: ownersFiltered ?? this.ownersFiltered,
+      owner: owner ?? this.owner,
+      id: id ?? this.id,
+      selectedRegion: selectedRegion ?? this.selectedRegion,
+      pageIndex: pageIndex ?? this.pageIndex,
+      dancersNames: dancersNames ?? this.dancersNames,
+      costumesTitles: costumesTitles ?? this.costumesTitles,
+      isRegionSelected: isRegionSelected ?? this.isRegionSelected,
+      isDancerSelected: isDancerSelected ?? this.isDancerSelected,
+      pageController: pageController ?? this.pageController,
+      isFABVisible: isFABVisible ?? this.isFABVisible,
+      isLoading: isLoading ?? this.isLoading,
+      isOwnerEdit: isOwnerEdit ?? this.isOwnerEdit,
+      selectedRegionValue: selectedRegionValue ?? this.selectedRegionValue,
+      selectedDancerValue: selectedDancerValue ?? this.selectedDancerValue,
+      editingOwnerIndex: editingOwnerIndex ?? this.editingOwnerIndex,
+      selectedItems: selectedItems ?? this.selectedItems,
+      checkedCostumeIndexes:
+          checkedCostumeIndexes ?? this.checkedCostumeIndexes,
+      querySearch: querySearch ?? this.querySearch,
+      searchTextController: searchTextController ?? this.searchTextController,
+      status: status ?? this.status,
+      snackbarMessage: snackbarMessage ?? this.snackbarMessage,
+    );
   }
 
   @override
@@ -120,5 +128,7 @@ final class OwnersState extends Equatable {
         checkedCostumeIndexes,
         querySearch,
         searchTextController,
+        status,
+        snackbarMessage,
       ];
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:folk_robe/dao/owner.dart';
 import 'package:folk_robe/models/options.dart';
+import 'package:folk_robe/models/status.dart';
 import 'package:folk_robe/repositories/costumes_repository.dart';
 import 'package:folk_robe/repositories/dancers_repository.dart';
 import 'package:folk_robe/repositories/owners_repository.dart';
@@ -107,23 +108,39 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     AddTemporaryOwnerEvent event,
     Emitter<OwnersState> emit,
   ) async {
-    final itemString = (state.selectedItems ?? []).join(', ');
+    try {
+      final itemString = (state.selectedItems ?? []).join(', ');
 
-    final owner = Owner(
-      title: event.title,
-      name: event.name,
-      items: itemString,
-    );
+      final owner = Owner(
+        title: event.title,
+        name: event.name,
+        items: itemString,
+      );
 
-    final newId = await OwnersRepository().add(
-      item: owner,
-      gender: genderType,
-    );
+      final newId = await OwnersRepository().add(
+        item: owner,
+        gender: genderType,
+      );
+
+      emit(state.copyWith(
+        owner: owner.copyWith(id: newId),
+        selectedItems: [], // clear selection after adding
+        checkedCostumeIndexes: {}, // reset checkboxes
+        status: Status.success,
+        snackbarMessage:
+            "Успешно назначихте временен ${genderType == GenderType.male ? 'отговорник' : 'отговорничка'}!",
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+          status: Status.error,
+          snackbarMessage: "Възникна грешка, моля опитайте по-късно."));
+
+      throw Exception(e);
+    }
 
     emit(state.copyWith(
-      owner: owner.copyWith(id: newId),
-      selectedItems: [], // clear selection after adding
-      checkedCostumeIndexes: {}, // reset checkboxes
+      status: Status.initial,
+      snackbarMessage: null,
     ));
   }
 
@@ -131,48 +148,64 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     EditTemporaryOwnerEvent event,
     Emitter<OwnersState> emit,
   ) async {
-    final ownerIndex = state.editingOwnerIndex ?? 0;
-    final ownerToEdit = state.allOwnersList?[ownerIndex];
+    try {
+      final ownerIndex = state.editingOwnerIndex ?? 0;
+      final ownerToEdit = state.allOwnersList?[ownerIndex];
 
-    if (ownerToEdit == null) return;
+      if (ownerToEdit == null) return;
 
-    // Build the Set of checked indexes based on the owner’s current items
-    final Set<int> checkedIndexes = {};
-    final ownerItems = ownerToEdit.items.split(', ').map((e) => e.trim());
-    for (int i = 0; i < (state.costumesTitles?.length ?? 0); i++) {
-      if (ownerItems.contains(state.costumesTitles?[i])) {
-        checkedIndexes.add(i);
+      // Build the Set of checked indexes based on the owner’s current items
+      final Set<int> checkedIndexes = {};
+      final ownerItems = ownerToEdit.items.split(', ').map((e) => e.trim());
+      for (int i = 0; i < (state.costumesTitles?.length ?? 0); i++) {
+        if (ownerItems.contains(state.costumesTitles?[i])) {
+          checkedIndexes.add(i);
+        }
       }
+
+      // Build the updated selectedItems from the checked indexes
+      final selectedItems = state.checkedCostumeIndexes
+          .map((i) => state.costumesTitles?[i] ?? '')
+          .where((item) => item.isNotEmpty)
+          .toList();
+
+      final itemString = selectedItems.join(', ');
+
+      final updatedOwner = Owner(
+        id: event.id,
+        name: event.name,
+        title: event.title,
+        items: itemString,
+      );
+
+      await OwnersRepository().update(
+        id: event.id,
+        item: updatedOwner,
+        gender: genderType,
+      );
+
+      final updatedList = await OwnersRepository().read(gender: genderType);
+
+      emit(state.copyWith(
+        allOwnersList: updatedList,
+        owner: updatedOwner,
+        selectedItems: selectedItems,
+        checkedCostumeIndexes: state.checkedCostumeIndexes,
+        status: Status.success,
+        snackbarMessage:
+            "Успешно сте променили ${genderType == GenderType.male ? 'отговорника' : 'отговорничката'}!",
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+          status: Status.error,
+          snackbarMessage: "Възникна грешка, моля опитайте по-късно."));
+
+      throw Exception(e);
     }
 
-    // Build the updated selectedItems from the checked indexes
-    final selectedItems = state.checkedCostumeIndexes
-        .map((i) => state.costumesTitles?[i] ?? '')
-        .where((item) => item.isNotEmpty)
-        .toList();
-
-    final itemString = selectedItems.join(', ');
-
-    final updatedOwner = Owner(
-      id: event.id,
-      name: event.name,
-      title: event.title,
-      items: itemString,
-    );
-
-    await OwnersRepository().update(
-      id: event.id,
-      item: updatedOwner,
-      gender: genderType,
-    );
-
-    final updatedList = await OwnersRepository().read(gender: genderType);
-
     emit(state.copyWith(
-      allOwnersList: updatedList,
-      owner: updatedOwner,
-      selectedItems: selectedItems,
-      checkedCostumeIndexes: state.checkedCostumeIndexes,
+      status: Status.initial,
+      snackbarMessage: null,
     ));
   }
 
@@ -180,21 +213,36 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     RemoveTemporaryOwnerEvent event,
     Emitter<OwnersState> emit,
   ) async {
-    await OwnersRepository().delete(
-      id: event.id,
-      gender: genderType,
-    );
+    try {
+      await OwnersRepository().delete(
+        id: event.id,
+        gender: genderType,
+      );
 
-    final updatedList = await OwnersRepository().read(
-      gender: genderType,
-    );
+      final updatedList = await OwnersRepository().read(
+        gender: genderType,
+      );
+
+      emit(state.copyWith(
+          allOwnersList: updatedList,
+          id: event.id,
+          status: Status.success,
+          snackbarMessage:
+              "Успешно сте премахнали ${genderType == GenderType.male ? 'отговорника' : 'отговорничката'}!"));
+
+      add(InitOwnersEvent());
+    } catch (e) {
+      emit(state.copyWith(
+          status: Status.error,
+          snackbarMessage: "Възникна грешка, моля опитайте по-късно."));
+
+      throw Exception(e);
+    }
 
     emit(state.copyWith(
-      allOwnersList: updatedList,
-      id: event.id,
+      status: Status.initial,
+      snackbarMessage: null,
     ));
-
-    add(InitOwnersEvent());
   }
 
   FutureOr<void> _onSelectedRegion(
