@@ -18,6 +18,7 @@ abstract class DatabaseHelper<T> {
     Options? option,
   }) async {
     final db = await database;
+
     return await db.insert(
         getTableName(
           gender: gender,
@@ -35,6 +36,7 @@ abstract class DatabaseHelper<T> {
       gender: gender,
       option: option,
     ));
+
     return result.map((map) => fromMap(map)).toList();
   }
 
@@ -45,6 +47,7 @@ abstract class DatabaseHelper<T> {
     required int id,
   }) async {
     final db = await database;
+
     return await db.update(
       getTableName(gender: gender, option: option),
       toMap(item),
@@ -59,6 +62,7 @@ abstract class DatabaseHelper<T> {
     required int id,
   }) async {
     final db = await database;
+    
     return await db.delete(
       getTableName(gender: gender, option: option),
       where: 'id = ?',
