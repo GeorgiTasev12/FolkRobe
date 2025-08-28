@@ -201,48 +201,26 @@ class DancersListPage extends HookWidget {
                             const SizedBox(width: 16),
                             CommonCircleIconButton(
                               index: index,
-                              icon: Icon(
-                                Icons.delete,
-                                color: context.appTheme.colors.surfaceContainer,
-                              ),
+                              icon: Icon(Icons.delete,
+                                  color:
+                                      context.appTheme.colors.surfaceContainer),
                               backgroundColor: context.appTheme.colors.error,
-                              onPressed: () => showDialog(
-                                context: context,
-                                builder: (context) => BlocProvider.value(
-                                  value: bloc,
-                                  child: BlocBuilder<DancersBloc, DancersState>(
-                                    buildWhen: (previous, current) =>
-                                        previous.id != current.id ||
-                                        previous.allDancersList !=
-                                            current.allDancersList ||
-                                        previous.dancersFiltered !=
-                                            current.dancersFiltered ||
-                                        previous.querySearch !=
-                                            current.querySearch,
-                                    builder: (context, state) {
-                                      final displayList =
-                                          state.dancersFiltered ??
-                                              state.allDancersList ??
-                                              [];
-                                      final dancer = displayList[index];
+                              onPressed: () {
+                                final dancerToDelete = displayList[index];
 
-                                      if (index >= displayList.length) {
-                                        return const SizedBox.shrink();
-                                      }
-                                      return CommonDeleteDialog(
-                                        index: dancer.id ?? 0,
-                                        onDeletePressed: () {
-                                          bloc.add(RemoveDancerEvent(
-                                            id: dancer.id ?? 0,
-                                          ));
-                                          bloc.add(InitDancersEvent());
-                                          locator<NavigationService>().pop();
-                                        },
-                                      );
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => CommonDeleteDialog(
+                                    index: dancerToDelete.id ?? 0,
+                                    onDeletePressed: () {
+                                      bloc.add(RemoveDancerEvent(
+                                          id: dancerToDelete.id ?? 0));
+                                      bloc.add(InitDancersEvent());
+                                      locator<NavigationService>().pop();
                                     },
                                   ),
-                                ),
-                              ),
+                                );
+                              },
                             ),
                           ],
                         );
