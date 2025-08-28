@@ -73,6 +73,7 @@ class CostumeListPage extends HookWidget {
                             quantity: state.quantityTextController?.text,
                           ));
                           bloc.add(InitDataEvent());
+                          bloc.add(OnCloseDialogEvent());
                           locator<NavigationService>().pop();
                         },
                         onClosedPressed: () {
@@ -186,6 +187,7 @@ class CostumeListPage extends HookWidget {
                                                   .quantityTextController?.text,
                                             ));
                                             bloc.add(InitDataEvent());
+                                            bloc.add(OnCloseDialogEvent());
                                             locator<NavigationService>().pop();
                                           },
                                           onClosedPressed: () {
