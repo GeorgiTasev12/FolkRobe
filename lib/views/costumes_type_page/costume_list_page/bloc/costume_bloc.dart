@@ -83,11 +83,16 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
         id: newId,
       );
 
+      state.nameTextController?.clear();
+      state.quantityTextController?.clear();
+
       emit(
         state.copyWith(
           costume: costumeWithId,
           status: Status.success,
           snackbarMessage: "Успешно сте добавили елемент!",
+          isNameNotEmpty: false,
+          isQuantityNotEmpty: false,
         ),
       );
     } on DatabaseException catch (dbError) {

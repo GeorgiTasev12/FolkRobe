@@ -169,63 +169,79 @@ class CostumeListPage extends HookWidget {
                                 child: Material(
                                   color: context.appTheme.colors.warning,
                                   child: IconButton(
-                                    onPressed: () => showDialog(
-                                      context: context,
-                                      builder: (_) => BlocProvider.value(
-                                        value: bloc,
-                                        child: CommonDialog(
-                                          dialogTitle:
-                                              'Моля, въведете реквизит',
-                                          onSavePressed: () {
-                                            bloc.add(UpdateCostumeEvent(
-                                              id: costume.id,
-                                              title: state.nameTextController
-                                                      ?.text ??
-                                                  "",
-                                              quantity: state
-                                                  .quantityTextController?.text,
-                                            ));
-                                            bloc.add(InitDataEvent());
-                                            locator<NavigationService>().pop();
-                                          },
-                                          onClosedPressed: () {
-                                            bloc.add(OnCloseDialogEvent());
-                                            locator<NavigationService>().pop();
-                                          },
-                                          onNameClearPressed: () =>
-                                              bloc.add(OnNameClearEvent(
-                                            textController:
+                                    onPressed: () {
+                                      if (costume.id != null) {
+                                        state.nameTextController?.text =
+                                            costume.title;
+                                        state.quantityTextController?.text =
+                                            costume.quantity?.toString() ?? '';
+                                      } else {
+                                        state.nameTextController?.clear();
+                                        state.quantityTextController?.clear();
+                                      }
+
+                                      showDialog(
+                                        context: context,
+                                        builder: (_) => BlocProvider.value(
+                                          value: bloc,
+                                          child: CommonDialog(
+                                            dialogTitle:
+                                                'Моля, въведете реквизит',
+                                            onSavePressed: () {
+                                              bloc.add(UpdateCostumeEvent(
+                                                id: costume.id,
+                                                title: state.nameTextController
+                                                        ?.text ??
+                                                    "",
+                                                quantity: state
+                                                    .quantityTextController
+                                                    ?.text,
+                                              ));
+                                              bloc.add(InitDataEvent());
+                                              locator<NavigationService>()
+                                                  .pop();
+                                            },
+                                            onClosedPressed: () {
+                                              bloc.add(OnCloseDialogEvent());
+                                              locator<NavigationService>()
+                                                  .pop();
+                                            },
+                                            onNameClearPressed: () =>
+                                                bloc.add(OnNameClearEvent(
+                                              textController:
+                                                  state.nameTextController ??
+                                                      TextEditingController(),
+                                            )),
+                                            onQuantityClearPressed: () =>
+                                                bloc.add(
+                                              OnQuantityClearEvent(
+                                                textController: state
+                                                        .quantityTextController ??
+                                                    TextEditingController(),
+                                              ),
+                                            ),
+                                            onNameChanged: (String name) =>
+                                                bloc.add(
+                                              OnNameChangedEvent(text: name),
+                                            ),
+                                            onNumberChanged: (String number) =>
+                                                bloc.add(
+                                              OnQuantityChangedEvent(
+                                                  number: number),
+                                            ),
+                                            isNameNotEmpty:
+                                                state.isNameNotEmpty,
+                                            isQuantityNotEmpty:
+                                                state.isQuantityNotEmpty,
+                                            nameTextController:
                                                 state.nameTextController ??
                                                     TextEditingController(),
-                                          )),
-                                          onQuantityClearPressed: () =>
-                                              bloc.add(
-                                            OnQuantityClearEvent(
-                                              textController: state
-                                                      .quantityTextController ??
-                                                  TextEditingController(),
-                                            ),
+                                            quantityTextController:
+                                                state.quantityTextController,
                                           ),
-                                          onNameChanged: (String name) =>
-                                              bloc.add(
-                                            OnNameChangedEvent(text: name),
-                                          ),
-                                          onNumberChanged: (String number) =>
-                                              bloc.add(
-                                            OnQuantityChangedEvent(
-                                                number: number),
-                                          ),
-                                          isNameNotEmpty: state.isNameNotEmpty,
-                                          isQuantityNotEmpty:
-                                              state.isQuantityNotEmpty,
-                                          nameTextController:
-                                              state.nameTextController ??
-                                                  TextEditingController(),
-                                          quantityTextController:
-                                              state.quantityTextController,
                                         ),
-                                      ),
-                                    ),
+                                      );
+                                    },
                                     icon: Icon(
                                       Icons.edit,
                                       color: context
