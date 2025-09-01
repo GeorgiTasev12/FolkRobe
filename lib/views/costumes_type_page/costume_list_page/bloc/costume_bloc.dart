@@ -87,7 +87,7 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
         state.copyWith(
           costume: costumeWithId,
           status: Status.success,
-          snackbarMessage: "Успешно сте добавили реквизит от костюма!",
+          snackbarMessage: "Успешно сте добавили елемент!",
         ),
       );
     } on DatabaseException catch (dbError) {
@@ -130,7 +130,7 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
         allCostumesList: updatedList,
         id: event.id,
         status: Status.success,
-        snackbarMessage: "Успешно сте премахнали реквизита!",
+        snackbarMessage: "Елементът е премахнат успешно!",
       ));
     } on DatabaseException catch (dbError) {
       emit(state.copyWith(
@@ -178,7 +178,7 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
         allCostumesList: updatedList,
         costume: updatedCostume,
         status: Status.success,
-        snackbarMessage: "Успешно сте променили реквизита!",
+        snackbarMessage: "Успешно сте променили елемента!",
       ));
     } on DatabaseException catch (dbError) {
       emit(state.copyWith(

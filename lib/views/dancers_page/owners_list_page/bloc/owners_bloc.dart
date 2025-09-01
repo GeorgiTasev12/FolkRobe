@@ -129,7 +129,7 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
         checkedCostumeIndexes: {}, // reset checkboxes
         status: Status.success,
         snackbarMessage:
-            "Успешно назначихте временен ${genderType == GenderType.male ? 'отговорник' : 'отговорничка'}!",
+            "Успешно добавихте временен ${genderType == GenderType.male ? 'отговорник' : 'отговорничка'}!",
       ));
     } on DatabaseException catch (dbError) {
       emit(state.copyWith(
