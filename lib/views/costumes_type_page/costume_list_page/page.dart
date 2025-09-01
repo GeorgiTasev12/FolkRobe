@@ -67,6 +67,7 @@ class CostumeListPage extends HookWidget {
                     builder: (context, state) {
                       return CommonDialog(
                         dialogTitle: 'Моля, въведете реквизит',
+                        isEnabled: state.nameTextController?.text.isNotEmpty ?? false,
                         onSavePressed: () {
                           bloc.add(AddCostumeEvent(
                             title: state.nameTextController?.text ?? "",
@@ -188,6 +189,7 @@ class CostumeListPage extends HookWidget {
                                           child: CommonDialog(
                                             dialogTitle:
                                                 'Моля, въведете реквизит',
+                                            isEnabled: state.nameTextController?.text.isNotEmpty ?? false,
                                             onSavePressed: () {
                                               bloc.add(UpdateCostumeEvent(
                                                 id: costume.id,
