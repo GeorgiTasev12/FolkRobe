@@ -16,6 +16,7 @@ class CommonDialog extends StatelessWidget {
   final bool? isQuantityNotEmpty;
   final void Function()? onQuantityClearPressed;
   final void Function(String number)? onNumberChanged;
+  final bool isEnabled;
 
   const CommonDialog({
     super.key,
@@ -30,6 +31,7 @@ class CommonDialog extends StatelessWidget {
     this.quantityTextController,
     this.isQuantityNotEmpty = false,
     this.onQuantityClearPressed,
+    this.isEnabled = true,
   });
 
   @override
@@ -97,7 +99,7 @@ class CommonDialog extends StatelessWidget {
           ),
         ),
         FilledButton(
-          onPressed: onSavePressed,
+          onPressed: isEnabled ? onSavePressed : null,
           style: FilledButton.styleFrom(
             backgroundColor: context.appTheme.colors.secondary,
           ),
