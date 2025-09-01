@@ -31,8 +31,9 @@ class OwnersListPage extends HookWidget {
     }, []);
 
     return BlocListener<OwnersBloc, OwnersState>(
-      listenWhen: (previous, current) => previous.status != current.status ||
-        previous.snackbarMessage != current.snackbarMessage,
+      listenWhen: (previous, current) =>
+          previous.status != current.status ||
+          previous.snackbarMessage != current.snackbarMessage,
       listener: (context, state) {
         if (state.status == Status.success || state.status == Status.error) {
           showCommonSnackbar(
@@ -133,90 +134,96 @@ class OwnersListPage extends HookWidget {
                     if (state.isRegionSelected == true) ...[
                       CommonDivider(),
                       const SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Expanded(
-                            child: OutlinedButton(
-                              onPressed: () => bloc.add(
-                                SwitchPageEvent(
-                                  pageIndex: 0,
-                                  isOwnerEdit: false,
+                      SafeArea(
+                        bottom: true,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed: () => bloc.add(
+                                  SwitchPageEvent(
+                                    pageIndex: 0,
+                                    isOwnerEdit: false,
+                                  ),
                                 ),
-                              ),
-                              style: OutlinedButton.styleFrom(
-                                side: BorderSide(
-                                  color: context.appTheme.colors.primary,
+                                style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                    color: context.appTheme.colors.primary,
+                                  ),
                                 ),
-                              ),
-                              child: Text(
-                                'Cancel',
-                                style: context.appTheme.textStyles.bodyLarge
-                                    .copyWith(
-                                  color: context.appTheme.colors.primary,
-                                  fontWeight: FontWeight.w400,
+                                child: Text(
+                                  'Cancel',
+                                  style: context.appTheme.textStyles.bodyLarge
+                                      .copyWith(
+                                    color: context.appTheme.colors.primary,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: BlocBuilder<OwnersBloc, OwnersState>(
-                              buildWhen: (previous, current) =>
-                                  bloc.filledButtonBuildWhen(previous, current),
-                              builder: (context, state) {
-                                return FilledButton(
-                                  onPressed: state
-                                          .checkedCostumeIndexes.isNotEmpty
-                                      ? () {
-                                          if (state.isOwnerEdit) {
-                                            final editingOwnerId = displayList[
-                                                    state.editingOwnerIndex ??
-                                                        0]
-                                                .id;
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: BlocBuilder<OwnersBloc, OwnersState>(
+                                buildWhen: (previous, current) => bloc
+                                    .filledButtonBuildWhen(previous, current),
+                                builder: (context, state) {
+                                  return FilledButton(
+                                    onPressed: state
+                                            .checkedCostumeIndexes.isNotEmpty
+                                        ? () {
+                                            if (state.isOwnerEdit) {
+                                              final editingOwnerId = displayList[
+                                                      state.editingOwnerIndex ??
+                                                          0]
+                                                  .id;
 
-                                            bloc.add(EditTemporaryOwnerEvent(
-                                              id: editingOwnerId ?? 0,
-                                              name: state.selectedDancerValue ??
-                                                  '',
-                                              title: state.selectedRegionValue
-                                                      ?.optionName ??
-                                                  '',
+                                              bloc.add(EditTemporaryOwnerEvent(
+                                                id: editingOwnerId ?? 0,
+                                                name:
+                                                    state.selectedDancerValue ??
+                                                        '',
+                                                title: state.selectedRegionValue
+                                                        ?.optionName ??
+                                                    '',
+                                              ));
+                                            } else {
+                                              bloc.add(AddTemporaryOwnerEvent(
+                                                name:
+                                                    state.selectedDancerValue ??
+                                                        '',
+                                                title: state.selectedRegionValue
+                                                        ?.optionName ??
+                                                    '',
+                                              ));
+                                            }
+
+                                            bloc.add(SwitchPageEvent(
+                                              pageIndex: 0,
+                                              isOwnerEdit: false,
                                             ));
-                                          } else {
-                                            bloc.add(AddTemporaryOwnerEvent(
-                                              name: state.selectedDancerValue ??
-                                                  '',
-                                              title: state.selectedRegionValue
-                                                      ?.optionName ??
-                                                  '',
-                                            ));
+                                            bloc.add(InitOwnersEvent());
                                           }
-
-                                          bloc.add(SwitchPageEvent(
-                                            pageIndex: 0,
-                                            isOwnerEdit: false,
-                                          ));
-                                          bloc.add(InitOwnersEvent());
-                                        }
-                                      : null,
-                                  style: FilledButton.styleFrom(
-                                    backgroundColor: context
-                                        .appTheme.colors.surfaceContainer,
-                                  ),
-                                  child: Text(
-                                    state.isOwnerEdit ? 'Save' : 'Add',
-                                    style: context.appTheme.textStyles.bodyLarge
-                                        .copyWith(
-                                      color: context
-                                          .appTheme.colors.onSurfaceContainer,
+                                        : null,
+                                    style: FilledButton.styleFrom(
+                                      backgroundColor: context
+                                          .appTheme.colors.surfaceContainer,
                                     ),
-                                  ),
-                                );
-                              },
+                                    child: Text(
+                                      state.isOwnerEdit ? 'Save' : 'Add',
+                                      style: context
+                                          .appTheme.textStyles.bodyLarge
+                                          .copyWith(
+                                        color: context
+                                            .appTheme.colors.onSurfaceContainer,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 10),
                     ],

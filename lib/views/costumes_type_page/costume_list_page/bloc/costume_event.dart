@@ -74,7 +74,11 @@ final class AddCostumeEvent extends CostumeEvent {
   final String title;
   final String? quantity;
 
-  AddCostumeEvent({required this.title, this.costume, this.quantity});
+  AddCostumeEvent({
+    required this.title,
+    this.costume,
+    this.quantity,
+  });
 
   AddCostumeEvent copyWith({
     Costume? costume,

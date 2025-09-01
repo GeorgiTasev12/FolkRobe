@@ -65,7 +65,7 @@ class DancersListPage extends HookWidget {
                       previous.isNameNotEmpty != current.isNameNotEmpty,
                   builder: (context, state) {
                     return CommonDialog(
-                      dialogTitle: 'Моля, въведете име на танцьора.',
+                      dialogTitle: 'Моля, въведете име на танцьора',
                       onSavePressed: () {
                         bloc.add(AddDancerEvent(
                           name: state.nameTextController?.text ?? "",
@@ -156,49 +156,57 @@ class DancersListPage extends HookWidget {
                                 color: context.appTheme.colors.surfaceContainer,
                               ),
                               backgroundColor: context.appTheme.colors.warning,
-                              onPressed: () => showDialog(
-                                context: context,
-                                builder: (_) => BlocProvider.value(
-                                  value: bloc,
-                                  child: BlocBuilder<DancersBloc, DancersState>(
-                                    builder: (context, state) {
-                                      return CommonDialog(
-                                        dialogTitle:
-                                            'Моля, въведете име на танцьора.',
-                                        onSavePressed: () {
-                                          bloc.add(UpdateDancerEvent(
-                                            id: dancer.id,
-                                            name: state
-                                                    .nameTextController?.text ??
-                                                "",
-                                          ));
-                                          bloc.add(InitDancersEvent());
-                                          bloc.add(OnCloseDialogEvent());
-                                          locator<NavigationService>().pop();
-                                        },
-                                        onClosedPressed: () {
-                                          bloc.add(OnCloseDialogEvent());
-                                          locator<NavigationService>().pop();
-                                        },
-                                        onNameClearPressed: () =>
-                                            bloc.add(OnNameClearEvent(
-                                          textController:
+                              onPressed: () {
+                                if (dancer.id != null) {
+                                  state.nameTextController?.text = dancer.name;
+                                } else {
+                                  state.nameTextController?.clear();
+                                }
+
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => BlocProvider.value(
+                                    value: bloc,
+                                    child:
+                                        BlocBuilder<DancersBloc, DancersState>(
+                                      builder: (context, state) {
+                                        return CommonDialog(
+                                          dialogTitle:
+                                              'Моля, въведете име на танцьора',
+                                          onSavePressed: () {
+                                            bloc.add(UpdateDancerEvent(
+                                              id: dancer.id,
+                                              name: state.nameTextController
+                                                      ?.text ??
+                                                  "",
+                                            ));
+                                            bloc.add(InitDancersEvent());
+                                            locator<NavigationService>().pop();
+                                          },
+                                          onClosedPressed: () {
+                                            bloc.add(OnCloseDialogEvent());
+                                            locator<NavigationService>().pop();
+                                          },
+                                          onNameClearPressed: () =>
+                                              bloc.add(OnNameClearEvent(
+                                            textController:
+                                                state.nameTextController ??
+                                                    TextEditingController(),
+                                          )),
+                                          onNameChanged: (String name) =>
+                                              bloc.add(
+                                            OnNameChangedEvent(text: name),
+                                          ),
+                                          isNameNotEmpty: state.isNameNotEmpty,
+                                          nameTextController:
                                               state.nameTextController ??
                                                   TextEditingController(),
-                                        )),
-                                        onNameChanged: (String name) =>
-                                            bloc.add(
-                                          OnNameChangedEvent(text: name),
-                                        ),
-                                        isNameNotEmpty: state.isNameNotEmpty,
-                                        nameTextController:
-                                            state.nameTextController ??
-                                                TextEditingController(),
-                                      );
-                                    },
+                                        );
+                                      },
+                                    ),
                                   ),
-                                ),
-                              ),
+                                );
+                              },
                             ),
                             const SizedBox(width: 16),
                             CommonCircleIconButton(
