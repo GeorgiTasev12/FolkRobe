@@ -20,7 +20,7 @@ class CommonEmptyInfoText extends StatelessWidget {
             Text(
               isDancer
                   ? "Имате празен списък от танцьори, моля добавете като натискате:"
-                  : 'Имате празен инвентар от риквизити, моля добавете като натискате:',
+                  : 'Няма налични реквизити, моля добавете като натискате:',
               softWrap: true,
               textAlign: TextAlign.center,
               style: context.appTheme.textStyles.bodyLarge.copyWith(
