@@ -71,6 +71,7 @@ class DancersListPage extends HookWidget {
                           name: state.nameTextController?.text ?? "",
                         ));
                         bloc.add(InitDancersEvent());
+                        bloc.add(OnCloseDialogEvent());
                         locator<NavigationService>().pop();
                       },
                       onClosedPressed: () {

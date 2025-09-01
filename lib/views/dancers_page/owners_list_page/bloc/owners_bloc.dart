@@ -96,6 +96,12 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
       curve: Curves.easeInOut,
     );
 
+    if (state.pageIndex != 1) {
+      emit(state.copyWith(
+        isRegionSelected: false,
+      ));
+    }
+
     emit(
       state.copyWith(
         pageIndex: event.pageIndex,
