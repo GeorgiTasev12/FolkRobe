@@ -66,11 +66,14 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
 
       final dancerWithId = dancer.copyWith(id: newId);
 
+      state.nameTextController?.clear();
+
       emit(state.copyWith(
         dancer: dancerWithId,
         status: Status.success,
         snackbarMessage:
             "Успешно сте записали ${genderType == GenderType.male ? 'танцьорът' : 'танцьорката'} в списъка!",
+        isNameNotEmpty: false,
       ));
     } on DatabaseException catch (dbError) {
       emit(state.copyWith(
