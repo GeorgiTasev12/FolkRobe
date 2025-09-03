@@ -21,7 +21,7 @@ class DancersPage extends StatelessWidget {
           children: [
             Flexible(
               child: CommonMainOptionCard(
-                title: 'Добави танцьори',
+                title: 'Добави танцьор',
                 icon: Icon(
                   Icons.person_add,
                   size: 60,
