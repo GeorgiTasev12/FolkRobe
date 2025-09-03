@@ -113,6 +113,8 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
 
       final updatedList = await DancersRepository().read(gender: genderType);
 
+      state.nameTextController?.clear();
+
       emit(state.copyWith(
         allDancersList: updatedList,
         dancer: updatedDancer,

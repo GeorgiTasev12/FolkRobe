@@ -179,6 +179,9 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
         gender: genderType,
       );
 
+      state.nameTextController?.clear();
+      state.quantityTextController?.clear();
+
       emit(state.copyWith(
         allCostumesList: updatedList,
         costume: updatedCostume,
