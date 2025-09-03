@@ -19,7 +19,7 @@ class CommonEmptyInfoText extends StatelessWidget {
           children: [
             Text(
               isDancer
-                  ? "Няма налични танцьори"
+                  ? "Списъкът с танцьори е празен"
                   : 'Няма налични реквизити',
               softWrap: true,
               textAlign: TextAlign.center,
