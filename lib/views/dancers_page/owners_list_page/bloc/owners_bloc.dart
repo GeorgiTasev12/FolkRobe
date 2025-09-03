@@ -134,8 +134,7 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
         selectedItems: [], // clear selection after adding
         checkedCostumeIndexes: {}, // reset checkboxes
         status: Status.success,
-        snackbarMessage:
-            "Успешно добавихте временен ${genderType == GenderType.male ? 'отговорник' : 'отговорничка'}!",
+        snackbarMessage: "Елементът е добавено успешно!",
       ));
     } on DatabaseException catch (dbError) {
       emit(state.copyWith(
@@ -207,8 +206,7 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
         selectedItems: selectedItems,
         checkedCostumeIndexes: state.checkedCostumeIndexes,
         status: Status.success,
-        snackbarMessage:
-            "Успешно сте променили ${genderType == GenderType.male ? 'отговорника' : 'отговорничката'}!",
+        snackbarMessage: "Елементът е редактиран успешно!",
       ));
     } on DatabaseException catch (dbError) {
       emit(state.copyWith(
@@ -250,8 +248,7 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
           allOwnersList: updatedList,
           id: event.id,
           status: Status.success,
-          snackbarMessage:
-              "Успешно сте премахнали ${genderType == GenderType.male ? 'отговорника' : 'отговорничката'}!"));
+          snackbarMessage: "Елементът е премахнат успешно!"));
 
       add(InitOwnersEvent());
     } on DatabaseException catch (dbError) {
