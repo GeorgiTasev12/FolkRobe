@@ -27,12 +27,6 @@ class CommonEmptyInfoText extends StatelessWidget {
                 color: context.appTheme.colors.primary,
               ),
             ),
-            SizedBox(height: 15),
-            Icon(
-              Icons.add,
-              color: context.appTheme.colors.primary,
-              size: 32,
-            ),
           ],
         ),
       ),
