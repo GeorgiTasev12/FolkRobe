@@ -93,7 +93,7 @@ class CommonTextfield extends StatelessWidget {
       keyboardType: keyboardType ?? TextInputType.text,
       inputFormatters: formatters ??
           [
-            FilteringTextInputFormatter.allow(RegexHelper.lettersAndSymbols),
+            FilteringTextInputFormatter.allow(RegexHelper.everyCharacter),
           ],
     );
   }

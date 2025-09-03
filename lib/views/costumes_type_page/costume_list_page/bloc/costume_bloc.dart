@@ -179,11 +179,14 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
         gender: genderType,
       );
 
+      state.nameTextController?.clear();
+      state.quantityTextController?.clear();
+
       emit(state.copyWith(
         allCostumesList: updatedList,
         costume: updatedCostume,
         status: Status.success,
-        snackbarMessage: "Успешно сте променили елемента!",
+        snackbarMessage: "Елементът е редактирано успешно!",
       ));
     } on DatabaseException catch (dbError) {
       emit(state.copyWith(

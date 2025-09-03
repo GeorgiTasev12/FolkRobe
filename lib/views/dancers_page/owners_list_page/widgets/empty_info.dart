@@ -15,17 +15,12 @@ class EmptyInfoText extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'В момент нямате $genderText, за да добавите на танциорите дадени реквизити, моля натиснете:',
+          'Списъкът с отговорници е празен',
           softWrap: true,
           textAlign: TextAlign.center,
           style: context.appTheme.textStyles.bodyLarge.copyWith(
             color: context.appTheme.colors.primary,
           ),
-        ),
-        SizedBox(height: 15),
-        Icon(
-          Icons.add,
-          color: context.appTheme.colors.primary,
         ),
       ],
     );

@@ -71,8 +71,7 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
       emit(state.copyWith(
         dancer: dancerWithId,
         status: Status.success,
-        snackbarMessage:
-            "Успешно сте записали ${genderType == GenderType.male ? 'танцьорът' : 'танцьорката'} в списъка!",
+        snackbarMessage: "Елементът е добавен успешно!",
         isNameNotEmpty: false,
       ));
     } on DatabaseException catch (dbError) {
@@ -113,12 +112,13 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
 
       final updatedList = await DancersRepository().read(gender: genderType);
 
+      state.nameTextController?.clear();
+
       emit(state.copyWith(
         allDancersList: updatedList,
         dancer: updatedDancer,
         status: Status.success,
-        snackbarMessage:
-            "Успешно сте преименували ${genderType == GenderType.male ? 'танцьорът' : 'танцьорката'}!",
+        snackbarMessage: "Елементът е редактиран успешно!!",
       ));
     } on DatabaseException catch (dbError) {
       emit(state.copyWith(
@@ -156,8 +156,7 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
           allDancersList: updatedList,
           id: event.id,
           status: Status.success,
-          snackbarMessage:
-              "Успешно сте премахнали ${genderType == GenderType.male ? 'танцьорът' : 'танцьорката'} от списъка!"));
+          snackbarMessage: "Елементът е премахнат успешно!"));
     } on DatabaseException catch (dbError) {
       emit(state.copyWith(
         status: Status.error,

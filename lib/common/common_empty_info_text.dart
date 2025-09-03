@@ -19,19 +19,13 @@ class CommonEmptyInfoText extends StatelessWidget {
           children: [
             Text(
               isDancer
-                  ? "Имате празен списък от танцьори, моля добавете като натискате:"
-                  : 'Няма налични реквизити, моля добавете като натискате:',
+                  ? "Списъкът с танцьори е празен"
+                  : 'Няма налични реквизити',
               softWrap: true,
               textAlign: TextAlign.center,
               style: context.appTheme.textStyles.bodyLarge.copyWith(
                 color: context.appTheme.colors.primary,
               ),
-            ),
-            SizedBox(height: 15),
-            Icon(
-              Icons.add,
-              color: context.appTheme.colors.primary,
-              size: 32,
             ),
           ],
         ),
