@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:folk_robe/locator.dart';
-import 'package:folk_robe/models/page_source.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/views/core_page.dart';
 import 'package:folk_robe/views/dancers_page/page.dart';
@@ -27,9 +26,7 @@ class HomePage extends StatelessWidget {
                     imagePath: "assets/folklore_dress.png",
                     onTap: () => locator<NavigationService>().push(
                       MaterialPageRoute(
-                        builder: (context) => GenderPage(
-                          pageSource: PageSource.homePage,
-                        ),
+                        builder: (context) => GenderPage(),
                       ),
                     ),
                   ),
