@@ -13,11 +13,8 @@ part 'dancers_event.dart';
 part 'dancers_state.dart';
 
 class DancersBloc extends Bloc<DancersEvent, DancersState> {
-  final GenderType genderType;
-
-  DancersBloc({
-    required this.genderType,
-  }) : super(DancersState(
+  DancersBloc()
+      : super(DancersState(
           nameTextController: TextEditingController(),
           searchTextController: TextEditingController(),
         )) {
@@ -30,6 +27,9 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
     on<OnCloseDialogEvent>(_onCloseDialog);
     on<SearchDancerEvent>(_onSearchDancer);
     on<OnSearchClearEvent>(_onSearchClear);
+    on<OnSelectedGenderEvent>(_onSelectedGender);
+    on<OnOpenDialogEvent>(_onOpenDialog);
+    on<OnFilterDancersEvent>(_onFilterDancers);
   }
 
   FutureOr<void> _onInitData(
@@ -38,7 +38,7 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
   ) async {
     emit(state.copyWith(isLoading: true));
 
-    final dancers = await DancersRepository().read(gender: genderType);
+    final dancers = await DancersRepository().read();
 
     emit(state.copyWith(
       allDancersList: dancers,
@@ -59,10 +59,12 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
     Emitter<DancersState> emit,
   ) async {
     try {
-      final dancer = Dancer(name: event.name);
+      final dancer = Dancer(
+        name: event.name,
+        gender: event.gender,
+      );
 
-      final newId =
-          await DancersRepository().add(item: dancer, gender: genderType);
+      final newId = await DancersRepository().add(item: dancer);
 
       final dancerWithId = dancer.copyWith(id: newId);
 
@@ -73,6 +75,7 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
         status: Status.success,
         snackbarMessage: "Елементът е добавен успешно!",
         isNameNotEmpty: false,
+        genderStringValue: event.gender,
       ));
     } on DatabaseException catch (dbError) {
       emit(state.copyWith(
@@ -102,15 +105,15 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
       final updatedDancer = Dancer(
         id: event.id,
         name: event.name ?? '',
+        gender: event.gender ?? '',
       );
 
       await DancersRepository().update(
         item: updatedDancer,
-        gender: genderType,
         id: event.id ?? 0,
       );
 
-      final updatedList = await DancersRepository().read(gender: genderType);
+      final updatedList = await DancersRepository().read();
 
       state.nameTextController?.clear();
 
@@ -118,7 +121,7 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
         allDancersList: updatedList,
         dancer: updatedDancer,
         status: Status.success,
-        snackbarMessage: "Елементът е редактиран успешно!!",
+        snackbarMessage: "Елементът е редактиран успешно!",
       ));
     } on DatabaseException catch (dbError) {
       emit(state.copyWith(
@@ -147,10 +150,9 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
     try {
       await DancersRepository().delete(
         id: event.id ?? 0,
-        gender: genderType,
       );
 
-      final updatedList = await DancersRepository().read(gender: genderType);
+      final updatedList = await DancersRepository().read();
 
       emit(state.copyWith(
           allDancersList: updatedList,
@@ -247,5 +249,60 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
     ));
 
     add(InitDancersEvent());
+  }
+
+  FutureOr<void> _onSelectedGender(
+    OnSelectedGenderEvent event,
+    Emitter<DancersState> emit,
+  ) {
+    emit(state.copyWith(
+      genderStringValue: event.gender.name,
+      genderTypeValue: event.gender,
+    ));
+  }
+
+  FutureOr<void> _onOpenDialog(
+    OnOpenDialogEvent event,
+    Emitter<DancersState> emit,
+  ) {
+    if (state.isDancerEdit) {
+      final dancer = state.allDancersList?[state.dancer?.id ?? 0];
+
+      if (dancer != null) {
+        emit(state.copyWith(
+          isDancerEdit: true,
+          genderTypeValue: event.genderType,
+          genderStringValue: dancer.gender,
+        ));
+      } else {
+        emit(state.copyWith(
+          isDancerEdit: false,
+          genderStringValue: null,
+          genderTypeValue: null,
+        ));
+      }
+    }
+
+    emit(state.copyWith(
+      isDancerEdit: false,
+    ));
+  }
+
+  FutureOr<void> _onFilterDancers(
+    OnFilterDancersEvent event,
+    Emitter<DancersState> emit,
+  ) async {
+    emit(state.copyWith(isLoading: true));
+
+    final filteredDancers = await DancersRepository.getFilteredDancers(
+      gender: event.genderType,
+    );
+
+    emit(state.copyWith(
+      filterGenderTypeValue: event.genderType,
+      allDancersList: filteredDancers,
+      dancersFiltered: filteredDancers,
+      isLoading: false,
+    ));
   }
 }

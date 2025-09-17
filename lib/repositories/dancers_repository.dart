@@ -6,10 +6,12 @@ import 'package:folk_robe/service/database_dancers_helper.dart';
 class DancersRepository extends BaseRepository<Dancer> {
   final _dancersDB = DatabaseDancersHelper();
 
+  static final Map<GenderType, List<String>> _dancersCache = {};
+
   @override
   Future<int> add({
     required Dancer item,
-    required GenderType gender,
+    GenderType? gender,
     Options? option,
   }) async {
     return await _dancersDB.insert(item: item, gender: gender);
@@ -18,7 +20,7 @@ class DancersRepository extends BaseRepository<Dancer> {
   @override
   Future<int> delete({
     required int id,
-    required GenderType gender,
+    GenderType? gender,
     Options? option,
   }) async {
     return await _dancersDB.delete(
@@ -29,7 +31,7 @@ class DancersRepository extends BaseRepository<Dancer> {
 
   @override
   Future<List<Dancer>> read({
-    required GenderType gender,
+    GenderType? gender,
     Options? option,
   }) async {
     return await _dancersDB.getAll(gender: gender);
@@ -39,7 +41,7 @@ class DancersRepository extends BaseRepository<Dancer> {
   Future<int> update({
     required int id,
     required Dancer item,
-    required GenderType gender,
+    GenderType? gender,
     Options? option,
   }) async {
     return await _dancersDB.update(
@@ -50,6 +52,19 @@ class DancersRepository extends BaseRepository<Dancer> {
   }
 
   static Future<List<String>> getDancers({required GenderType gender}) async {
-    return await DatabaseDancersHelper.getDancersNames(gender);
+    if (_dancersCache.containsKey(gender)) {
+      return _dancersCache[gender]!;
+    } else {
+      final dancers = await DatabaseDancersHelper.getDancersNames(gender);
+      _dancersCache[gender] = dancers;
+
+      return dancers;
+    }
+  }
+
+  static Future<List<Dancer>> getFilteredDancers({
+    required GenderType gender,
+  }) async {
+    return await DatabaseDancersHelper.getFilteredDancers(gender: gender);
   }
 }

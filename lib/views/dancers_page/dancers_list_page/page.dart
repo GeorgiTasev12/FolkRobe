@@ -16,12 +16,7 @@ import 'package:folk_robe/common/common_empty_info_text.dart';
 import 'package:folk_robe/views/dancers_page/dancers_list_page/bloc/dancers_bloc.dart';
 
 class DancersListPage extends HookWidget {
-  final GenderType genderType;
-
-  const DancersListPage({
-    super.key,
-    required this.genderType,
-  });
+  const DancersListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -62,19 +57,30 @@ class DancersListPage extends HookWidget {
                   buildWhen: (previous, current) =>
                       previous.nameTextController !=
                           current.nameTextController ||
-                      previous.isNameNotEmpty != current.isNameNotEmpty,
+                      previous.isNameNotEmpty != current.isNameNotEmpty ||
+                      previous.genderStringValue != current.genderStringValue,
                   builder: (context, state) {
                     return CommonDialog(
                       dialogTitle: 'Моля, въведете име на танцьора',
                       isEnabled:
                           state.nameTextController?.text.isNotEmpty ?? false,
+                      isGenderSelected:
+                          state.genderStringValue?.isNotEmpty ?? false,
                       onSavePressed: () {
                         bloc.add(AddDancerEvent(
                           name: state.nameTextController?.text ?? "",
+                          gender: state.genderStringValue ?? "",
                         ));
                         bloc.add(InitDancersEvent());
                         bloc.add(OnCloseDialogEvent());
                         locator<NavigationService>().pop();
+                      },
+                      onSelectedGender: (genderValue) {
+                        bloc.add(
+                          OnSelectedGenderEvent(
+                            gender: genderValue ?? GenderType.none,
+                          ),
+                        );
                       },
                       onClosedPressed: () {
                         bloc.add(OnCloseDialogEvent());
@@ -101,7 +107,17 @@ class DancersListPage extends HookWidget {
           hasSearchBar: true,
           onSearchChanged: (value) => bloc.add(SearchDancerEvent(query: value)),
           searchTextController: state.searchTextController,
-          isSuffixIconVisible: state.searchTextController?.text.isNotEmpty,
+          hasFilterMenu: true,
+          initialFilterValue: state.filterGenderTypeValue,
+          onSelectedFilter: (genderFilter) {
+            bloc.add(
+              OnFilterDancersEvent(
+                genderType: genderFilter ?? GenderType.none,
+              ),
+            );
+          },
+          isSuffixIconVisible:
+              state.searchTextController?.text.isNotEmpty ?? false,
           onSuffixPressed: () => bloc.add(
             OnSearchClearEvent(
               textController:
@@ -116,7 +132,10 @@ class DancersListPage extends HookWidget {
                   buildWhen: (previous, current) =>
                       previous.allDancersList != current.allDancersList ||
                       previous.dancersFiltered != current.dancersFiltered ||
-                      previous.isLoading != current.isLoading,
+                      previous.isLoading != current.isLoading ||
+                      previous.genderStringValue != current.genderStringValue ||
+                      previous.genderTypeValue != current.genderTypeValue ||
+                      previous.isDancerEdit != current.isDancerEdit,
                   builder: (context, state) {
                     final displayList =
                         state.dancersFiltered ?? state.allDancersList ?? [];
@@ -161,6 +180,11 @@ class DancersListPage extends HookWidget {
                               onPressed: () {
                                 if (dancer.id != null) {
                                   state.nameTextController?.text = dancer.name;
+                                  bloc.add(
+                                    OnSelectedGenderEvent(
+                                      gender: dancer.gender.asGenderType,
+                                    ),
+                                  );
                                 } else {
                                   state.nameTextController?.clear();
                                 }
@@ -172,21 +196,43 @@ class DancersListPage extends HookWidget {
                                     child:
                                         BlocBuilder<DancersBloc, DancersState>(
                                       builder: (context, state) {
+                                        bloc.add(
+                                          OnOpenDialogEvent(
+                                            genderType: state.genderTypeValue,
+                                            isDancerEdit: true,
+                                          ),
+                                        );
                                         return CommonDialog(
                                           dialogTitle:
                                               'Моля, въведете име на танцьора',
                                           isEnabled: state.nameTextController
                                                   ?.text.isNotEmpty ??
                                               false,
+                                          isGenderSelected: state
+                                                  .genderStringValue
+                                                  ?.isNotEmpty ??
+                                              false,
+                                          initialSelection:
+                                              state.genderTypeValue,
                                           onSavePressed: () {
                                             bloc.add(UpdateDancerEvent(
                                               id: dancer.id,
                                               name: state.nameTextController
                                                       ?.text ??
                                                   "",
+                                              gender:
+                                                  state.genderStringValue ?? "",
                                             ));
                                             bloc.add(InitDancersEvent());
                                             locator<NavigationService>().pop();
+                                          },
+                                          onSelectedGender: (genderValue) {
+                                            bloc.add(
+                                              OnSelectedGenderEvent(
+                                                gender: genderValue ??
+                                                    GenderType.none,
+                                              ),
+                                            );
                                           },
                                           onClosedPressed: () {
                                             bloc.add(OnCloseDialogEvent());
