@@ -1,6 +1,35 @@
 enum GenderType {
   male,
   female,
+  none,
+}
+
+extension GenderNames on GenderType {
+  String get genderName {
+    switch (this) {
+      case GenderType.male:
+        return 'Мъж';
+      case GenderType.female:
+        return 'Жена';
+      case GenderType.none:
+        return 'Всички';
+    }
+  }
+}
+
+extension StringMapper on String {
+  GenderType get asGenderType {
+    switch (this) {
+      case 'male':
+        return GenderType.male;
+      case 'female':
+        return GenderType.female;
+      case 'none':
+        return GenderType.none;
+      default:
+        throw Exception('Invalid gender string: $this');
+    }
+  }
 }
 
 enum Options {
@@ -10,11 +39,12 @@ enum Options {
   rodopski,
   strandzhanski,
   dobrudzhanski,
-  pirinski
+  pirinski,
+  none
 }
 
 extension OptionTableName on Options {
-  String tableCostumeName(GenderType gender) {
+  String tableCostumeName(GenderType? gender) {
     final prefix = gender == GenderType.female ? 'female_' : 'male_';
 
     switch (this) {
@@ -32,18 +62,10 @@ extension OptionTableName on Options {
         return '${prefix}costume_dobrudzhanski';
       case Options.pirinski:
         return '${prefix}costume_pirinski';
+      case Options.none:
+        return '';
     }
   }
-}
-
-String tableDancerName(GenderType gender) {
-  final prefix = gender == GenderType.female ? 'female' : 'male';
-  return '${prefix}_dancer';
-}
-
-String tableOwnersName(GenderType gender) {
-  final prefix = gender == GenderType.female ? 'female' : 'male';
-  return '${prefix}_owner';
 }
 
 extension OptionName on Options {
@@ -63,6 +85,8 @@ extension OptionName on Options {
         return 'Добруджански';
       case Options.pirinski:
         return 'Пирински';
+      case Options.none:
+        return '';
     }
   }
 }
