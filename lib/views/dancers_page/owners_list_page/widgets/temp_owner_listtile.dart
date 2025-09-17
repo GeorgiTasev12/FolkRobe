@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:folk_robe/common/common_divider.dart';
 import 'package:folk_robe/locator.dart';
-import 'package:folk_robe/models/options.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 import 'package:folk_robe/views/dancers_page/owners_list_page/bloc/owners_bloc.dart';
@@ -10,12 +9,10 @@ import 'package:folk_robe/views/dancers_page/owners_list_page/widgets/delete_own
 
 class TempOwnerListTile extends StatelessWidget {
   final int index;
-  final GenderType genderType;
 
   const TempOwnerListTile({
     super.key,
     required this.index,
-    required this.genderType,
   });
 
   @override
@@ -29,7 +26,11 @@ class TempOwnerListTile extends StatelessWidget {
           previous.id != current.id ||
           previous.selectedItems != current.selectedItems ||
           previous.ownersFiltered != current.ownersFiltered ||
-          previous.querySearch != current.querySearch,
+          previous.querySearch != current.querySearch ||
+          previous.genderTypeValue != current.genderTypeValue ||
+          previous.pageIndex != current.pageIndex ||
+          previous.isOwnerEdit != current.isOwnerEdit ||
+          previous.genderTypeValue != current.genderTypeValue,
       builder: (context, state) {
         final displayList = state.ownersFiltered ?? state.allOwnersList ?? [];
         final owner = displayList[index];
@@ -162,7 +163,12 @@ class TempOwnerListTile extends StatelessWidget {
 
                   case 2:
                     bloc.add(StartEditOwnerEvent(index: index));
-                    bloc.add(SwitchPageEvent(pageIndex: 1, isOwnerEdit: true));
+                    bloc.add(
+                      SwitchPageEvent(
+                        pageIndex: 1,
+                        isOwnerEdit: true,
+                      ),
+                    );
                     break;
 
                   case 3:
@@ -172,8 +178,8 @@ class TempOwnerListTile extends StatelessWidget {
                         value: bloc,
                         child: DeleteOwnerDialog(
                           onDeletePressed: () {
-                            bloc.add(RemoveTemporaryOwnerEvent(
-                                id: owner.id ?? 0));
+                            bloc.add(
+                                RemoveTemporaryOwnerEvent(id: owner.id ?? 0));
                             locator<NavigationService>().pop();
                           },
                         ),
