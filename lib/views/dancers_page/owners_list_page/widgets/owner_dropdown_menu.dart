@@ -7,13 +7,17 @@ class OwnerDropdownMenu<T> extends StatelessWidget {
   final String text;
   final void Function(T?)? onSelected;
   final bool enabled;
+  final T? initialSelection;
+  final Key? valueKey;
 
   const OwnerDropdownMenu({
     super.key,
     required this.entries,
     required this.text,
-    this.onSelected,
+    required this.initialSelection,
+    required this.onSelected,
     this.enabled = true,
+    this.valueKey,
   });
 
   @override
@@ -23,7 +27,7 @@ class OwnerDropdownMenu<T> extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Text(
             text,
@@ -65,10 +69,12 @@ class OwnerDropdownMenu<T> extends StatelessWidget {
               ),
             ),
             child: DropdownMenu<T>(
+              key: valueKey,
               dropdownMenuEntries: entries,
               enabled: enabled,
               onSelected: onSelected,
               width: ScreenSizeHelper(context).getX(spacing: spacing),
+              initialSelection: initialSelection,
               inputDecorationTheme: InputDecorationTheme(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(
