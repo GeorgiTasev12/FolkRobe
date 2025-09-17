@@ -5,7 +5,6 @@ final class OwnersState extends Equatable {
   final List<Owner>? ownersFiltered;
   final Owner? owner;
   final int? id;
-  final Options? selectedRegion;
   final int pageIndex;
   final bool isRegionSelected;
   final bool isDancerSelected;
@@ -24,13 +23,17 @@ final class OwnersState extends Equatable {
   final TextEditingController? searchTextController;
   final Status status;
   final String? snackbarMessage;
+  final GenderType genderTypeValue;
+  final String? selectedGenderStringValue;
+  final bool isGenderSelected;
+  final bool isCancelPressed;
+  final GenderType filterGenderTypeValue;
 
   const OwnersState({
     this.allOwnersList,
     this.ownersFiltered,
     this.owner,
     this.id,
-    this.selectedRegion,
     this.pageIndex = 0,
     this.dancersNames,
     this.costumesTitles,
@@ -49,6 +52,11 @@ final class OwnersState extends Equatable {
     this.searchTextController,
     this.status = Status.initial,
     this.snackbarMessage,
+    this.genderTypeValue = GenderType.none,
+    this.selectedGenderStringValue,
+    this.isGenderSelected = false,
+    this.isCancelPressed = false,
+    this.filterGenderTypeValue = GenderType.none,
   });
 
   OwnersState copyWith({
@@ -56,7 +64,6 @@ final class OwnersState extends Equatable {
     List<Owner>? ownersFiltered,
     Owner? owner,
     int? id,
-    Options? selectedRegion,
     int? pageIndex,
     Set<int>? checkedCostumeIndexes,
     List<String>? dancersNames,
@@ -76,13 +83,17 @@ final class OwnersState extends Equatable {
     TextEditingController? searchTextController,
     Status? status,
     String? snackbarMessage,
+    GenderType? genderTypeValue,
+    String? selectedGenderStringValue,
+    bool? isGenderSelected,
+    bool? isCancelPressed,
+    GenderType? filterGenderTypeValue,
   }) {
     return OwnersState(
       allOwnersList: allOwnersList ?? this.allOwnersList,
       ownersFiltered: ownersFiltered ?? this.ownersFiltered,
       owner: owner ?? this.owner,
       id: id ?? this.id,
-      selectedRegion: selectedRegion ?? this.selectedRegion,
       pageIndex: pageIndex ?? this.pageIndex,
       dancersNames: dancersNames ?? this.dancersNames,
       costumesTitles: costumesTitles ?? this.costumesTitles,
@@ -102,6 +113,11 @@ final class OwnersState extends Equatable {
       searchTextController: searchTextController ?? this.searchTextController,
       status: status ?? this.status,
       snackbarMessage: snackbarMessage ?? this.snackbarMessage,
+      genderTypeValue: genderTypeValue ?? this.genderTypeValue,
+      selectedGenderStringValue: selectedGenderStringValue ?? this.selectedGenderStringValue,
+      isGenderSelected: isGenderSelected ?? this.isGenderSelected,
+      isCancelPressed: isCancelPressed ?? this.isCancelPressed,
+      filterGenderTypeValue: filterGenderTypeValue ?? this.filterGenderTypeValue,
     );
   }
 
@@ -111,7 +127,6 @@ final class OwnersState extends Equatable {
         ownersFiltered,
         owner,
         id,
-        selectedRegion,
         pageIndex,
         dancersNames,
         costumesTitles,
@@ -130,5 +145,10 @@ final class OwnersState extends Equatable {
         searchTextController,
         status,
         snackbarMessage,
+        genderTypeValue,
+        selectedGenderStringValue,
+        isGenderSelected,
+        isCancelPressed,
+        filterGenderTypeValue,
       ];
 }

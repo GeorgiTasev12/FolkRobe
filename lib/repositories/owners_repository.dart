@@ -1,4 +1,3 @@
-
 import 'package:folk_robe/dao/owner.dart';
 import 'package:folk_robe/models/options.dart';
 import 'package:folk_robe/repositories/base_repository.dart';
@@ -7,10 +6,12 @@ import 'package:folk_robe/service/database_owners_helper.dart';
 class OwnersRepository extends BaseRepository<Owner> {
   final _ownersDB = DatabaseOwnersHelper();
 
+  final Map<GenderType, List<Owner>> _cachedOwners = {};
+
   @override
   Future<int> add({
     required Owner item,
-    required GenderType gender,
+    GenderType? gender,
     Options? option,
   }) async {
     try {
@@ -26,7 +27,7 @@ class OwnersRepository extends BaseRepository<Owner> {
   @override
   Future<int> delete({
     required int id,
-    required GenderType gender,
+    GenderType? gender,
     Options? option,
   }) async {
     try {
@@ -41,11 +42,18 @@ class OwnersRepository extends BaseRepository<Owner> {
 
   @override
   Future<List<Owner>> read({
-    required GenderType gender,
+    GenderType? gender,
     Options? option,
   }) async {
     try {
-      return await _ownersDB.getAll(gender: gender);
+      if (_cachedOwners.containsKey(gender)) {
+        return _cachedOwners[gender]!;
+      } else {
+        final owners = await _ownersDB.getAll(gender: gender);
+        _cachedOwners[gender ?? GenderType.none] = owners;
+
+        return owners;
+      }
     } catch (e) {
       throw Exception(e);
     }
@@ -55,7 +63,7 @@ class OwnersRepository extends BaseRepository<Owner> {
   Future<int> update({
     required int id,
     required Owner item,
-    required GenderType gender,
+    GenderType? gender,
     Options? option,
   }) async {
     try {
@@ -67,5 +75,11 @@ class OwnersRepository extends BaseRepository<Owner> {
     } catch (e) {
       throw Exception(e);
     }
+  }
+
+  static Future<List<Owner>> getFilteredDancersName({
+    required GenderType gender,
+  }) async {
+    return await DatabaseOwnersHelper.getFilteredOwners(gender: gender);
   }
 }

@@ -23,7 +23,15 @@ final class SelectedDancerEvent extends OwnersEvent {
 final class StartEditOwnerEvent extends OwnersEvent {
   final int index;
 
-  StartEditOwnerEvent({required this.index});
+  StartEditOwnerEvent({
+    required this.index,
+  });
+}
+
+final class SelectedGenderEvent extends OwnersEvent {
+  final GenderType genderTypeValue;
+
+  SelectedGenderEvent({required this.genderTypeValue});
 }
 
 final class SwitchPageEvent extends OwnersEvent {
@@ -40,11 +48,13 @@ final class EditTemporaryOwnerEvent extends OwnersEvent {
   final int id;
   final String name;
   final String title;
+  final String gender;
 
   EditTemporaryOwnerEvent({
     required this.name,
     required this.title,
     required this.id,
+    required this.gender,
   });
 }
 
@@ -52,10 +62,12 @@ final class AddTemporaryOwnerEvent extends OwnersEvent {
   final String name;
   final String title;
   final int? id;
+  final String gender;
 
   AddTemporaryOwnerEvent({
     required this.name,
     required this.title,
+    required this.gender,
     this.id,
   });
 }
@@ -86,4 +98,10 @@ final class OnSearchClearEvent extends OwnersEvent {
   OnSearchClearEvent({
     required this.textController,
   });
+}
+
+final class OnFilterOwnersEvent extends OwnersEvent {
+  final GenderType genderType;
+
+  OnFilterOwnersEvent({required this.genderType});
 }
