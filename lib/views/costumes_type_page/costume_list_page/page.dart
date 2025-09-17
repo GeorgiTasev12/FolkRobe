@@ -115,7 +115,7 @@ class CostumeListPage extends HookWidget {
             onSearchChanged: (value) =>
                 bloc.add(SearchCostumeEvent(query: value)),
             searchTextController: state.searchTextController,
-            isSuffixIconVisible: state.querySearch?.isNotEmpty,
+            isSuffixIconVisible: state.querySearch?.isNotEmpty ?? false,
             onSuffixPressed: () => bloc.add(
               OnSearchClearEvent(
                 textController:
