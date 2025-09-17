@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:folk_robe/common/common_main_options_card.dart';
 import 'package:folk_robe/locator.dart';
-import 'package:folk_robe/models/page_source.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 import 'package:folk_robe/views/core_page.dart';
-import 'package:folk_robe/views/gender_page/page.dart';
+import 'package:folk_robe/views/dancers_page/dancers_list_page/bloc/dancers_bloc.dart';
+import 'package:folk_robe/views/dancers_page/dancers_list_page/page.dart';
+import 'package:folk_robe/views/dancers_page/owners_list_page/bloc/owners_bloc.dart';
+import 'package:folk_robe/views/dancers_page/owners_list_page/page.dart';
 
 class DancersPage extends StatelessWidget {
   const DancersPage({super.key});
@@ -29,8 +32,9 @@ class DancersPage extends StatelessWidget {
                 ),
                 onTap: () => locator<NavigationService>().push(
                   MaterialPageRoute(
-                    builder: (context) => GenderPage(
-                      pageSource: PageSource.dancersPage,
+                    builder: (context) => BlocProvider(
+                      create: (context) => DancersBloc(),
+                      child: DancersListPage(),
                     ),
                   ),
                 ),
@@ -46,8 +50,9 @@ class DancersPage extends StatelessWidget {
                 ),
                 onTap: () => locator<NavigationService>().push(
                   MaterialPageRoute(
-                    builder: (context) => GenderPage(
-                      pageSource: PageSource.ownersPage,
+                    builder: (context) => BlocProvider(
+                      create: (context) => OwnersBloc(),
+                      child: OwnersListPage(),
                     ),
                   ),
                 ),
