@@ -9,7 +9,7 @@ class DatabaseCostumeHelper extends DatabaseHelper<Costume> {
   Future<Database> get database async => await AppDatabase.getInstance();
 
   @override
-  String getTableName({required GenderType gender, Options? option}) =>
+  String getTableName({GenderType? gender, Options? option}) =>
       option?.tableCostumeName(gender) ??
       Options.shopska.tableCostumeName(gender);
 
@@ -21,7 +21,7 @@ class DatabaseCostumeHelper extends DatabaseHelper<Costume> {
 
   /// Fetch costume titles
   static Future<List<String>> getCostumes(
-    GenderType gender,
+    GenderType? gender,
     Options option,
   ) async {
     final prefix = gender == GenderType.female ? 'female' : 'male';
