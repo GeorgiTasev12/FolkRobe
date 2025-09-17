@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:folk_robe/common/common_textfield.dart';
 import 'package:folk_robe/helpers/screen_size_helper.dart';
+import 'package:folk_robe/models/options.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 
 class CommonDialog extends StatelessWidget {
@@ -16,7 +17,10 @@ class CommonDialog extends StatelessWidget {
   final bool? isQuantityNotEmpty;
   final void Function()? onQuantityClearPressed;
   final void Function(String number)? onNumberChanged;
+  final void Function(GenderType?)? onSelectedGender;
   final bool isEnabled;
+  final bool isGenderSelected;
+  final GenderType? initialSelection;
 
   const CommonDialog({
     super.key,
@@ -32,6 +36,9 @@ class CommonDialog extends StatelessWidget {
     this.isQuantityNotEmpty = false,
     this.onQuantityClearPressed,
     this.isEnabled = true,
+    this.onSelectedGender,
+    this.isGenderSelected = true,
+    this.initialSelection,
   });
 
   @override
@@ -87,6 +94,69 @@ class CommonDialog extends StatelessWidget {
                   ),
                 )
               ],
+            ),
+          if (onSelectedGender != null)
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('Пол:'),
+                const SizedBox(width: 10),
+                Theme(
+                  data: Theme.of(context).copyWith(
+                    dropdownMenuTheme: DropdownMenuThemeData(
+                      menuStyle: MenuStyle(
+                        backgroundColor: WidgetStateProperty.all(
+                          context.appTheme.colors.surfaceContainer,
+                        ),
+                        shape: WidgetStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(4),
+                              topRight: Radius.circular(4),
+                              bottomLeft: Radius.circular(12),
+                              bottomRight: Radius.circular(12),
+                            ),
+                          ),
+                        ),
+                        minimumSize: WidgetStateProperty.all(
+                          Size(
+                            ScreenSizeHelper(context).width * 0.6,
+                            40,
+                          ),
+                        ),
+                        maximumSize: WidgetStateProperty.all(
+                          Size(
+                            ScreenSizeHelper(context).width * 0.8,
+                            double.infinity,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  child: DropdownMenu(
+                    dropdownMenuEntries: (GenderType.values)
+                        .where((gender) => gender != GenderType.none)
+                        .map((gender) {
+                      return DropdownMenuEntry(
+                        value: gender,
+                        label: gender.genderName,
+                      );
+                    }).toList(),
+                    enabled: isEnabled,
+                    initialSelection: initialSelection,
+                    onSelected: onSelectedGender,
+                    inputDecorationTheme: InputDecorationTheme(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(4),
+                        ),
+                      ),
+                      filled: true,
+                      fillColor: context.appTheme.colors.surfaceContainer,
+                    ),
+                  ),
+                ),
+              ],
             )
         ],
       ),
@@ -99,7 +169,7 @@ class CommonDialog extends StatelessWidget {
           ),
         ),
         FilledButton(
-          onPressed: isEnabled ? onSavePressed : null,
+          onPressed: isEnabled && isGenderSelected ? onSavePressed : null,
           style: FilledButton.styleFrom(
             backgroundColor: context.appTheme.colors.secondary,
           ),
