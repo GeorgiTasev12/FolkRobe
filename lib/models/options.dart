@@ -72,19 +72,19 @@ extension OptionName on Options {
   String get optionName {
     switch (this) {
       case Options.shopska:
-        return 'Шопски';
+        return 'Шопска';
       case Options.trakiski:
-        return 'Тракийски';
+        return 'Тракийска';
       case Options.severniashka:
-        return 'Северняшки';
+        return 'Северняшка';
       case Options.rodopski:
-        return 'Родопски';
+        return 'Родопска';
       case Options.strandzhanski:
-        return 'Странджански';
+        return 'Странджанска';
       case Options.dobrudzhanski:
-        return 'Добруджански';
+        return 'Добруджанска';
       case Options.pirinski:
-        return 'Пирински';
+        return 'Пиринска';
       case Options.none:
         return '';
     }
