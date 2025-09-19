@@ -73,7 +73,7 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
       emit(state.copyWith(
         dancer: dancerWithId,
         status: Status.success,
-        snackbarMessage: "Елементът е добавен успешно!",
+        snackbarMessage: "Танцьорът е добавен успешно!",
         isNameNotEmpty: false,
         genderStringValue: event.gender,
       ));
@@ -121,7 +121,7 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
         allDancersList: updatedList,
         dancer: updatedDancer,
         status: Status.success,
-        snackbarMessage: "Елементът е редактиран успешно!",
+        snackbarMessage: "Танцьорът е редактиран успешно!",
       ));
     } on DatabaseException catch (dbError) {
       emit(state.copyWith(
@@ -158,7 +158,7 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
           allDancersList: updatedList,
           id: event.id,
           status: Status.success,
-          snackbarMessage: "Елементът е премахнат успешно!"));
+          snackbarMessage: "Танцьорът е премахнат успешно!"));
     } on DatabaseException catch (dbError) {
       emit(state.copyWith(
         status: Status.error,
