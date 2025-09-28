@@ -10,7 +10,7 @@ class MissingCostumesText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Text(
-          'За момента, нямате записана информация при костюмите, моля добавете реквизит и се върнете обратно.',
+          'За момента, нямате записана информация при костюмите, моля добавете костюм и се върнете обратно.',
           textAlign: TextAlign.center,
           style: context.appTheme.textStyles.bodyLarge
               .copyWith(

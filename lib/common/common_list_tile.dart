@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:folk_robe/helpers/screen_size_helper.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 
 class CommonListTile extends StatelessWidget {
@@ -36,11 +37,15 @@ class CommonListTile extends StatelessWidget {
                 const SizedBox(width: 8),
               ],
             ),
-          Text(
-            title,
-            style: context.appTheme.textStyles.titleMedium.copyWith(
-              fontWeight: FontWeight.w300,
-              color: context.appTheme.colors.onSurfaceContainer,
+          SizedBox(
+            width: ScreenSizeHelper(context).isSmall ? 170 : 140,
+            child: Text(
+              title,
+              style: context.appTheme.textStyles.titleMedium.copyWith(
+                fontWeight: FontWeight.w300,
+                overflow: TextOverflow.ellipsis,
+                color: context.appTheme.colors.onSurfaceContainer,
+              ),
             ),
           ),
         ],

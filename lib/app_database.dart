@@ -31,6 +31,9 @@ class AppDatabase {
     for (var gender in GenderType.values) {
       for (var option in Options.values) {
         final table = option.tableCostumeName(gender);
+
+        if (table.isEmpty) continue; // Skip invalid table names
+
         await db.execute('''
           CREATE TABLE IF NOT EXISTS $table (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -42,30 +45,26 @@ class AppDatabase {
     }
 
     // Owner tables
-    for (var gender in GenderType.values) {
-      final table = tableOwnersName(gender);
-      await db.execute('''
-        CREATE TABLE IF NOT EXISTS $table (
+    await db.execute('''
+        CREATE TABLE IF NOT EXISTS ${Constants.ownersTableName} (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           title TEXT,
           name TEXT,
           items TEXT NULL,
-          quantity INTEGER NULL
+          quantity INTEGER NULL,
+          gender TEXT
         )
       ''');
-    }
 
     // Dancer tables
-    for (var gender in GenderType.values) {
-      final table = tableDancerName(gender);
-      await db.execute('''
-        CREATE TABLE IF NOT EXISTS $table (
+    await db.execute('''
+        CREATE TABLE IF NOT EXISTS ${Constants.dancersTableName} (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           name TEXT,
-          age INTEGER NULL
+          age INTEGER NULL,
+          gender TEXT
         )
       ''');
-    }
   }
 
   /// Close the database

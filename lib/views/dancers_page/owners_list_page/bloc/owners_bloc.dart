@@ -15,11 +15,10 @@ part 'owners_event.dart';
 part 'owners_state.dart';
 
 class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
-  final GenderType genderType;
+  // final GenderType genderType;
 
-  OwnersBloc({
-    required this.genderType,
-  }) : super(OwnersState(
+  OwnersBloc()
+      : super(OwnersState(
           pageController: PageController(initialPage: 0),
           searchTextController: TextEditingController(),
         )) {
@@ -29,51 +28,49 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     on<RemoveTemporaryOwnerEvent>(_onRemoveTemporaryOwner);
     on<SelectedRegionEvent>(_onSelectedRegion);
     on<SelectedDancerEvent>(_onSelectedDancer);
+    on<SelectedGenderEvent>(_onSelectedGender);
     on<StartEditOwnerEvent>(_onStartEditOwner);
     on<SwitchPageEvent>(_onSwitchPage);
     on<ToggleCheckEvent>(_onToggleCheck);
     on<SearchOwnerEvent>(_onSearchOwners);
     on<OnSearchClearEvent>(_onSearchClear);
+    on<OnFilterOwnersEvent>(_onFilterOwners);
   }
 
   bool buildWhen(OwnersState previous, OwnersState current) =>
-      previous.isLoading != current.isLoading ||
       previous.pageIndex != current.pageIndex ||
+      previous.isFABVisible != current.isFABVisible ||
+      previous.searchTextController != current.searchTextController ||
+      previous.pageController != current.pageController ||
+      previous.isLoading != current.isLoading ||
+      previous.isOwnerEdit != current.isOwnerEdit ||
       previous.isRegionSelected != current.isRegionSelected ||
-      previous.isDancerSelected != current.isDancerSelected ||
-      previous.dancersNames != current.dancersNames ||
       previous.costumesTitles != current.costumesTitles ||
-      previous.allOwnersList != current.allOwnersList ||
-      previous.id != current.id ||
-      previous.ownersFiltered != current.ownersFiltered ||
-      previous.querySearch != current.querySearch;
+      previous.filterGenderTypeValue != current.filterGenderTypeValue;
 
   bool filledButtonBuildWhen(OwnersState previous, OwnersState current) =>
+      previous.ownersFiltered != current.ownersFiltered ||
+      previous.allOwnersList != current.allOwnersList ||
+      previous.checkedCostumeIndexes != current.checkedCostumeIndexes ||
       previous.isOwnerEdit != current.isOwnerEdit ||
+      previous.editingOwnerIndex != current.editingOwnerIndex ||
       previous.selectedDancerValue != current.selectedDancerValue ||
       previous.selectedRegionValue != current.selectedRegionValue ||
-      previous.editingOwnerIndex != current.editingOwnerIndex ||
-      previous.checkedCostumeIndexes != current.checkedCostumeIndexes ||
-      previous.selectedItems != current.selectedItems;
+      previous.selectedGenderStringValue != current.selectedGenderStringValue ||
+      previous.pageIndex != current.pageIndex;
 
   FutureOr<void> _onInit(
     InitOwnersEvent event,
     Emitter<OwnersState> emit,
   ) async {
-    final names = await DancersRepository.getDancers(
-      gender: genderType,
-    );
-
     emit(state.copyWith(isLoading: true));
-    final owners = await OwnersRepository().read(
-      gender: genderType,
-    );
+    final owners = await OwnersRepository().read();
 
     emit(
       state.copyWith(
-        dancersNames: names,
         allOwnersList: owners,
         ownersFiltered: owners,
+        filterGenderTypeValue: GenderType.none,
         isLoading: false,
         querySearch: "",
       ),
@@ -83,6 +80,7 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
   @override
   Future<void> close() {
     state.pageController?.dispose();
+    state.searchTextController?.dispose();
     return super.close();
   }
 
@@ -97,9 +95,51 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     );
 
     if (state.pageIndex != 1) {
-      emit(state.copyWith(
-        isRegionSelected: false,
-      ));
+      if (event.isOwnerEdit) {
+        final owner = state.allOwnersList?[state.editingOwnerIndex ?? 0];
+
+        if (owner != null) {
+          final region = Options.values.firstWhere(
+            (option) => option.optionName == owner.title,
+            orElse: () => Options.none,
+          );
+
+          final genderType = GenderType.values.firstWhere(
+            (gender) => gender.name == owner.gender,
+            orElse: () => GenderType.none,
+          );
+
+          // Filter dancers by gender
+          final filteredDancers = (await DancersRepository.getDancers(
+            gender: genderType,
+          ))
+              .where((name) => name.isNotEmpty)
+              .toList();
+
+          // Ensure the owner's name exists in the filtered list
+          final selectedName =
+              filteredDancers.contains(owner.name) ? owner.name : null;
+
+          emit(state.copyWith(
+            pageIndex: event.pageIndex,
+            isFABVisible: event.pageIndex != 0 ? false : true,
+            isOwnerEdit: event.isOwnerEdit,
+            selectedDancerValue: selectedName,
+            dancersNames: filteredDancers,
+            selectedRegionValue:
+                (state.dancersNames?.isEmpty ?? false) ? Options.none : region,
+            selectedGenderStringValue: owner.gender,
+            genderTypeValue: genderType,
+            isDancerSelected: true,
+            isRegionSelected: true,
+            isGenderSelected: true,
+            isCancelPressed: false,
+          ));
+
+          add(SelectedRegionEvent(optionValue: region));
+          return;
+        }
+      }
     }
 
     emit(
@@ -107,6 +147,16 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
         pageIndex: event.pageIndex,
         isFABVisible: event.pageIndex != 0 ? false : true,
         isOwnerEdit: event.isOwnerEdit,
+        selectedDancerValue: '',
+        dancersNames: [],
+        genderTypeValue: GenderType.none,
+        selectedRegionValue: Options.none,
+        selectedGenderStringValue: null,
+        isDancerSelected: false,
+        isRegionSelected: false,
+        isGenderSelected: false,
+        editingOwnerIndex: null,
+        isCancelPressed: false,
       ),
     );
   }
@@ -121,20 +171,21 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
       final owner = Owner(
         title: event.title,
         name: event.name,
+        gender: event.gender,
         items: itemString,
       );
 
       final newId = await OwnersRepository().add(
         item: owner,
-        gender: genderType,
       );
 
       emit(state.copyWith(
         owner: owner.copyWith(id: newId),
         selectedItems: [], // clear selection after adding
         checkedCostumeIndexes: {}, // reset checkboxes
+        isCancelPressed: false,
         status: Status.success,
-        snackbarMessage: "Елементът е добавено успешно!",
+        snackbarMessage: "Отговорникът е добавено успешно!",
       ));
     } on DatabaseException catch (dbError) {
       emit(state.copyWith(
@@ -155,6 +206,17 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     emit(state.copyWith(
       status: Status.initial,
       snackbarMessage: null,
+      selectedDancerValue: '',
+      selectedRegionValue: Options.none,
+      selectedGenderStringValue: '',
+      genderTypeValue: null,
+      isDancerSelected: false,
+      isRegionSelected: false,
+      isGenderSelected: false,
+      editingOwnerIndex: null,
+      dancersNames: [],
+      costumesTitles: [],
+      isCancelPressed: false,
     ));
   }
 
@@ -189,16 +251,16 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
         id: event.id,
         name: event.name,
         title: event.title,
+        gender: event.gender,
         items: itemString,
       );
 
       await OwnersRepository().update(
         id: event.id,
         item: updatedOwner,
-        gender: genderType,
       );
 
-      final updatedList = await OwnersRepository().read(gender: genderType);
+      final updatedList = await OwnersRepository().read();
 
       emit(state.copyWith(
         allOwnersList: updatedList,
@@ -206,7 +268,8 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
         selectedItems: selectedItems,
         checkedCostumeIndexes: state.checkedCostumeIndexes,
         status: Status.success,
-        snackbarMessage: "Елементът е редактиран успешно!",
+        snackbarMessage: "Отговорникът е редактиран успешно!",
+        isCancelPressed: false,
       ));
     } on DatabaseException catch (dbError) {
       emit(state.copyWith(
@@ -227,6 +290,7 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     emit(state.copyWith(
       status: Status.initial,
       snackbarMessage: null,
+      isCancelPressed: false,
     ));
   }
 
@@ -237,18 +301,15 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     try {
       await OwnersRepository().delete(
         id: event.id,
-        gender: genderType,
       );
 
-      final updatedList = await OwnersRepository().read(
-        gender: genderType,
-      );
+      final updatedList = await OwnersRepository().read();
 
       emit(state.copyWith(
           allOwnersList: updatedList,
           id: event.id,
           status: Status.success,
-          snackbarMessage: "Елементът е премахнат успешно!"));
+          snackbarMessage: "Отговорникът е премахнат успешно!"));
 
       add(InitOwnersEvent());
     } on DatabaseException catch (dbError) {
@@ -273,21 +334,48 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     ));
   }
 
+  FutureOr<void> _onSelectedGender(
+    SelectedGenderEvent event,
+    Emitter<OwnersState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        isGenderSelected: true,
+        genderTypeValue: event.genderTypeValue,
+        selectedGenderStringValue: event.genderTypeValue.name,
+        selectedDancerValue: null,
+        isDancerSelected: state.isOwnerEdit ? true : false,
+        dancersNames: [],
+      ),
+    );
+
+    final dancers = await DancersRepository.getDancers(
+      gender: event.genderTypeValue,
+    );
+
+    emit(
+      state.copyWith(
+        dancersNames: dancers,
+      ),
+    );
+  }
+
   FutureOr<void> _onSelectedRegion(
     SelectedRegionEvent event,
     Emitter<OwnersState> emit,
   ) async {
     emit(
       state.copyWith(
-        selectedRegion: event.optionValue,
+        selectedRegionValue: event.optionValue,
         isRegionSelected: true,
         isLoading: true,
       ),
     );
 
+    //Make sure on the gender to get the value from the state after selecting from the dropdown menu
     final costumes = await CostumesRepository.getCostumes(
-      gender: genderType,
       option: event.optionValue,
+      gender: state.genderTypeValue,
     );
 
     emit(
@@ -302,10 +390,12 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
   FutureOr<void> _onStartEditOwner(
     StartEditOwnerEvent event,
     Emitter<OwnersState> emit,
-  ) {
-    emit(state.copyWith(
-      editingOwnerIndex: event.index,
-    ));
+  ) async {
+    emit(
+      state.copyWith(
+        editingOwnerIndex: event.index,
+      ),
+    );
   }
 
   FutureOr<void> _onSelectedDancer(
@@ -316,6 +406,8 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
       state.copyWith(
         isDancerSelected: true,
         selectedDancerValue: event.dancerValue,
+        selectedRegionValue: null,
+        isRegionSelected: state.isOwnerEdit ? true : false,
       ),
     );
   }
@@ -381,5 +473,23 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     ));
 
     add(InitOwnersEvent());
+  }
+
+  FutureOr<void> _onFilterOwners(
+    OnFilterOwnersEvent event,
+    Emitter<OwnersState> emit,
+  ) async {
+    emit(state.copyWith(isLoading: true));
+
+    final filteredOwners = await OwnersRepository.getFilteredDancersName(
+      gender: event.genderType,
+    );
+
+    emit(state.copyWith(
+      filterGenderTypeValue: event.genderType,
+      allOwnersList: filteredOwners,
+      ownersFiltered: filteredOwners,
+      isLoading: false,
+    ));
   }
 }

@@ -9,19 +9,23 @@ final class InitDancersEvent extends DancersEvent {}
 final class AddDancerEvent extends DancersEvent {
   final Dancer? dancer;
   final String name;
+  final String gender;
 
   const AddDancerEvent({
     required this.name,
+    required this.gender,
     this.dancer,
   });
 
   AddDancerEvent copyWith({
     Dancer? dancer,
     String? name,
+    String? gender,
   }) {
     return AddDancerEvent(
       dancer: dancer ?? this.dancer,
       name: name ?? this.name,
+      gender: gender ?? this.gender,
     );
   }
 }
@@ -29,19 +33,23 @@ final class AddDancerEvent extends DancersEvent {
 final class UpdateDancerEvent extends DancersEvent {
   final String? name;
   final int? id;
+  final String? gender;
 
   UpdateDancerEvent({
     this.name,
     this.id,
+    this.gender,
   });
 
   UpdateDancerEvent copyWith({
     String? name,
     int? id,
+    String? gender,
   }) {
     return UpdateDancerEvent(
       name: name ?? this.name,
       id: id ?? this.id,
+      gender: gender ?? this.gender,
     );
   }
 }
@@ -102,4 +110,28 @@ final class OnSearchClearEvent extends DancersEvent {
   OnSearchClearEvent({
     required this.textController,
   });
+}
+
+final class OnSelectedGenderEvent extends DancersEvent {
+  final GenderType gender;
+
+  OnSelectedGenderEvent({required this.gender});
+}
+
+final class OnOpenDialogEvent extends DancersEvent {
+  final GenderType genderType;
+  final String? genderStringValue;
+  final bool isDancerEdit;
+
+  OnOpenDialogEvent({
+    required this.genderType,
+    this.genderStringValue,
+    this.isDancerEdit = false,
+  });
+}
+
+final class OnFilterDancersEvent extends DancersEvent {
+  final GenderType genderType;
+
+  OnFilterDancersEvent({required this.genderType});
 }

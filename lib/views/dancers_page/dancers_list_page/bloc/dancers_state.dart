@@ -12,6 +12,10 @@ final class DancersState extends Equatable {
   final bool isLoading;
   final Status status;
   final String? snackbarMessage;
+  final String? genderStringValue;
+  final GenderType genderTypeValue;
+  final bool isDancerEdit;
+  final GenderType filterGenderTypeValue;
 
   const DancersState({
     this.dancer,
@@ -25,6 +29,10 @@ final class DancersState extends Equatable {
     this.isLoading = false,
     this.status = Status.initial,
     this.snackbarMessage,
+    this.genderStringValue,
+    this.genderTypeValue = GenderType.none,
+    this.isDancerEdit = false,
+    this.filterGenderTypeValue = GenderType.none,
   });
 
   DancersState copyWith({
@@ -39,6 +47,10 @@ final class DancersState extends Equatable {
     bool? isLoading,
     Status? status,
     String? snackbarMessage,
+    String? genderStringValue,
+    GenderType? genderTypeValue,
+    bool? isDancerEdit,
+    GenderType? filterGenderTypeValue,
   }) {
     return DancersState(
       dancer: dancer ?? this.dancer,
@@ -52,6 +64,10 @@ final class DancersState extends Equatable {
       isLoading: isLoading ?? this.isLoading,
       status: status ?? this.status,
       snackbarMessage: snackbarMessage ?? this.snackbarMessage,
+      genderStringValue: genderStringValue ?? this.genderStringValue,
+      genderTypeValue: genderTypeValue ?? this.genderTypeValue,
+      isDancerEdit: isDancerEdit ?? this.isDancerEdit,
+      filterGenderTypeValue: filterGenderTypeValue ?? this.filterGenderTypeValue,
     );
   }
 
@@ -68,5 +84,9 @@ final class DancersState extends Equatable {
         isLoading,
         status,
         snackbarMessage,
+        genderStringValue,
+        genderTypeValue,
+        isDancerEdit,
+        filterGenderTypeValue,
       ];
 }

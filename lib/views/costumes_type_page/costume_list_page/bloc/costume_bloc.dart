@@ -90,7 +90,7 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
         state.copyWith(
           costume: costumeWithId,
           status: Status.success,
-          snackbarMessage: "Успешно сте добавили елемент!",
+          snackbarMessage: "Елементът е добавено успешно!",
           isNameNotEmpty: false,
           isQuantityNotEmpty: false,
         ),

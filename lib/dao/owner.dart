@@ -3,11 +3,13 @@ class Owner {
   final String title;
   final String name;
   final String items;
+  final String gender;
 
   Owner({
     required this.title,
     required this.name,
     required this.items,
+    required this.gender,
     this.id,
   });
 
@@ -16,12 +18,14 @@ class Owner {
     String? title,
     String? name,
     String? items,
+    String? gender,
   }) {
     return Owner(
       id: id ?? this.id,
       title: title ?? this.title,
       name: name ?? this.name,
       items: items ?? this.items,
+      gender: gender ?? this.gender,
     );
   }
 
@@ -30,6 +34,7 @@ class Owner {
       id: map['id'] as int?,
       title: map['title'] as String,
       name: map['name'] as String,
+      gender: map['gender'] as String,
       items: (map['items'] as String?) ?? '',
     );
   }
@@ -39,6 +44,7 @@ class Owner {
       'id': id,
       'title': title,
       'name': name,
+      'gender': gender,
       'items': items,
     };
   }

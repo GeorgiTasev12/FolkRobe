@@ -66,7 +66,7 @@ class CostumeListPage extends HookWidget {
                             current.isQuantityNotEmpty,
                     builder: (context, state) {
                       return CommonDialog(
-                        dialogTitle: 'Моля, въведете реквизит',
+                        dialogTitle: 'Моля, въведете костюм',
                         isEnabled: state.nameTextController?.text.isNotEmpty ?? false,
                         onSavePressed: () {
                           bloc.add(AddCostumeEvent(
@@ -115,7 +115,7 @@ class CostumeListPage extends HookWidget {
             onSearchChanged: (value) =>
                 bloc.add(SearchCostumeEvent(query: value)),
             searchTextController: state.searchTextController,
-            isSuffixIconVisible: state.querySearch?.isNotEmpty,
+            isSuffixIconVisible: state.querySearch?.isNotEmpty ?? false,
             onSuffixPressed: () => bloc.add(
               OnSearchClearEvent(
                 textController:
@@ -188,7 +188,7 @@ class CostumeListPage extends HookWidget {
                                           value: bloc,
                                           child: CommonDialog(
                                             dialogTitle:
-                                                'Моля, въведете реквизит',
+                                                'Моля, въведете костюм',
                                             isEnabled: state.nameTextController?.text.isNotEmpty ?? false,
                                             onSavePressed: () {
                                               bloc.add(UpdateCostumeEvent(

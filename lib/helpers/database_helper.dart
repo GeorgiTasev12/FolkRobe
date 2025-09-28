@@ -6,14 +6,14 @@ import 'package:folk_robe/models/options.dart';
 abstract class DatabaseHelper<T> {
   Future<Database> get database => _DatabaseManager().database;
 
-  String getTableName({required GenderType gender, Options? option});
+  String getTableName({GenderType? gender, Options? option});
 
   T fromMap(Map<String, dynamic> map);
 
   Map<String, dynamic> toMap(T item);
 
   Future<int> insert({
-    required GenderType gender,
+    GenderType? gender,
     required T item,
     Options? option,
   }) async {
@@ -28,7 +28,7 @@ abstract class DatabaseHelper<T> {
   }
 
   Future<List<T>> getAll({
-    required GenderType gender,
+    GenderType? gender,
     Options? option,
   }) async {
     final db = await database;
@@ -41,7 +41,7 @@ abstract class DatabaseHelper<T> {
   }
 
   Future<int> update({
-    required GenderType gender,
+    GenderType? gender,
     required T item,
     Options? option,
     required int id,
@@ -57,7 +57,7 @@ abstract class DatabaseHelper<T> {
   }
 
   Future<int> delete({
-    required GenderType gender,
+    GenderType? gender,
     Options? option,
     required int id,
   }) async {
@@ -120,29 +120,25 @@ class _DatabaseManager {
   }
 
   Future<void> _createOwnerTables(Database db) async {
-    for (var gender in GenderType.values) {
-      final table = tableOwnersName(gender);
-      await db.execute('''
-        CREATE TABLE IF NOT EXISTS $table (
+    await db.execute('''
+        CREATE TABLE IF NOT EXISTS ${Constants.ownersTableName} (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           title TEXT,
           name TEXT,
           items TEXT,
+          gender TEXT,
           quantity INTEGER
         )
       ''');
-    }
   }
 
   Future<void> _createDancerTables(Database db) async {
-    for (var gender in GenderType.values) {
-      final table = tableDancerName(gender);
       await db.execute('''
-        CREATE TABLE IF NOT EXISTS $table (
+        CREATE TABLE IF NOT EXISTS ${Constants.dancersTableName} (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT
+          name TEXT,
+          gender TEXT
         )
       ''');
-    }
   }
 }

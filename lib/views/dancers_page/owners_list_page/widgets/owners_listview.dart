@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:folk_robe/models/options.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 import 'package:folk_robe/views/dancers_page/owners_list_page/bloc/owners_bloc.dart';
 import 'package:folk_robe/views/dancers_page/owners_list_page/widgets/empty_info.dart';
@@ -9,10 +8,7 @@ import 'package:folk_robe/views/dancers_page/owners_list_page/widgets/temp_owner
 class OwnersListView extends StatelessWidget {
   const OwnersListView({
     super.key,
-    required this.genderType,
   });
-
-  final GenderType genderType;
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +32,7 @@ class OwnersListView extends StatelessWidget {
           if ((state.allOwnersList?.isEmpty ?? true)) {
             // Full list is empty
             return Center(
-              child: genderType != GenderType.male
-                  ? EmptyInfoText(genderText: "женски отговорнички")
-                  : EmptyInfoText(genderText: "мъжки отговорници"),
+              child: EmptyInfoText(),
             );
           } else if (displayList.isEmpty) {
             // List filtered by search but no results
@@ -56,7 +50,6 @@ class OwnersListView extends StatelessWidget {
             separatorBuilder: (context, idnex) => const SizedBox(height: 10),
             itemBuilder: (context, index) => TempOwnerListTile(
               index: index,
-              genderType: genderType,
             ),
           );
         });

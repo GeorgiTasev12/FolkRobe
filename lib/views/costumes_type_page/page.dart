@@ -23,7 +23,7 @@ class CostumesTypePage extends StatelessWidget {
     return CorePage(
       appBarTitle: 'Изберете фолклорна област',
       child: ListView.separated(
-        itemCount: options.length,
+        itemCount: options.where((option) => option != Options.none).length,
         separatorBuilder: (context, index) => const SizedBox(height: 10),
         itemBuilder: (context, index) {
           final option = options[index];
