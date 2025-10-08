@@ -213,7 +213,7 @@ class OwnersListPage extends HookWidget {
                                 ),
                               ),
                               child: Text(
-                                'Cancel',
+                                'Откажи',
                                 style: context.appTheme.textStyles.bodyLarge
                                     .copyWith(
                                   color: context.appTheme.colors.primary,
@@ -278,7 +278,7 @@ class OwnersListPage extends HookWidget {
                                         .appTheme.colors.surfaceContainer,
                                   ),
                                   child: Text(
-                                    state.isOwnerEdit ? 'Save' : 'Add',
+                                    state.isOwnerEdit ? 'Запази' : 'Добави',
                                     style: context.appTheme.textStyles.bodyLarge
                                         .copyWith(
                                       color: context
