@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:folk_robe/common/common_divider.dart';
 import 'package:folk_robe/locator.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 import 'package:folk_robe/views/dancers_page/owners_list_page/bloc/owners_bloc.dart';
 import 'package:folk_robe/views/dancers_page/owners_list_page/widgets/delete_owner_dialog.dart';
+import 'package:folk_robe/views/dancers_page/owners_list_page/widgets/modal_bottom_sheet.dart';
 
 class TempOwnerListTile extends StatelessWidget {
   final int index;
@@ -36,6 +36,11 @@ class TempOwnerListTile extends StatelessWidget {
         final owner = displayList[index];
 
         return ListTile(
+          onTap: () => showOwnersBottomsheet(
+              context: context, 
+              allOwnersList: state.allOwnersList, 
+              index: index,
+            ),
           title: Text(
             owner.name,
             style: context.appTheme.textStyles.titleLarge.copyWith(
@@ -74,94 +79,6 @@ class TempOwnerListTile extends StatelessWidget {
               onSelected: (value) {
                 switch (value) {
                   case 1:
-                    showModalBottomSheet(
-                      context: context,
-                      backgroundColor: context.appTheme.colors.surfaceContainer,
-                      builder: (context) {
-                        final ownersList = state.allOwnersList?[index];
-                        final itemsList = (ownersList?.items.isEmpty ?? true)
-                            ? []
-                            : ownersList!.items.split(', ');
-
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 10),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    state.allOwnersList?[index].name ??
-                                        'Dancer not found.',
-                                    style: context
-                                        .appTheme.textStyles.titleLarge
-                                        .copyWith(
-                                      color: context
-                                          .appTheme.colors.onSurfaceContainer,
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  IconButton.filled(
-                                    onPressed: () =>
-                                        locator<NavigationService>().pop(),
-                                    icon: Icon(
-                                      Icons.close,
-                                      color: context
-                                          .appTheme.colors.surfaceContainer,
-                                    ),
-                                    style: IconButton.styleFrom(
-                                      backgroundColor: context
-                                          .appTheme.colors.onSurfaceContainer,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 2),
-                            CommonDivider(),
-                            const SizedBox(height: 5),
-                            Text(
-                              state.allOwnersList?[index].title ??
-                                  'Missing region title.',
-                              style: context.appTheme.textStyles.titleLarge
-                                  .copyWith(
-                                color:
-                                    context.appTheme.colors.onSurfaceContainer,
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            Expanded(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 12),
-                                child: ListView.builder(
-                                  itemCount: itemsList.length,
-                                  itemBuilder: (context, index) {
-                                    return Text(
-                                      itemsList[index] ?? '',
-                                      style: context
-                                          .appTheme.textStyles.bodyLarge
-                                          .copyWith(
-                                        color: context
-                                            .appTheme.colors.onSurfaceContainer,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                    break;
-
-                  case 2:
                     bloc.add(StartEditOwnerEvent(index: index));
                     bloc.add(
                       SwitchPageEvent(
@@ -171,7 +88,7 @@ class TempOwnerListTile extends StatelessWidget {
                     );
                     break;
 
-                  case 3:
+                  case 2:
                     showDialog(
                       context: context,
                       builder: (context) => BlocProvider.value(
@@ -190,19 +107,6 @@ class TempOwnerListTile extends StatelessWidget {
               },
               itemBuilder: (context) {
                 return [
-                  PopupMenuItem(
-                    value: 1,
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.remove_red_eye_rounded,
-                          color: context.appTheme.colors.onSurfaceContainer,
-                        ),
-                        const SizedBox(width: 8),
-                        Text('Преглед'),
-                      ],
-                    ),
-                  ),
                   PopupMenuItem(
                     value: 2,
                     child: Row(
