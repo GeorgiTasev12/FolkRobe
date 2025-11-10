@@ -19,7 +19,7 @@ class DatabaseCostumeHelper extends DatabaseHelper<Costume> {
   @override
   Map<String, dynamic> toMap(Costume costume) => costume.toMap();
 
-  /// Fetch costume titles
+  // Fetch costume titles
   static Future<List<String>> getCostumes(
     GenderType? gender,
     Options option,

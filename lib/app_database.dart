@@ -25,7 +25,7 @@ class AppDatabase {
     return _database!;
   }
 
-  /// Creates all tables (Costumes, Owners, Dancers)
+  // Creates all tables (Costumes, Owners, Dancers)
   static Future<void> _createTables(Database db) async {
     // Costume tables
     for (var gender in GenderType.values) {
