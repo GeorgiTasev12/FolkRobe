@@ -10,8 +10,7 @@ class DatabaseCostumeHelper extends DatabaseHelper<Costume> {
 
   @override
   String getTableName({GenderType? gender, Options? option}) =>
-      option?.tableCostumeName(gender) ??
-      Options.shopska.tableCostumeName(gender);
+      option?.tableCostumeName(gender) ?? Options.none.tableCostumeName(gender);
 
   @override
   Costume fromMap(Map<String, dynamic> map) => Costume.fromMap(map);
@@ -26,10 +25,14 @@ class DatabaseCostumeHelper extends DatabaseHelper<Costume> {
   ) async {
     final prefix = gender == GenderType.female ? 'female' : 'male';
     final tableName = '${prefix}_costume_${option.name}';
+    final tableAlterName = '${Options.other.name}_costume';
 
     try {
       final result = await AppDatabase.getInstance().then(
-        (db) => db.rawQuery('SELECT title FROM $tableName'),
+        (db) => db.rawQuery(
+            'SELECT title FROM ${option != Options.other 
+            ? tableName 
+            : tableAlterName}'),
       );
 
       return result.map((costume) => costume['title'] as String).toList();
