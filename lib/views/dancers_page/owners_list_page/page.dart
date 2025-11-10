@@ -119,8 +119,7 @@ class OwnersListPage extends HookWidget {
                     buildWhen: (previous, current) =>
                         previous.dancersNames != current.dancersNames ||
                         previous.isGenderSelected != current.isGenderSelected ||
-                        previous.selectedDancerValue !=
-                            current.selectedDancerValue,
+                        previous.selectedDancerValue != current.selectedDancerValue,
                     builder: (context, state) => OwnerDropdownMenu(
                       valueKey: ValueKey(state.genderTypeValue),
                       entries: (state.dancersNames ?? []).map((entry) {
