@@ -40,6 +40,7 @@ enum Options {
   strandzhanski,
   dobrudzhanski,
   pirinski,
+  other,
   none
 }
 
@@ -62,6 +63,8 @@ extension OptionTableName on Options {
         return '${prefix}costume_dobrudzhanski';
       case Options.pirinski:
         return '${prefix}costume_pirinski';
+      case Options.other:
+        return '${Options.other.name}_costume';
       case Options.none:
         return '';
     }
@@ -85,6 +88,8 @@ extension OptionName on Options {
         return 'Добруджанска';
       case Options.pirinski:
         return 'Пиринска';
+      case Options.other:
+        return 'Други';
       case Options.none:
         return '';
     }

@@ -33,8 +33,10 @@ class CostumesRepository extends BaseRepository<Costume> {
   }
 
   @override
-  Future<List<Costume>> read(
-      {required GenderType gender, Options? option}) async {
+  Future<List<Costume>> read({
+    required GenderType gender, 
+    Options? option,
+  }) async {
     return await _costumesDB.getAll(
       option: option,
       gender: gender,

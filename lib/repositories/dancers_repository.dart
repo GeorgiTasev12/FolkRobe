@@ -6,7 +6,6 @@ import 'package:folk_robe/service/database_dancers_helper.dart';
 class DancersRepository extends BaseRepository<Dancer> {
   final _dancersDB = DatabaseDancersHelper();
 
-  static final Map<GenderType, List<String>> _dancersCache = {};
 
   @override
   Future<int> add({
@@ -52,14 +51,7 @@ class DancersRepository extends BaseRepository<Dancer> {
   }
 
   static Future<List<String>> getDancers({required GenderType gender}) async {
-    if (_dancersCache.containsKey(gender)) {
-      return _dancersCache[gender]!;
-    } else {
-      final dancers = await DatabaseDancersHelper.getDancersNames(gender);
-      _dancersCache[gender] = dancers;
-
-      return dancers;
-    }
+    return await DatabaseDancersHelper.getDancersNames(gender);
   }
 
   static Future<List<Dancer>> getFilteredDancers({
