@@ -8,13 +8,17 @@ import 'package:folk_robe/views/costumes_type_page/page.dart';
 import 'package:folk_robe/views/gender_page/widgets/gender_card.dart';
 
 class GenderPage extends StatelessWidget {
+  final AgeGroup age;
 
-  const GenderPage({super.key});
+  const GenderPage({
+    super.key,
+    required this.age,
+  });
 
   @override
   Widget build(BuildContext context) {
     return CorePage(
-      appBarTitle: "Изберете тип носии",
+      appBarTitle: "Изберете тип носии за ${age.agesName}",
       child: Padding(
         padding: EdgeInsets.all(8),
         child: Center(
@@ -26,23 +30,25 @@ class GenderPage extends StatelessWidget {
                       title: 'Мъжки',
                       icon: Icons.male_rounded,
                       onTap: () => locator<NavigationService>().push(
-                          MaterialPageRoute(
-                            builder: (context) => CostumesTypePage(
-                              genderType: GenderType.male,
-                            ),
+                        MaterialPageRoute(
+                          builder: (context) => CostumesTypePage(
+                            genderType: GenderType.male,
+                            ageType: age,
                           ),
                         ),
+                      ),
                     ),
                     GenderCard(
                       title: 'Женски',
                       icon: Icons.female_rounded,
                       onTap: () => locator<NavigationService>().push(
-                              MaterialPageRoute(
-                                builder: (context) => CostumesTypePage(
-                                  genderType: GenderType.female,
-                                ),
-                              ),
-                            ),
+                        MaterialPageRoute(
+                          builder: (context) => CostumesTypePage(
+                            genderType: GenderType.female,
+                            ageType: age,
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 )
@@ -54,12 +60,13 @@ class GenderPage extends StatelessWidget {
                         title: 'Мъжки',
                         icon: Icons.male_rounded,
                         onTap: () => locator<NavigationService>().push(
-                                MaterialPageRoute(
-                                  builder: (context) => CostumesTypePage(
-                                    genderType: GenderType.male,
-                                  ),
-                                ),
-                              ),
+                          MaterialPageRoute(
+                            builder: (context) => CostumesTypePage(
+                              genderType: GenderType.male,
+                              ageType: age,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                     Flexible(
@@ -67,12 +74,13 @@ class GenderPage extends StatelessWidget {
                         title: 'Женски',
                         icon: Icons.female_rounded,
                         onTap: () => locator<NavigationService>().push(
-                                MaterialPageRoute(
-                                  builder: (context) => CostumesTypePage(
-                                    genderType: GenderType.female,
-                                  ),
-                                ),
-                              ),
+                          MaterialPageRoute(
+                            builder: (context) => CostumesTypePage(
+                              genderType: GenderType.female,
+                              ageType: age,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ],
