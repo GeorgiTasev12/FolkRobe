@@ -15,8 +15,6 @@ part 'owners_event.dart';
 part 'owners_state.dart';
 
 class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
-  // final GenderType genderType;
-
   OwnersBloc()
       : super(OwnersState(
           pageController: PageController(initialPage: 0),
