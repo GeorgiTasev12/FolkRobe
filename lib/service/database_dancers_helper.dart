@@ -16,7 +16,11 @@ class DatabaseDancersHelper extends DatabaseHelper<Dancer> {
   Map<String, dynamic> toMap(Dancer dancer) => dancer.toMap();
 
   @override
-  String getTableName({GenderType? gender, Options? option}) =>
+  String getTableName({
+    AgeGroup? age,
+    GenderType? gender,
+    Options? option,
+  }) =>
       Constants.dancersTableName;
 
   static Future<List<String>> getDancersNames(GenderType gender) async {

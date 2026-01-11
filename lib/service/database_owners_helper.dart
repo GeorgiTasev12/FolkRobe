@@ -13,7 +13,11 @@ class DatabaseOwnersHelper extends DatabaseHelper<Owner> {
   Owner fromMap(Map<String, dynamic> map) => Owner.fromMap(map);
 
   @override
-  String getTableName({GenderType? gender, Options? option}) =>
+  String getTableName({
+    GenderType? gender,
+    Options? option,
+    AgeGroup? age,
+  }) =>
       Constants.ownersTableName;
 
   @override

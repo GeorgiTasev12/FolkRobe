@@ -9,8 +9,13 @@ class DatabaseCostumeHelper extends DatabaseHelper<Costume> {
   Future<Database> get database async => await AppDatabase.getInstance();
 
   @override
-  String getTableName({GenderType? gender, Options? option}) =>
-      option?.tableCostumeName(gender) ?? Options.none.tableCostumeName(gender);
+  String getTableName({
+    GenderType? gender,
+    Options? option,
+    AgeGroup? age,
+  }) =>
+      option?.tableCostumeName(gender, age) ??
+      Options.none.tableCostumeName(gender, age);
 
   @override
   Costume fromMap(Map<String, dynamic> map) => Costume.fromMap(map);
@@ -30,9 +35,7 @@ class DatabaseCostumeHelper extends DatabaseHelper<Costume> {
     try {
       final result = await AppDatabase.getInstance().then(
         (db) => db.rawQuery(
-            'SELECT title FROM ${option != Options.other 
-            ? tableName 
-            : tableAlterName}'),
+            'SELECT title FROM ${option != Options.other ? tableName : tableAlterName}'),
       );
 
       return result.map((costume) => costume['title'] as String).toList();
