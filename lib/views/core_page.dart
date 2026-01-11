@@ -21,10 +21,10 @@ class CorePage extends StatelessWidget {
   final bool isSuffixIconVisible;
   final VoidCallback? onSuffixPressed;
   final VoidCallback? onPopPressed;
-  final bool hasFilterMenu;
+  final bool hasFilterGenderMenu;
   final bool isFilterSelected;
-  final void Function(GenderType?)? onSelectedFilter;
-  final GenderType? initialFilterValue;
+  final void Function(GenderType?)? onSelectedGenderFilter;
+  final GenderType? initialFilterGenderValue;
 
   const CorePage({
     super.key,
@@ -41,10 +41,10 @@ class CorePage extends StatelessWidget {
     this.isSuffixIconVisible = false,
     this.onSuffixPressed,
     this.onPopPressed,
-    this.onSelectedFilter,
-    this.hasFilterMenu = false,
+    this.onSelectedGenderFilter,
+    this.hasFilterGenderMenu = false,
     this.isFilterSelected = false,
-    this.initialFilterValue,
+    this.initialFilterGenderValue,
   });
 
   @override
@@ -125,10 +125,16 @@ class CorePage extends StatelessWidget {
                                     isSearchTextField: true,
                                   ),
                                 ),
-                                if (hasFilterMenu)
-                                  FilterGenderPopupMenu(
-                                    initialFilterValue: initialFilterValue,
-                                    onSelectedFilter: onSelectedFilter,
+                                if (hasFilterGenderMenu)
+                                  FilterTypePopupMenu<GenderType>(
+                                    initialFilterValue:
+                                        initialFilterGenderValue,
+                                    onSelectedFilter: onSelectedGenderFilter,
+                                    valueList: [
+                                      GenderType.none,
+                                      GenderType.male,
+                                      GenderType.female,
+                                    ],
                                   ),
                               ],
                             ),
@@ -158,15 +164,17 @@ class CorePage extends StatelessWidget {
   }
 }
 
-class FilterGenderPopupMenu extends StatelessWidget {
-  const FilterGenderPopupMenu({
+class FilterTypePopupMenu<T> extends StatelessWidget {
+  final T? initialFilterValue;
+  final void Function(T? p1)? onSelectedFilter;
+  final List<T> valueList;
+
+  const FilterTypePopupMenu({
     super.key,
     required this.initialFilterValue,
     required this.onSelectedFilter,
+    required this.valueList,
   });
-
-  final GenderType? initialFilterValue;
-  final void Function(GenderType? p1)? onSelectedFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -186,14 +194,14 @@ class FilterGenderPopupMenu extends StatelessWidget {
           ),
         ),
       ),
-      child: PopupMenuButton<GenderType>(
+      child: PopupMenuButton<T>(
         icon: Icon(Icons.filter_alt),
         iconColor: context.appTheme.colors.onSurfaceContainer,
         initialValue: initialFilterValue,
         onSelected: onSelectedFilter,
-        itemBuilder: (context) => <PopupMenuEntry<GenderType>>[
-          PopupMenuItem<GenderType>(
-            value: GenderType.none,
+        itemBuilder: (context) => <PopupMenuEntry<T>>[
+          PopupMenuItem<T>(
+            value: valueList[0], //GenderType.none,
             child: ListTile(
               title: Text(GenderType.none.genderName),
               titleTextStyle: context.appTheme.textStyles.bodyLarge.copyWith(
@@ -202,8 +210,8 @@ class FilterGenderPopupMenu extends StatelessWidget {
               tileColor: context.appTheme.colors.surfaceContainer,
             ),
           ),
-          PopupMenuItem<GenderType>(
-            value: GenderType.male,
+          PopupMenuItem<T>(
+            value: valueList[1], //GenderType.male,
             child: ListTile(
               title: Text(GenderType.male.genderName),
               titleTextStyle: context.appTheme.textStyles.bodyLarge.copyWith(
@@ -212,8 +220,8 @@ class FilterGenderPopupMenu extends StatelessWidget {
               tileColor: context.appTheme.colors.surfaceContainer,
             ),
           ),
-          PopupMenuItem<GenderType>(
-            value: GenderType.female,
+          PopupMenuItem<T>(
+            value: valueList[2], //GenderType.female,
             child: ListTile(
               title: Text(GenderType.female.genderName),
               titleTextStyle: context.appTheme.textStyles.bodyLarge.copyWith(
@@ -228,11 +236,11 @@ class FilterGenderPopupMenu extends StatelessWidget {
   }
 }
 
-PopupMenuItem<GenderType> genderMenuItem({
+PopupMenuItem<T> genderMenuItem<T>({
   required BuildContext context,
-  required GenderType selectedGender,
+  required T selectedGender,
   required String label,
-  required GenderType? value,
+  required T? value,
 }) {
   return PopupMenuItem(
     value: value,
