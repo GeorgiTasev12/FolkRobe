@@ -6,13 +6,12 @@ import 'package:folk_robe/service/database_owners_helper.dart';
 class OwnersRepository extends BaseRepository<Owner> {
   final _ownersDB = DatabaseOwnersHelper();
 
-  final Map<GenderType, List<Owner>> _cachedOwners = {};
-
   @override
   Future<int> add({
     required Owner item,
     GenderType? gender,
     Options? option,
+    AgeGroup? age,
   }) async {
     try {
       return await _ownersDB.insert(
@@ -29,6 +28,7 @@ class OwnersRepository extends BaseRepository<Owner> {
     required int id,
     GenderType? gender,
     Options? option,
+    AgeGroup? age,
   }) async {
     try {
       return await _ownersDB.delete(
@@ -43,17 +43,14 @@ class OwnersRepository extends BaseRepository<Owner> {
   @override
   Future<List<Owner>> read({
     GenderType? gender,
+    AgeGroup? ageGroup,
     Options? option,
   }) async {
     try {
-      if (_cachedOwners.containsKey(gender)) {
-        return _cachedOwners[gender]!;
-      } else {
-        final owners = await _ownersDB.getAll(gender: gender);
-        _cachedOwners[gender ?? GenderType.none] = owners;
-
-        return owners;
-      }
+      return await _ownersDB.getAll(
+        gender: gender,
+        age: ageGroup,
+      );
     } catch (e) {
       throw Exception(e);
     }
@@ -65,6 +62,7 @@ class OwnersRepository extends BaseRepository<Owner> {
     required Owner item,
     GenderType? gender,
     Options? option,
+    AgeGroup? age,
   }) async {
     try {
       return await _ownersDB.update(

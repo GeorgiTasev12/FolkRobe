@@ -5,10 +5,12 @@ abstract class BaseRepository<T> {
     required T item,
     required GenderType gender,
     Options? option,
+    AgeGroup? age,
   });
 
   Future<List<T>> read({
     required GenderType gender,
+    AgeGroup? ageGroup,
     Options? option,
   });
 
@@ -17,11 +19,13 @@ abstract class BaseRepository<T> {
     required T item,
     required GenderType gender,
     Options? option,
+    AgeGroup? age,
   });
 
   Future<int> delete({
     required int id,
     required GenderType gender,
     Options? option,
+    AgeGroup? age,
   });
 }

@@ -6,14 +6,21 @@ import 'package:folk_robe/service/database_dancers_helper.dart';
 class DancersRepository extends BaseRepository<Dancer> {
   final _dancersDB = DatabaseDancersHelper();
 
-
   @override
   Future<int> add({
     required Dancer item,
     GenderType? gender,
     Options? option,
+    AgeGroup? age,
   }) async {
-    return await _dancersDB.insert(item: item, gender: gender);
+    try {
+      return await _dancersDB.insert(
+        item: item,
+        gender: gender,
+      );
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 
   @override
@@ -21,19 +28,32 @@ class DancersRepository extends BaseRepository<Dancer> {
     required int id,
     GenderType? gender,
     Options? option,
+    AgeGroup? age,
   }) async {
-    return await _dancersDB.delete(
+    try {
+      return await _dancersDB.delete(
       id: id,
       gender: gender,
     );
+    } catch(e) {
+      throw Exception(e);
+    }
   }
 
   @override
   Future<List<Dancer>> read({
     GenderType? gender,
+    AgeGroup? ageGroup,
     Options? option,
   }) async {
-    return await _dancersDB.getAll(gender: gender);
+    try {
+      return await _dancersDB.getAll(
+      gender: gender,
+      age: ageGroup,
+    );
+    } catch(e) {
+      throw Exception(e);
+    }
   }
 
   @override
@@ -42,21 +62,41 @@ class DancersRepository extends BaseRepository<Dancer> {
     required Dancer item,
     GenderType? gender,
     Options? option,
+    AgeGroup? age,
   }) async {
-    return await _dancersDB.update(
+    try {
+      return await _dancersDB.update(
       item: item,
       gender: gender,
       id: id,
+      age: age,
     );
+    } catch(e) {
+      throw Exception(e);
+    }
   }
 
-  static Future<List<String>> getDancers({required GenderType gender}) async {
-    return await DatabaseDancersHelper.getDancersNames(gender);
+  static Future<List<String>> getDancers({
+    required GenderType gender,
+  }) async {
+    try {
+      return await DatabaseDancersHelper.getDancersNames(
+      gender,
+    );
+    } catch(e) {
+      throw Exception(e);
+    }
   }
 
   static Future<List<Dancer>> getFilteredDancers({
     required GenderType gender,
   }) async {
-    return await DatabaseDancersHelper.getFilteredDancers(gender: gender);
+    try {
+      return await DatabaseDancersHelper.getFilteredDancers(
+        gender: gender,
+      );
+    } catch(e) {
+      throw Exception(e);
+    }
   }
 }
