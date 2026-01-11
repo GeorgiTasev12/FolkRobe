@@ -23,7 +23,7 @@ class DancersPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Flexible(
-              child: CommonMainOptionCard(
+              child: CommonOptionCard(
                 title: 'Добави танцьор',
                 icon: Icon(
                   Icons.person_add,
@@ -41,7 +41,7 @@ class DancersPage extends StatelessWidget {
               ),
             ),
             Flexible(
-              child: CommonMainOptionCard(
+              child: CommonOptionCard(
                 title: 'Назначи отговорник',
                 icon: Icon(
                   Icons.edit_note,

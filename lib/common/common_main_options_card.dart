@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 
-class CommonMainOptionCard extends StatelessWidget {
+class CommonOptionCard extends StatelessWidget {
   final String title;
   final String? imagePath;
   final Widget? icon;
   final void Function()? onTap;
 
-  const CommonMainOptionCard({
+  const CommonOptionCard({
     super.key,
     required this.title,
     required this.onTap,
