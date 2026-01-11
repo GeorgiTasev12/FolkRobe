@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:folk_robe/common/common_dialog.dart';
 import 'package:folk_robe/common/common_list_tile.dart';
 import 'package:folk_robe/common/common_snackbar.dart';
+import 'package:folk_robe/helpers/screen_size_helper.dart';
 import 'package:folk_robe/locator.dart';
 import 'package:folk_robe/models/options.dart';
 import 'package:folk_robe/models/status.dart';
@@ -15,7 +16,14 @@ import 'package:folk_robe/common/common_delete_dialog.dart';
 import 'package:folk_robe/common/common_empty_info_text.dart';
 
 class CostumeListPage extends HookWidget {
-  const CostumeListPage({super.key});
+  final String ageString;
+  final String? selectedOptionString;
+
+  const CostumeListPage({
+    super.key,
+    required this.ageString,
+    required this.selectedOptionString,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +57,8 @@ class CostumeListPage extends HookWidget {
           return CorePage(
             hasFAB: true,
             hasAppBarTitle: true,
-            appBarTitle: 'Костюми',
+            appBarTitle:
+                'Костюми - ${ScreenSizeHelper(context).isSmall ? null : selectedOptionString} - $ageString',
             onFABPressed: () => showDialog(
               context: context,
               builder: (context) {
@@ -67,7 +76,8 @@ class CostumeListPage extends HookWidget {
                     builder: (context, state) {
                       return CommonDialog(
                         dialogTitle: 'Моля, въведете костюм',
-                        isEnabled: state.nameTextController?.text.isNotEmpty ?? false,
+                        isEnabled:
+                            state.nameTextController?.text.isNotEmpty ?? false,
                         onSavePressed: () {
                           bloc.add(AddCostumeEvent(
                             title: state.nameTextController?.text ?? "",
@@ -189,7 +199,9 @@ class CostumeListPage extends HookWidget {
                                           child: CommonDialog(
                                             dialogTitle:
                                                 'Моля, въведете костюм',
-                                            isEnabled: state.nameTextController?.text.isNotEmpty ?? false,
+                                            isEnabled: state.nameTextController
+                                                    ?.text.isNotEmpty ??
+                                                false,
                                             onSavePressed: () {
                                               bloc.add(UpdateCostumeEvent(
                                                 id: costume.id,
