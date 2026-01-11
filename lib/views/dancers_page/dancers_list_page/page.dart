@@ -107,11 +107,11 @@ class DancersListPage extends HookWidget {
           hasSearchBar: true,
           onSearchChanged: (value) => bloc.add(SearchDancerEvent(query: value)),
           searchTextController: state.searchTextController,
-          hasFilterMenu: true,
-          initialFilterValue: state.filterGenderTypeValue,
-          onSelectedFilter: (genderFilter) {
+          hasFilterGenderMenu: true,
+          initialFilterGenderValue: state.filterGenderTypeValue,
+          onSelectedGenderFilter: (genderFilter) {
             bloc.add(
-              OnFilterDancersEvent(
+              OnFilterGenderEvent(
                 genderType: genderFilter ?? GenderType.none,
               ),
             );
@@ -212,17 +212,15 @@ class DancersListPage extends HookWidget {
                                                   .genderStringValue
                                                   ?.isNotEmpty ??
                                               false,
-                                          initialSelection:
-                                              state.genderTypeValue,
                                           onSavePressed: () {
                                             bloc.add(UpdateDancerEvent(
-                                              id: dancer.id,
-                                              name: state.nameTextController
-                                                      ?.text ??
-                                                  "",
-                                              gender:
-                                                  state.genderStringValue ?? "",
-                                            ));
+                                                id: dancer.id,
+                                                name: state.nameTextController
+                                                        ?.text ??
+                                                    "",
+                                                gender:
+                                                    state.genderStringValue ??
+                                                        "",));
                                             bloc.add(InitDancersEvent());
                                             locator<NavigationService>().pop();
                                           },

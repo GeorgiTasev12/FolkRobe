@@ -63,9 +63,9 @@ class OwnersListPage extends HookWidget {
                 )
               : locator<NavigationService>().pop(),
           hasSearchBar: state.pageIndex != 0 ? false : true,
-          hasFilterMenu: true,
-          initialFilterValue: state.filterGenderTypeValue,
-          onSelectedFilter: (genderFilter) {
+          hasFilterGenderMenu: true,
+          initialFilterGenderValue: state.filterGenderTypeValue,
+          onSelectedGenderFilter: (genderFilter) {
             bloc.add(
               OnFilterOwnersEvent(
                 genderType: genderFilter ?? GenderType.none,
@@ -119,7 +119,8 @@ class OwnersListPage extends HookWidget {
                     buildWhen: (previous, current) =>
                         previous.dancersNames != current.dancersNames ||
                         previous.isGenderSelected != current.isGenderSelected ||
-                        previous.selectedDancerValue != current.selectedDancerValue,
+                        previous.selectedDancerValue !=
+                            current.selectedDancerValue,
                     builder: (context, state) => OwnerDropdownMenu(
                       valueKey: ValueKey(state.genderTypeValue),
                       entries: (state.dancersNames ?? []).map((entry) {
@@ -254,15 +255,15 @@ class OwnersListPage extends HookWidget {
                                             ));
                                           } else {
                                             bloc.add(AddTemporaryOwnerEvent(
-                                                name:
-                                                    state.selectedDancerValue ??
-                                                        '',
-                                                title: state.selectedRegionValue
-                                                        ?.optionName ??
-                                                    '',
-                                                gender: state
-                                                        .selectedGenderStringValue ??
-                                                    ''));
+                                              name: state.selectedDancerValue ??
+                                                  '',
+                                              title: state.selectedRegionValue
+                                                      ?.optionName ??
+                                                  '',
+                                              gender: state
+                                                      .selectedGenderStringValue ??
+                                                  '',
+                                            ));
                                           }
 
                                           bloc.add(SwitchPageEvent(

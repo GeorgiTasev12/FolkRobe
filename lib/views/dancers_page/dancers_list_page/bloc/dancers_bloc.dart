@@ -29,7 +29,7 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
     on<OnSearchClearEvent>(_onSearchClear);
     on<OnSelectedGenderEvent>(_onSelectedGender);
     on<OnOpenDialogEvent>(_onOpenDialog);
-    on<OnFilterDancersEvent>(_onFilterDancers);
+    on<OnFilterGenderEvent>(_onFilterGender);
   }
 
   FutureOr<void> _onInitData(
@@ -38,7 +38,10 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
   ) async {
     emit(state.copyWith(isLoading: true));
 
-    final dancers = await DancersRepository().read();
+    final dancers = await DancersRepository().read(
+      ageGroup: AgeGroup
+          .adult, //This is by default for the list generate the adults first
+    );
 
     emit(state.copyWith(
       allDancersList: dancers,
@@ -103,10 +106,9 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
   ) async {
     try {
       final updatedDancer = Dancer(
-        id: event.id,
-        name: event.name ?? '',
-        gender: event.gender ?? '',
-      );
+          id: event.id,
+          name: event.name ?? '',
+          gender: event.gender ?? '',);
 
       await DancersRepository().update(
         item: updatedDancer,
@@ -288,8 +290,8 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
     ));
   }
 
-  FutureOr<void> _onFilterDancers(
-    OnFilterDancersEvent event,
+  FutureOr<void> _onFilterGender(
+    OnFilterGenderEvent event,
     Emitter<DancersState> emit,
   ) async {
     emit(state.copyWith(isLoading: true));
