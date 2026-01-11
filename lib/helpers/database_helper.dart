@@ -6,16 +6,21 @@ import 'package:folk_robe/models/options.dart';
 abstract class DatabaseHelper<T> {
   Future<Database> get database => _DatabaseManager().database;
 
-  String getTableName({GenderType? gender, Options? option});
+  String getTableName({
+    GenderType? gender,
+    Options? option,
+    AgeGroup? age,
+  });
 
   T fromMap(Map<String, dynamic> map);
 
   Map<String, dynamic> toMap(T item);
 
   Future<int> insert({
-    GenderType? gender,
     required T item,
+    GenderType? gender,
     Options? option,
+    AgeGroup? age,
   }) async {
     final db = await database;
 
@@ -23,6 +28,7 @@ abstract class DatabaseHelper<T> {
         getTableName(
           gender: gender,
           option: option,
+          age: age,
         ),
         toMap(item));
   }
@@ -30,26 +36,35 @@ abstract class DatabaseHelper<T> {
   Future<List<T>> getAll({
     GenderType? gender,
     Options? option,
+    AgeGroup? age,
   }) async {
     final db = await database;
-    final result = await db.query(getTableName(
-      gender: gender,
-      option: option,
-    ));
+    final result = await db.query(
+      getTableName(
+        gender: gender,
+        option: option,
+        age: age,
+      ),
+    );
 
     return result.map((map) => fromMap(map)).toList();
   }
 
   Future<int> update({
-    GenderType? gender,
     required T item,
-    Options? option,
     required int id,
+    GenderType? gender,
+    Options? option,
+    AgeGroup? age,
   }) async {
     final db = await database;
 
     return await db.update(
-      getTableName(gender: gender, option: option),
+      getTableName(
+        gender: gender,
+        option: option,
+        age: age,
+      ),
       toMap(item),
       where: 'id = ?',
       whereArgs: [id],
@@ -57,14 +72,19 @@ abstract class DatabaseHelper<T> {
   }
 
   Future<int> delete({
+    required int id,
     GenderType? gender,
     Options? option,
-    required int id,
+    AgeGroup? age,
   }) async {
     final db = await database;
-    
+
     return await db.delete(
-      getTableName(gender: gender, option: option),
+      getTableName(
+        gender: gender,
+        option: option,
+        age: age,
+      ),
       where: 'id = ?',
       whereArgs: [id],
     );
@@ -107,14 +127,17 @@ class _DatabaseManager {
   Future<void> _createCostumeTables(Database db) async {
     for (var gender in GenderType.values) {
       for (var option in Options.values) {
-        final table = option.tableCostumeName(gender);
-        await db.execute('''
+        for (var age in AgeGroup.values) {
+          final table = option.tableCostumeName(gender, age);
+
+          await db.execute('''
           CREATE TABLE IF NOT EXISTS $table (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT,
             quantity INTEGER
           )
         ''');
+        }
       }
     }
   }
@@ -133,7 +156,7 @@ class _DatabaseManager {
   }
 
   Future<void> _createDancerTables(Database db) async {
-      await db.execute('''
+    await db.execute('''
         CREATE TABLE IF NOT EXISTS ${Constants.dancersTableName} (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           name TEXT,

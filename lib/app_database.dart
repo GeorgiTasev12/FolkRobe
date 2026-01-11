@@ -30,7 +30,8 @@ class AppDatabase {
     // Costume tables
     for (var gender in GenderType.values) {
       for (var option in Options.values) {
-        final table = option.tableCostumeName(gender);
+        for (var age in AgeGroup.values) {
+          final table = option.tableCostumeName(gender, age);
 
         if (table.isEmpty) continue; // Skip invalid table names
 
@@ -42,6 +43,7 @@ class AppDatabase {
           )
         ''');
       }
+    }
     }
 
     // Owner tables
