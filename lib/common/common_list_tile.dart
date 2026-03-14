@@ -18,16 +18,22 @@ class CommonListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool hasQuantity = (quantity ?? '').isNotEmpty;
+
+    double mediumWidthSize() {
+      return ScreenSizeHelper(context).isMedium ? 210 : 190;
+    }
+
     return ListTile(
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (quantity != null && (quantity?.isNotEmpty ?? false))
+          if (hasQuantity)
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Бр: ${quantity.toString()}',
+                  'Бр: $quantity',
                   style: context.appTheme.textStyles.titleMedium.copyWith(
                     fontWeight: FontWeight.w400,
                     color: context.appTheme.colors.onSurfaceContainer,
@@ -38,7 +44,9 @@ class CommonListTile extends StatelessWidget {
               ],
             ),
           SizedBox(
-            width: ScreenSizeHelper(context).isSmall ? 170 : 140,
+            width: !hasQuantity 
+              ? (!hasQuantity ? mediumWidthSize() : 130) 
+              : ScreenSizeHelper(context).isSmall ? 130 : 150,
             child: Text(
               title,
               style: context.appTheme.textStyles.titleMedium.copyWith(
