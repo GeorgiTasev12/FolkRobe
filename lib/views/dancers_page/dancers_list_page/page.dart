@@ -193,8 +193,7 @@ class DancersListPage extends HookWidget {
                                   context: context,
                                   builder: (_) => BlocProvider.value(
                                     value: bloc,
-                                    child:
-                                        BlocBuilder<DancersBloc, DancersState>(
+                                    child: BlocBuilder<DancersBloc, DancersState>(
                                       builder: (context, state) {
                                         bloc.add(
                                           OnOpenDialogEvent(
@@ -203,6 +202,7 @@ class DancersListPage extends HookWidget {
                                           ),
                                         );
                                         return CommonDialog(
+                                          initialSelection: state.genderTypeValue,
                                           dialogTitle:
                                               'Моля, въведете име на танцьора',
                                           isEnabled: state.nameTextController
@@ -228,7 +228,7 @@ class DancersListPage extends HookWidget {
                                             bloc.add(
                                               OnSelectedGenderEvent(
                                                 gender: genderValue ??
-                                                    GenderType.none,
+                                                    GenderType.none, //TODO: Check here
                                               ),
                                             );
                                           },
