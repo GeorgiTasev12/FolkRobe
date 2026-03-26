@@ -4,7 +4,13 @@ sealed class DancersEvent {
   const DancersEvent();
 }
 
-final class InitDancersEvent extends DancersEvent {}
+final class InitDancersEvent extends DancersEvent {
+  final AgeGroup ageGroup;
+
+  const InitDancersEvent({
+    required this.ageGroup,
+  });
+}
 
 final class AddDancerEvent extends DancersEvent {
   final Dancer? dancer;

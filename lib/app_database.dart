@@ -64,7 +64,8 @@ class AppDatabase {
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           name TEXT,
           age INTEGER NULL,
-          gender TEXT
+          gender TEXT,
+          ageGroup TEXT
         )
       ''');
   }

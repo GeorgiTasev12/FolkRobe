@@ -39,12 +39,28 @@ abstract class DatabaseHelper<T> {
     AgeGroup? age,
   }) async {
     final db = await database;
+
+    List<String> whereClauses = [];
+    List<dynamic> whereArgs = [];
+
+    if (gender != null && gender != GenderType.none) {
+      whereClauses.add('gender = ?');
+      whereArgs.add(gender.name); // or your mapping
+    }
+
+    if (age != null) {
+      whereClauses.add('ageGroup = ?');
+      whereArgs.add(age.name); // IMPORTANT: must match stored value
+    }
+
     final result = await db.query(
       getTableName(
         gender: gender,
         option: option,
         age: age,
       ),
+      where: whereClauses.isNotEmpty ? whereClauses.join(' AND ') : null,
+      whereArgs: whereArgs.isNotEmpty ? whereArgs : null,
     );
 
     return result.map((map) => fromMap(map)).toList();
@@ -160,7 +176,8 @@ class _DatabaseManager {
         CREATE TABLE IF NOT EXISTS ${Constants.dancersTableName} (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           name TEXT,
-          gender TEXT
+          gender TEXT,
+          ageGroup TEXT
         )
       ''');
   }

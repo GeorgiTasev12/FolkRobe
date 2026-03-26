@@ -6,11 +6,15 @@ import 'package:folk_robe/models/options.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 import 'package:folk_robe/views/core_page.dart';
+import 'package:folk_robe/views/dancers_page/page.dart';
 import 'package:folk_robe/views/gender_page/page.dart';
 
 class SelectAgePage extends StatelessWidget {
+  final PageSource pageSource;
+
   const SelectAgePage({
     super.key,
+    required this.pageSource,
   });
 
   @override
@@ -35,7 +39,9 @@ class SelectAgePage extends StatelessWidget {
                   onTap: () {
                     locator<NavigationService>().push(
                       MaterialPageRoute(
-                        builder: (context) => GenderPage(age: AgeGroup.adult),
+                        builder: (context) => pageSource == PageSource.costumes
+                            ? GenderPage(age: AgeGroup.adult)
+                            : DancersPage(ageGroup: AgeGroup.adult),
                       ),
                     );
                   },
@@ -52,7 +58,9 @@ class SelectAgePage extends StatelessWidget {
                   onTap: () {
                     locator<NavigationService>().push(
                       MaterialPageRoute(
-                        builder: (context) => GenderPage(age: AgeGroup.child),
+                        builder: (context) => pageSource == PageSource.costumes
+                            ? GenderPage(age: AgeGroup.child)
+                            : DancersPage(ageGroup: AgeGroup.child),
                       ),
                     );
                   },

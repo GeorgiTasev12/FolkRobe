@@ -16,14 +16,19 @@ import 'package:folk_robe/common/common_empty_info_text.dart';
 import 'package:folk_robe/views/dancers_page/dancers_list_page/bloc/dancers_bloc.dart';
 
 class DancersListPage extends HookWidget {
-  const DancersListPage({super.key});
+  final AgeGroup ageGroup;
+
+  const DancersListPage({
+    super.key,
+    required this.ageGroup,
+  });
 
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<DancersBloc>();
 
     useEffect(() {
-      bloc.add(InitDancersEvent());
+      bloc.add(InitDancersEvent(ageGroup: ageGroup));
       return;
     }, const []);
 
@@ -71,7 +76,7 @@ class DancersListPage extends HookWidget {
                           name: state.nameTextController?.text ?? "",
                           gender: state.genderStringValue ?? "",
                         ));
-                        bloc.add(InitDancersEvent());
+                        bloc.add(InitDancersEvent(ageGroup: ageGroup));
                         bloc.add(OnCloseDialogEvent());
                         locator<NavigationService>().pop();
                       },
@@ -221,14 +226,14 @@ class DancersListPage extends HookWidget {
                                                 gender:
                                                     state.genderStringValue ??
                                                         "",));
-                                            bloc.add(InitDancersEvent());
+                                            bloc.add(InitDancersEvent(ageGroup: ageGroup));
                                             locator<NavigationService>().pop();
                                           },
                                           onSelectedGender: (genderValue) {
                                             bloc.add(
                                               OnSelectedGenderEvent(
                                                 gender: genderValue ??
-                                                    GenderType.none, //TODO: Check here
+                                                    GenderType.none,
                                               ),
                                             );
                                           },
@@ -274,7 +279,7 @@ class DancersListPage extends HookWidget {
                                     onDeletePressed: () {
                                       bloc.add(RemoveDancerEvent(
                                           id: dancerToDelete.id ?? 0));
-                                      bloc.add(InitDancersEvent());
+                                      bloc.add(InitDancersEvent(ageGroup: ageGroup));
                                       locator<NavigationService>().pop();
                                     },
                                   ),

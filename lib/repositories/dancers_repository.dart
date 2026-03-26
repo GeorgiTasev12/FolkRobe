@@ -17,6 +17,7 @@ class DancersRepository extends BaseRepository<Dancer> {
       return await _dancersDB.insert(
         item: item,
         gender: gender,
+        age: age,
       );
     } catch (e) {
       throw Exception(e);
@@ -34,6 +35,7 @@ class DancersRepository extends BaseRepository<Dancer> {
       return await _dancersDB.delete(
       id: id,
       gender: gender,
+      age: age,
     );
     } catch(e) {
       throw Exception(e);
@@ -82,6 +84,7 @@ class DancersRepository extends BaseRepository<Dancer> {
     try {
       return await DatabaseDancersHelper.getDancersNames(
       gender,
+      AgeGroup.none //TODO: Make sure to change this as a parameter, for the owners
     );
     } catch(e) {
       throw Exception(e);
@@ -90,10 +93,12 @@ class DancersRepository extends BaseRepository<Dancer> {
 
   static Future<List<Dancer>> getFilteredDancers({
     required GenderType gender,
+    required AgeGroup ageGroup,
   }) async {
     try {
       return await DatabaseDancersHelper.getFilteredDancers(
         gender: gender,
+        ageGroup: ageGroup,
       );
     } catch(e) {
       throw Exception(e);
