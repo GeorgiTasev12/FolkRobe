@@ -52,7 +52,7 @@ class DancersListPage extends HookWidget {
         builder: (context, state) => CorePage(
           hasFAB: true,
           hasAppBarTitle: true,
-          appBarTitle: 'Танцьори',
+          appBarTitle: 'Танцьори - ${ageGroup == AgeGroup.adult ? "Възрастова група" : "Детската група"}',
           onFABPressed: () => showDialog(
             context: context,
             builder: (context) {

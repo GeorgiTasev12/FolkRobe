@@ -22,7 +22,7 @@ class DancersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CorePage(
-      appBarTitle: 'Моля изберете опция',
+      appBarTitle: 'Моля изберете опция за ${ageGroup.agesName}',
       child: Center(
         child: Row(
           mainAxisSize: MainAxisSize.min,
