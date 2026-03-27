@@ -23,6 +23,25 @@ class DatabaseCostumeHelper extends DatabaseHelper<Costume> {
   @override
   Map<String, dynamic> toMap(Costume costume) => costume.toMap();
 
+  @override
+  Future<List<Costume>> getAll({
+    GenderType? gender,
+    Options? option,
+    AgeGroup? age,
+  }) async {
+    final db = await database;
+
+    final result = await db.query(
+      getTableName(
+        gender: gender,
+        option: option,
+        age: age,
+      ),
+    );
+
+    return result.map((map) => fromMap(map)).toList();
+  }
+
   // Fetch costume titles
   static Future<List<String>> getCostumes(
     GenderType? gender,
