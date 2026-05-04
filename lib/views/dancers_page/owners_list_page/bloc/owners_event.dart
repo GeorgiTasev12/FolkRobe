@@ -4,12 +4,18 @@ sealed class OwnersEvent {
   const OwnersEvent();
 }
 
-final class InitOwnersEvent extends OwnersEvent {}
+final class InitOwnersEvent extends OwnersEvent {
+  final AgeGroup ageGroup;
+
+  const InitOwnersEvent({
+    required this.ageGroup
+  });
+}
 
 final class SelectedRegionEvent extends OwnersEvent {
   final Options optionValue;
 
-  SelectedRegionEvent({
+  const SelectedRegionEvent({
     required this.optionValue,
   });
 }
@@ -17,13 +23,13 @@ final class SelectedRegionEvent extends OwnersEvent {
 final class SelectedDancerEvent extends OwnersEvent {
   final String dancerValue;
 
-  SelectedDancerEvent({required this.dancerValue});
+  const SelectedDancerEvent({required this.dancerValue});
 }
 
 final class StartEditOwnerEvent extends OwnersEvent {
   final int index;
 
-  StartEditOwnerEvent({
+  const StartEditOwnerEvent({
     required this.index,
   });
 }
@@ -102,6 +108,7 @@ final class OnSearchClearEvent extends OwnersEvent {
 
 final class OnFilterOwnersEvent extends OwnersEvent {
   final GenderType genderType;
+  final AgeGroup ageGroup;
 
-  OnFilterOwnersEvent({required this.genderType});
+  OnFilterOwnersEvent({required this.genderType, required this.ageGroup,});
 }

@@ -17,6 +17,7 @@ class OwnersRepository extends BaseRepository<Owner> {
       return await _ownersDB.insert(
         gender: gender,
         item: item,
+        age: age,
       );
     } catch (e) {
       throw Exception(e);
@@ -34,6 +35,7 @@ class OwnersRepository extends BaseRepository<Owner> {
       return await _ownersDB.delete(
         gender: gender,
         id: id,
+        age: age,
       );
     } catch (e) {
       throw Exception(e);
@@ -69,6 +71,7 @@ class OwnersRepository extends BaseRepository<Owner> {
         id: id,
         item: item,
         gender: gender,
+        age: age,
       );
     } catch (e) {
       throw Exception(e);
@@ -77,7 +80,11 @@ class OwnersRepository extends BaseRepository<Owner> {
 
   static Future<List<Owner>> getFilteredDancersName({
     required GenderType gender,
+    required AgeGroup ageGroup,
   }) async {
-    return await DatabaseOwnersHelper.getFilteredOwners(gender: gender);
+    return await DatabaseOwnersHelper.getFilteredOwners(
+      gender: gender, 
+      ageGroup: ageGroup.name,
+    );
   }
 }

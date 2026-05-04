@@ -57,8 +57,8 @@ class DancersPage extends StatelessWidget {
                 onTap: () => locator<NavigationService>().push(
                   MaterialPageRoute(
                     builder: (context) => BlocProvider(
-                      create: (context) => OwnersBloc(),
-                      child: OwnersListPage(),
+                      create: (context) => OwnersBloc(ageGroup: ageGroup),
+                      child: OwnersListPage(ageGroup: ageGroup,),
                     ),
                   ),
                 ),

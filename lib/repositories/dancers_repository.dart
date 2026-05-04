@@ -80,11 +80,12 @@ class DancersRepository extends BaseRepository<Dancer> {
 
   static Future<List<String>> getDancers({
     required GenderType gender,
+    required AgeGroup ageGroup,
   }) async {
     try {
       return await DatabaseDancersHelper.getDancersNames(
       gender,
-      AgeGroup.none //TODO: Make sure to change this as a parameter, for the owners
+      ageGroup,
     );
     } catch(e) {
       throw Exception(e);

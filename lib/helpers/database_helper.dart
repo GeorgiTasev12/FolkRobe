@@ -166,7 +166,8 @@ class _DatabaseManager {
           name TEXT,
           items TEXT,
           gender TEXT,
-          quantity INTEGER
+          quantity INTEGER,
+          ageGroup TEXT
         )
       ''');
   }

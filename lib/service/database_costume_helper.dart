@@ -46,20 +46,20 @@ class DatabaseCostumeHelper extends DatabaseHelper<Costume> {
   static Future<List<String>> getCostumes(
     GenderType? gender,
     Options option,
+    AgeGroup? ageGroup,
   ) async {
-    final prefix = gender == GenderType.female ? 'female' : 'male';
-    final tableName = '${prefix}_costume_${option.name}';
+    final tableCostumesName = option.tableCostumeName(gender, ageGroup);
     final tableAlterName = '${Options.other.name}_costume';
 
     try {
       final result = await AppDatabase.getInstance().then(
         (db) => db.rawQuery(
-            'SELECT title FROM ${option != Options.other ? tableName : tableAlterName}'),
+            'SELECT title FROM ${option != Options.other ? tableCostumesName : tableAlterName}'),
       );
 
       return result.map((costume) => costume['title'] as String).toList();
     } catch (e) {
-      throw Exception('Failed to fetch costumes from $tableName: $e');
+      throw Exception('Failed to fetch costumes from $tableCostumesName: $e');
     }
   }
 }

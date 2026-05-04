@@ -54,7 +54,8 @@ class AppDatabase {
           name TEXT,
           items TEXT NULL,
           quantity INTEGER NULL,
-          gender TEXT
+          gender TEXT,
+          ageGroup TEXT
         )
       ''');
 

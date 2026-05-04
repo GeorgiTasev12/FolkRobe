@@ -16,14 +16,16 @@ import 'package:folk_robe/views/dancers_page/owners_list_page/widgets/owner_list
 import 'package:folk_robe/views/dancers_page/owners_list_page/widgets/owners_listview.dart';
 
 class OwnersListPage extends HookWidget {
-  const OwnersListPage({super.key});
+  final AgeGroup ageGroup;
+
+  const OwnersListPage({super.key, required this.ageGroup,});
 
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<OwnersBloc>();
 
     useEffect(() {
-      bloc.add(InitOwnersEvent());
+      bloc.add(InitOwnersEvent(ageGroup: ageGroup));
       return;
     }, []);
 
@@ -46,7 +48,7 @@ class OwnersListPage extends HookWidget {
         buildWhen: (previous, current) => bloc.buildWhen(previous, current),
         builder: (context, state) => CorePage(
           hasAppBarTitle: true,
-          appBarTitle: "Отговорници",
+          appBarTitle: "Отговорници - ${ageGroup == AgeGroup.adult ? 'Възрастова група' : 'Детска група'}",
           hasFAB: state.isFABVisible,
           onFABPressed: () => bloc.add(
             SwitchPageEvent(
@@ -69,6 +71,7 @@ class OwnersListPage extends HookWidget {
             bloc.add(
               OnFilterOwnersEvent(
                 genderType: genderFilter ?? GenderType.none,
+                ageGroup: ageGroup,
               ),
             );
           },
@@ -270,7 +273,7 @@ class OwnersListPage extends HookWidget {
                                             pageIndex: 0,
                                             isOwnerEdit: false,
                                           ));
-                                          bloc.add(InitOwnersEvent());
+                                          bloc.add(InitOwnersEvent(ageGroup: ageGroup));
                                         }
                                       : null,
                                   style: FilledButton.styleFrom(
