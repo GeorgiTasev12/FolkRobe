@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:folk_robe/common/common_main_options_card.dart';
 import 'package:folk_robe/helpers/screen_size_helper.dart';
@@ -20,12 +19,6 @@ class SelectAgePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    if (kDebugMode) {
-      print("Screen sizes\nWidth: ${size.width}\nHeight: ${size.height}");
-    }
-
     return CorePage(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
