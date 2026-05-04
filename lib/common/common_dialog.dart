@@ -58,7 +58,7 @@ class CommonDialog extends StatelessWidget {
       backgroundColor: context.appTheme.colors.surfaceContainer,
       content: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           CommonTextfield(
             textController: nameTextController,
@@ -120,13 +120,13 @@ class CommonDialog extends StatelessWidget {
                         ),
                         minimumSize: WidgetStateProperty.all(
                           Size(
-                            ScreenSizeHelper(context).width * 0.6,
+                            screenSize.width * 0.6,
                             40,
                           ),
                         ),
                         maximumSize: WidgetStateProperty.all(
                           Size(
-                            ScreenSizeHelper(context).width * 0.8,
+                            screenSize.width * 0.8,
                             double.infinity,
                           ),
                         ),

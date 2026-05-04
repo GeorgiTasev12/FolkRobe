@@ -13,7 +13,11 @@ class DatabaseOwnersHelper extends DatabaseHelper<Owner> {
   Owner fromMap(Map<String, dynamic> map) => Owner.fromMap(map);
 
   @override
-  String getTableName({GenderType? gender, Options? option}) =>
+  String getTableName({
+    GenderType? gender,
+    Options? option,
+    AgeGroup? age,
+  }) =>
       Constants.ownersTableName;
 
   @override
@@ -21,6 +25,7 @@ class DatabaseOwnersHelper extends DatabaseHelper<Owner> {
 
   static Future<List<Owner>> getFilteredOwners({
     required GenderType gender,
+    required String ageGroup,
   }) async {
     try {
       final db = await AppDatabase.getInstance();
@@ -29,19 +34,20 @@ class DatabaseOwnersHelper extends DatabaseHelper<Owner> {
       switch (gender) {
         case GenderType.male:
           result = db.rawQuery(
-            'SELECT * FROM ${Constants.ownersTableName} WHERE gender = ?',
-            [GenderType.male.name],
+            'SELECT * FROM ${Constants.ownersTableName} WHERE gender = ? AND ageGroup = ?',
+            [GenderType.male.name, ageGroup],
           );
           break;
         case GenderType.female:
           result = db.rawQuery(
-            'SELECT * FROM ${Constants.ownersTableName} WHERE gender = ?',
-            [GenderType.female.name],
+            'SELECT * FROM ${Constants.ownersTableName} WHERE gender = ? AND ageGroup = ?',
+            [GenderType.female.name, ageGroup],
           );
           break;
         default:
           result = db.rawQuery(
-            'SELECT * FROM ${Constants.ownersTableName}',
+            'SELECT * FROM ${Constants.ownersTableName} WHERE ageGroup = ?',
+            [ageGroup]
           );
           break;
       }

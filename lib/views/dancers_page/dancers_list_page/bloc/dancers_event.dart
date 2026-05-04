@@ -4,7 +4,13 @@ sealed class DancersEvent {
   const DancersEvent();
 }
 
-final class InitDancersEvent extends DancersEvent {}
+final class InitDancersEvent extends DancersEvent {
+  final AgeGroup ageGroup;
+
+  const InitDancersEvent({
+    required this.ageGroup,
+  });
+}
 
 final class AddDancerEvent extends DancersEvent {
   final Dancer? dancer;
@@ -130,8 +136,8 @@ final class OnOpenDialogEvent extends DancersEvent {
   });
 }
 
-final class OnFilterDancersEvent extends DancersEvent {
+final class OnFilterGenderEvent extends DancersEvent {
   final GenderType genderType;
 
-  OnFilterDancersEvent({required this.genderType});
+  OnFilterGenderEvent({required this.genderType});
 }

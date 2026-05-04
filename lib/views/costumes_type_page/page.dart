@@ -10,10 +10,12 @@ import 'package:folk_robe/views/costumes_type_page/widgets/costume_type_item.dar
 
 class CostumesTypePage extends StatelessWidget {
   final GenderType genderType;
+  final AgeGroup ageType;
 
   const CostumesTypePage({
     super.key,
     required this.genderType,
+    required this.ageType,
   });
 
   @override
@@ -36,8 +38,12 @@ class CostumesTypePage extends StatelessWidget {
                   create: (_) => CostumeBloc(
                     selectedOption: option,
                     genderType: genderType,
+                    ageGroup: ageType,
                   ),
-                  child: const CostumeListPage(),
+                  child: CostumeListPage(
+                    selectedOptionString: option.optionName,
+                    ageString: ageType.agesName,
+                  ),
                 ),
               ),
             ),

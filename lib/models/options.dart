@@ -45,26 +45,30 @@ enum Options {
 }
 
 extension OptionTableName on Options {
-  String tableCostumeName(GenderType? gender) {
-    final prefix = gender == GenderType.female ? 'female_' : 'male_';
+  String tableCostumeName(
+    GenderType? gender,
+    AgeGroup? age,
+  ) {
+    final genderPrefix = gender == GenderType.female ? 'female' : 'male';
+    final agePrefix = age == AgeGroup.adult ? 'adult' : 'child';
 
     switch (this) {
       case Options.shopska:
-        return '${prefix}costume_shopska';
+        return '${agePrefix}_${genderPrefix}_costume_shopska';
       case Options.trakiski:
-        return '${prefix}costume_trakiski';
+        return '${agePrefix}_${genderPrefix}_costume_trakiski';
       case Options.severniashka:
-        return '${prefix}costume_severniashka';
+        return '${agePrefix}_${genderPrefix}_costume_severniashka';
       case Options.rodopski:
-        return '${prefix}costume_rodopski';
+        return '${agePrefix}_${genderPrefix}_costume_rodopski';
       case Options.strandzhanski:
-        return '${prefix}costume_strandzhanski';
+        return '${agePrefix}_${genderPrefix}_costume_strandzhanski';
       case Options.dobrudzhanski:
-        return '${prefix}costume_dobrudzhanski';
+        return '${agePrefix}_${genderPrefix}_costume_dobrudzhanski';
       case Options.pirinski:
-        return '${prefix}costume_pirinski';
+        return '${agePrefix}_${genderPrefix}_costume_pirinski';
       case Options.other:
-        return '${Options.other.name}_costume';
+        return '${agePrefix}_${Options.other.name}_costume';
       case Options.none:
         return '';
     }
@@ -94,4 +98,28 @@ extension OptionName on Options {
         return '';
     }
   }
+}
+
+enum AgeGroup {
+  adult,
+  child,
+  none,
+}
+
+extension AgeGroupName on AgeGroup {
+  String get agesName {
+    switch (this) {
+      case AgeGroup.adult:
+        return 'Възрастни';
+      case AgeGroup.child:
+        return 'Деца';
+      case AgeGroup.none:
+        return '';
+    }
+  }
+}
+
+enum PageSource {
+  costumes,
+  dancers,
 }

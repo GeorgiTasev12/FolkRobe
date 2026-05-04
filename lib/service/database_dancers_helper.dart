@@ -16,15 +16,25 @@ class DatabaseDancersHelper extends DatabaseHelper<Dancer> {
   Map<String, dynamic> toMap(Dancer dancer) => dancer.toMap();
 
   @override
-  String getTableName({GenderType? gender, Options? option}) =>
+  String getTableName({
+    AgeGroup? age,
+    GenderType? gender,
+    Options? option,
+  }) =>
       Constants.dancersTableName;
 
-  static Future<List<String>> getDancersNames(GenderType gender) async {
+  static Future<List<String>> getDancersNames(
+    GenderType gender,
+    AgeGroup ageGroup,
+  ) async {
     try {
       final db = await AppDatabase.getInstance();
       final result = await db.rawQuery(
-        "SELECT name FROM ${Constants.dancersTableName} WHERE gender = ?",
-        [gender.name],
+        "SELECT name FROM ${Constants.dancersTableName} WHERE gender = ? AND ageGroup = ?",
+        [
+          gender.name,
+          ageGroup.name,
+        ],
       );
 
       return result.map((dancer) => dancer['name'] as String).toList();
@@ -35,6 +45,7 @@ class DatabaseDancersHelper extends DatabaseHelper<Dancer> {
 
   static Future<List<Dancer>> getFilteredDancers({
     required GenderType gender,
+    required AgeGroup ageGroup,
   }) async {
     try {
       final db = await AppDatabase.getInstance();
@@ -43,20 +54,20 @@ class DatabaseDancersHelper extends DatabaseHelper<Dancer> {
       switch (gender) {
         case GenderType.male:
           result = db.rawQuery(
-            'SELECT * FROM ${Constants.dancersTableName} WHERE gender = ?',
-            [GenderType.male.name],
+            'SELECT * FROM ${Constants.dancersTableName} WHERE gender = ? AND ageGroup = ?',
+            [GenderType.male.name, ageGroup.name],
           );
           break;
         case GenderType.female:
           result = db.rawQuery(
-            'SELECT * FROM ${Constants.dancersTableName} WHERE gender = ?',
-            [GenderType.female.name],
+            'SELECT * FROM ${Constants.dancersTableName} WHERE gender = ? AND ageGroup = ?',
+            [GenderType.female.name, ageGroup.name],
           );
           break;
         default:
           result = db.rawQuery(
-            'SELECT * FROM ${Constants.dancersTableName}',
-          );
+              'SELECT * FROM ${Constants.dancersTableName} WHERE ageGroup = ?',
+              [ageGroup.name]);
           break;
       }
 

@@ -4,12 +4,14 @@ class Owner {
   final String name;
   final String items;
   final String gender;
+  final String ageGroup;
 
   Owner({
     required this.title,
     required this.name,
     required this.items,
     required this.gender,
+    required this.ageGroup,
     this.id,
   });
 
@@ -19,6 +21,7 @@ class Owner {
     String? name,
     String? items,
     String? gender,
+    String? ageGroup,
   }) {
     return Owner(
       id: id ?? this.id,
@@ -26,6 +29,7 @@ class Owner {
       name: name ?? this.name,
       items: items ?? this.items,
       gender: gender ?? this.gender,
+      ageGroup: ageGroup ?? this.ageGroup,
     );
   }
 
@@ -36,6 +40,7 @@ class Owner {
       name: map['name'] as String,
       gender: map['gender'] as String,
       items: (map['items'] as String?) ?? '',
+      ageGroup: map['ageGroup'] as String,
     );
   }
 
@@ -46,6 +51,7 @@ class Owner {
       'name': name,
       'gender': gender,
       'items': items,
+      'ageGroup': ageGroup,
     };
   }
 }

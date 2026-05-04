@@ -15,10 +15,12 @@ part 'costume_state.dart';
 class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
   final Options selectedOption;
   final GenderType genderType;
+  final AgeGroup ageGroup;
 
   CostumeBloc({
     required this.selectedOption,
     required this.genderType,
+    required this.ageGroup,
   }) : super(CostumeState(
           nameTextController: TextEditingController(),
           quantityTextController: TextEditingController(),
@@ -54,6 +56,7 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
     final costumes = await CostumesRepository().read(
       option: selectedOption,
       gender: genderType,
+      ageGroup: ageGroup,
     );
 
     emit(state.copyWith(
@@ -73,10 +76,12 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
         title: event.title,
         quantity: int.tryParse(event.quantity ?? ''),
       );
+
       final newId = await CostumesRepository().add(
         item: costume,
         gender: genderType,
         option: selectedOption,
+        age: ageGroup,
       );
 
       final costumeWithId = costume.copyWith(
@@ -124,11 +129,13 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
         option: selectedOption,
         id: event.id ?? 0,
         gender: genderType,
+        age: ageGroup,
       );
 
       final updatedList = await CostumesRepository().read(
         option: selectedOption,
         gender: genderType,
+        ageGroup: ageGroup,
       );
 
       emit(state.copyWith(
@@ -167,16 +174,19 @@ class CostumeBloc extends Bloc<CostumeEvent, CostumeState> {
         title: event.title ?? '',
         quantity: int.tryParse(event.quantity ?? ''),
       );
+
       await CostumesRepository().update(
         id: event.id ?? 0,
         option: selectedOption,
         item: updatedCostume,
         gender: genderType,
+        age: ageGroup,
       );
 
       final updatedList = await CostumesRepository().read(
         option: selectedOption,
         gender: genderType,
+        ageGroup: ageGroup,
       );
 
       state.nameTextController?.clear();

@@ -16,14 +16,19 @@ import 'package:folk_robe/common/common_empty_info_text.dart';
 import 'package:folk_robe/views/dancers_page/dancers_list_page/bloc/dancers_bloc.dart';
 
 class DancersListPage extends HookWidget {
-  const DancersListPage({super.key});
+  final AgeGroup ageGroup;
+
+  const DancersListPage({
+    super.key,
+    required this.ageGroup,
+  });
 
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<DancersBloc>();
 
     useEffect(() {
-      bloc.add(InitDancersEvent());
+      bloc.add(InitDancersEvent(ageGroup: ageGroup));
       return;
     }, const []);
 
@@ -47,7 +52,7 @@ class DancersListPage extends HookWidget {
         builder: (context, state) => CorePage(
           hasFAB: true,
           hasAppBarTitle: true,
-          appBarTitle: 'Танцьори',
+          appBarTitle: 'Танцьори - ${ageGroup == AgeGroup.adult ? "Възрастова група" : "Детската група"}',
           onFABPressed: () => showDialog(
             context: context,
             builder: (context) {
@@ -71,7 +76,7 @@ class DancersListPage extends HookWidget {
                           name: state.nameTextController?.text ?? "",
                           gender: state.genderStringValue ?? "",
                         ));
-                        bloc.add(InitDancersEvent());
+                        bloc.add(InitDancersEvent(ageGroup: ageGroup));
                         bloc.add(OnCloseDialogEvent());
                         locator<NavigationService>().pop();
                       },
@@ -107,11 +112,11 @@ class DancersListPage extends HookWidget {
           hasSearchBar: true,
           onSearchChanged: (value) => bloc.add(SearchDancerEvent(query: value)),
           searchTextController: state.searchTextController,
-          hasFilterMenu: true,
-          initialFilterValue: state.filterGenderTypeValue,
-          onSelectedFilter: (genderFilter) {
+          hasFilterGenderMenu: true,
+          initialFilterGenderValue: state.filterGenderTypeValue,
+          onSelectedGenderFilter: (genderFilter) {
             bloc.add(
-              OnFilterDancersEvent(
+              OnFilterGenderEvent(
                 genderType: genderFilter ?? GenderType.none,
               ),
             );
@@ -193,8 +198,7 @@ class DancersListPage extends HookWidget {
                                   context: context,
                                   builder: (_) => BlocProvider.value(
                                     value: bloc,
-                                    child:
-                                        BlocBuilder<DancersBloc, DancersState>(
+                                    child: BlocBuilder<DancersBloc, DancersState>(
                                       builder: (context, state) {
                                         bloc.add(
                                           OnOpenDialogEvent(
@@ -203,6 +207,7 @@ class DancersListPage extends HookWidget {
                                           ),
                                         );
                                         return CommonDialog(
+                                          initialSelection: state.genderTypeValue,
                                           dialogTitle:
                                               'Моля, въведете име на танцьора',
                                           isEnabled: state.nameTextController
@@ -212,18 +217,16 @@ class DancersListPage extends HookWidget {
                                                   .genderStringValue
                                                   ?.isNotEmpty ??
                                               false,
-                                          initialSelection:
-                                              state.genderTypeValue,
                                           onSavePressed: () {
                                             bloc.add(UpdateDancerEvent(
-                                              id: dancer.id,
-                                              name: state.nameTextController
-                                                      ?.text ??
-                                                  "",
-                                              gender:
-                                                  state.genderStringValue ?? "",
-                                            ));
-                                            bloc.add(InitDancersEvent());
+                                                id: dancer.id,
+                                                name: state.nameTextController
+                                                        ?.text ??
+                                                    "",
+                                                gender:
+                                                    state.genderStringValue ??
+                                                        "",));
+                                            bloc.add(InitDancersEvent(ageGroup: ageGroup));
                                             locator<NavigationService>().pop();
                                           },
                                           onSelectedGender: (genderValue) {
@@ -276,7 +279,7 @@ class DancersListPage extends HookWidget {
                                     onDeletePressed: () {
                                       bloc.add(RemoveDancerEvent(
                                           id: dancerToDelete.id ?? 0));
-                                      bloc.add(InitDancersEvent());
+                                      bloc.add(InitDancersEvent(ageGroup: ageGroup));
                                       locator<NavigationService>().pop();
                                     },
                                   ),

@@ -16,14 +16,16 @@ import 'package:folk_robe/views/dancers_page/owners_list_page/widgets/owner_list
 import 'package:folk_robe/views/dancers_page/owners_list_page/widgets/owners_listview.dart';
 
 class OwnersListPage extends HookWidget {
-  const OwnersListPage({super.key});
+  final AgeGroup ageGroup;
+
+  const OwnersListPage({super.key, required this.ageGroup,});
 
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<OwnersBloc>();
 
     useEffect(() {
-      bloc.add(InitOwnersEvent());
+      bloc.add(InitOwnersEvent(ageGroup: ageGroup));
       return;
     }, []);
 
@@ -46,7 +48,7 @@ class OwnersListPage extends HookWidget {
         buildWhen: (previous, current) => bloc.buildWhen(previous, current),
         builder: (context, state) => CorePage(
           hasAppBarTitle: true,
-          appBarTitle: "Отговорници",
+          appBarTitle: "Отговорници - ${ageGroup == AgeGroup.adult ? 'Възрастова група' : 'Детска група'}",
           hasFAB: state.isFABVisible,
           onFABPressed: () => bloc.add(
             SwitchPageEvent(
@@ -63,12 +65,13 @@ class OwnersListPage extends HookWidget {
                 )
               : locator<NavigationService>().pop(),
           hasSearchBar: state.pageIndex != 0 ? false : true,
-          hasFilterMenu: true,
-          initialFilterValue: state.filterGenderTypeValue,
-          onSelectedFilter: (genderFilter) {
+          hasFilterGenderMenu: true,
+          initialFilterGenderValue: state.filterGenderTypeValue,
+          onSelectedGenderFilter: (genderFilter) {
             bloc.add(
               OnFilterOwnersEvent(
                 genderType: genderFilter ?? GenderType.none,
+                ageGroup: ageGroup,
               ),
             );
           },
@@ -119,7 +122,8 @@ class OwnersListPage extends HookWidget {
                     buildWhen: (previous, current) =>
                         previous.dancersNames != current.dancersNames ||
                         previous.isGenderSelected != current.isGenderSelected ||
-                        previous.selectedDancerValue != current.selectedDancerValue,
+                        previous.selectedDancerValue !=
+                            current.selectedDancerValue,
                     builder: (context, state) => OwnerDropdownMenu(
                       valueKey: ValueKey(state.genderTypeValue),
                       entries: (state.dancersNames ?? []).map((entry) {
@@ -254,22 +258,22 @@ class OwnersListPage extends HookWidget {
                                             ));
                                           } else {
                                             bloc.add(AddTemporaryOwnerEvent(
-                                                name:
-                                                    state.selectedDancerValue ??
-                                                        '',
-                                                title: state.selectedRegionValue
-                                                        ?.optionName ??
-                                                    '',
-                                                gender: state
-                                                        .selectedGenderStringValue ??
-                                                    ''));
+                                              name: state.selectedDancerValue ??
+                                                  '',
+                                              title: state.selectedRegionValue
+                                                      ?.optionName ??
+                                                  '',
+                                              gender: state
+                                                      .selectedGenderStringValue ??
+                                                  '',
+                                            ));
                                           }
 
                                           bloc.add(SwitchPageEvent(
                                             pageIndex: 0,
                                             isOwnerEdit: false,
                                           ));
-                                          bloc.add(InitOwnersEvent());
+                                          bloc.add(InitOwnersEvent(ageGroup: ageGroup));
                                         }
                                       : null,
                                   style: FilledButton.styleFrom(

@@ -11,11 +11,13 @@ class CostumesRepository extends BaseRepository<Costume> {
     required Costume item,
     required GenderType gender,
     Options? option,
+    AgeGroup? age,
   }) async {
     return await _costumesDB.insert(
       item: item,
       gender: gender,
       option: option,
+      age: age,
     );
   }
 
@@ -24,22 +26,26 @@ class CostumesRepository extends BaseRepository<Costume> {
     required int id,
     required GenderType gender,
     Options? option,
+    AgeGroup? age,
   }) async {
     return await _costumesDB.delete(
       option: option,
       id: id,
       gender: gender,
+      age: age,
     );
   }
 
   @override
   Future<List<Costume>> read({
-    required GenderType gender, 
+    required GenderType gender,
+    AgeGroup? ageGroup,
     Options? option,
   }) async {
     return await _costumesDB.getAll(
       option: option,
       gender: gender,
+      age: ageGroup,
     );
   }
 
@@ -49,19 +55,26 @@ class CostumesRepository extends BaseRepository<Costume> {
     required Costume item,
     required GenderType gender,
     Options? option,
+    AgeGroup? age,
   }) async {
     return await _costumesDB.update(
       id: id,
       option: option,
       item: item,
       gender: gender,
+      age: age,
     );
   }
 
   static Future<List<String>> getCostumes({
     required Options option,
     GenderType? gender,
+    required AgeGroup? ageGroup,
   }) async {
-    return await DatabaseCostumeHelper.getCostumes(gender, option);
+    return await DatabaseCostumeHelper.getCostumes(
+        gender, 
+        option, 
+        ageGroup,
+      );
   }
 }

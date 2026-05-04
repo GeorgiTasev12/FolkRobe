@@ -304,3 +304,4 @@ linux/runner/main.cc
 linux/runner/CMakeLists.txt
 linux/CMakeLists.txt
 linux/.gitignore
+macos/Flutter/GeneratedPluginRegistrant.swift

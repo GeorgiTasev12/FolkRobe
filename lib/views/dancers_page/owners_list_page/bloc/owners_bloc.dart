@@ -15,9 +15,9 @@ part 'owners_event.dart';
 part 'owners_state.dart';
 
 class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
-  // final GenderType genderType;
+  final AgeGroup ageGroup;
 
-  OwnersBloc()
+  OwnersBloc({required this.ageGroup})
       : super(OwnersState(
           pageController: PageController(initialPage: 0),
           searchTextController: TextEditingController(),
@@ -64,7 +64,9 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     Emitter<OwnersState> emit,
   ) async {
     emit(state.copyWith(isLoading: true));
-    final owners = await OwnersRepository().read();
+    final owners = await OwnersRepository().read(
+      ageGroup: ageGroup,
+    );
 
     emit(
       state.copyWith(
@@ -112,9 +114,9 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
           // Filter dancers by gender
           final filteredDancers = (await DancersRepository.getDancers(
             gender: genderType,
-          ))
-              .where((name) => name.isNotEmpty)
-              .toList();
+            ageGroup: ageGroup,
+          )).where((name) => name.isNotEmpty)
+            .toList();
 
           // Ensure the owner's name exists in the filtered list
           final selectedName =
@@ -173,10 +175,12 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
         name: event.name,
         gender: event.gender,
         items: itemString,
+        ageGroup: ageGroup.name,
       );
 
       final newId = await OwnersRepository().add(
         item: owner,
+        age: ageGroup,
       );
 
       emit(state.copyWith(
@@ -253,14 +257,18 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
         title: event.title,
         gender: event.gender,
         items: itemString,
+        ageGroup: ageGroup.name,
       );
 
       await OwnersRepository().update(
         id: event.id,
         item: updatedOwner,
+        age: ageGroup,
       );
 
-      final updatedList = await OwnersRepository().read();
+      final updatedList = await OwnersRepository().read(
+        ageGroup: ageGroup,
+      );
 
       emit(state.copyWith(
         allOwnersList: updatedList,
@@ -301,9 +309,12 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     try {
       await OwnersRepository().delete(
         id: event.id,
+        age: ageGroup,
       );
 
-      final updatedList = await OwnersRepository().read();
+      final updatedList = await OwnersRepository().read(
+        ageGroup: ageGroup,
+      );
 
       emit(state.copyWith(
           allOwnersList: updatedList,
@@ -311,7 +322,7 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
           status: Status.success,
           snackbarMessage: "Отговорникът е премахнат успешно!"));
 
-      add(InitOwnersEvent());
+      add(InitOwnersEvent(ageGroup: ageGroup));
     } on DatabaseException catch (dbError) {
       emit(state.copyWith(
         status: Status.error,
@@ -351,6 +362,7 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
 
     final dancers = await DancersRepository.getDancers(
       gender: event.genderTypeValue,
+      ageGroup: ageGroup
     );
 
     emit(
@@ -376,6 +388,7 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     final costumes = await CostumesRepository.getCostumes(
       option: event.optionValue,
       gender: state.genderTypeValue,
+      ageGroup: ageGroup
     );
 
     emit(
@@ -472,7 +485,7 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
       searchTextController: controller,
     ));
 
-    add(InitOwnersEvent());
+    add(InitOwnersEvent(ageGroup: ageGroup));
   }
 
   FutureOr<void> _onFilterOwners(
@@ -483,6 +496,7 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
 
     final filteredOwners = await OwnersRepository.getFilteredDancersName(
       gender: event.genderType,
+      ageGroup: ageGroup,
     );
 
     emit(state.copyWith(

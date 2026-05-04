@@ -13,8 +13,11 @@ part 'dancers_event.dart';
 part 'dancers_state.dart';
 
 class DancersBloc extends Bloc<DancersEvent, DancersState> {
-  DancersBloc()
-      : super(DancersState(
+  final AgeGroup ageGroup;
+
+  DancersBloc({
+    required this.ageGroup,
+  }) : super(DancersState(
           nameTextController: TextEditingController(),
           searchTextController: TextEditingController(),
         )) {
@@ -29,7 +32,7 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
     on<OnSearchClearEvent>(_onSearchClear);
     on<OnSelectedGenderEvent>(_onSelectedGender);
     on<OnOpenDialogEvent>(_onOpenDialog);
-    on<OnFilterDancersEvent>(_onFilterDancers);
+    on<OnFilterGenderEvent>(_onFilterGender);
   }
 
   FutureOr<void> _onInitData(
@@ -38,7 +41,9 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
   ) async {
     emit(state.copyWith(isLoading: true));
 
-    final dancers = await DancersRepository().read();
+    final dancers = await DancersRepository().read(
+      ageGroup: ageGroup,
+    );
 
     emit(state.copyWith(
       allDancersList: dancers,
@@ -62,9 +67,13 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
       final dancer = Dancer(
         name: event.name,
         gender: event.gender,
+        ageGroup: ageGroup.name,
       );
 
-      final newId = await DancersRepository().add(item: dancer);
+      final newId = await DancersRepository().add(
+        item: dancer,
+        age: ageGroup,
+      );
 
       final dancerWithId = dancer.copyWith(id: newId);
 
@@ -106,14 +115,16 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
         id: event.id,
         name: event.name ?? '',
         gender: event.gender ?? '',
+        ageGroup: ageGroup.name,
       );
 
       await DancersRepository().update(
         item: updatedDancer,
         id: event.id ?? 0,
+        age: ageGroup,
       );
 
-      final updatedList = await DancersRepository().read();
+      final updatedList = await DancersRepository().read(ageGroup: ageGroup);
 
       state.nameTextController?.clear();
 
@@ -150,9 +161,10 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
     try {
       await DancersRepository().delete(
         id: event.id ?? 0,
+        age: ageGroup,
       );
 
-      final updatedList = await DancersRepository().read();
+      final updatedList = await DancersRepository().read(ageGroup: ageGroup);
 
       emit(state.copyWith(
           allDancersList: updatedList,
@@ -248,7 +260,7 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
       searchTextController: controller,
     ));
 
-    add(InitDancersEvent());
+    add(InitDancersEvent(ageGroup: ageGroup));
   }
 
   FutureOr<void> _onSelectedGender(
@@ -288,15 +300,14 @@ class DancersBloc extends Bloc<DancersEvent, DancersState> {
     ));
   }
 
-  FutureOr<void> _onFilterDancers(
-    OnFilterDancersEvent event,
+  FutureOr<void> _onFilterGender(
+    OnFilterGenderEvent event,
     Emitter<DancersState> emit,
   ) async {
     emit(state.copyWith(isLoading: true));
 
     final filteredDancers = await DancersRepository.getFilteredDancers(
-      gender: event.genderType,
-    );
+        gender: event.genderType, ageGroup: ageGroup);
 
     emit(state.copyWith(
       filterGenderTypeValue: event.genderType,
