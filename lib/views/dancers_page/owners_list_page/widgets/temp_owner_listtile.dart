@@ -78,7 +78,7 @@ class TempOwnerListTile extends StatelessWidget {
               ),
               onSelected: (value) {
                 switch (value) {
-                  case 1:
+                  case 0:
                     bloc.add(StartEditOwnerEvent(index: index));
                     bloc.add(
                       SwitchPageEvent(
@@ -88,7 +88,7 @@ class TempOwnerListTile extends StatelessWidget {
                     );
                     break;
 
-                  case 2:
+                  case 1:
                     showDialog(
                       context: context,
                       builder: (context) => BlocProvider.value(
@@ -108,7 +108,7 @@ class TempOwnerListTile extends StatelessWidget {
               itemBuilder: (context) {
                 return [
                   PopupMenuItem(
-                    value: 2,
+                    value: 0,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -122,7 +122,7 @@ class TempOwnerListTile extends StatelessWidget {
                     ),
                   ),
                   PopupMenuItem(
-                    value: 3,
+                    value: 1,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
