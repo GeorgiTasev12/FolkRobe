@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:folk_robe/common/common_circle_iconbutton.dart';
 import 'package:folk_robe/locator.dart';
+import 'package:folk_robe/models/options.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 import 'package:folk_robe/views/dancers_page/owners_list_page/bloc/owners_bloc.dart';
@@ -9,10 +11,14 @@ import 'package:folk_robe/views/dancers_page/owners_list_page/widgets/modal_bott
 
 class TempOwnerListTile extends StatelessWidget {
   final int index;
+  final AgeGroup ageGroup;
+  final GenderType genderType;
 
   const TempOwnerListTile({
     super.key,
     required this.index,
+    required this.ageGroup,
+    required this.genderType,
   });
 
   @override
@@ -30,17 +36,32 @@ class TempOwnerListTile extends StatelessWidget {
           previous.genderTypeValue != current.genderTypeValue ||
           previous.pageIndex != current.pageIndex ||
           previous.isOwnerEdit != current.isOwnerEdit ||
-          previous.genderTypeValue != current.genderTypeValue,
+          previous.genderTypeValue != current.genderTypeValue ||
+          previous.isIndividualItemChecked != current.isIndividualItemChecked,
       builder: (context, state) {
         final displayList = state.ownersFiltered ?? state.allOwnersList ?? [];
         final owner = displayList[index];
 
         return ListTile(
           onTap: () => showOwnersBottomsheet(
-              context: context, 
-              allOwnersList: state.allOwnersList, 
-              index: index,
+            context: context,
+            bloc: bloc,
+            allOwnersList: state.allOwnersList, 
+            ownerIndex: index,
+            deleteOwnerPressed: () => showDialog(
+              context: context,
+              builder: (context) => BlocProvider.value(
+                value: bloc,
+                child: DeleteOwnerDialog(
+                  onDeletePressed: () {
+                  bloc.add(
+                    RemoveTemporaryOwnerEvent(id: owner.id ?? 0));
+                    locator<NavigationService>().pop();
+                  },
+                ),
+              ),
             ),
+          ),
           title: Text(
             owner.name,
             style: context.appTheme.textStyles.titleLarge.copyWith(
@@ -71,72 +92,25 @@ class TempOwnerListTile extends StatelessWidget {
                 ),
               ),
             ),
-            child: PopupMenuButton(
-              icon: Icon(
-                Icons.more_vert,
-                color: context.appTheme.colors.onSurfaceContainer,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: CommonCircleIconButton(
+                index: index,
+                icon: Icon(
+                  Icons.edit_note_rounded,
+                  color: context.appTheme.colors.onSurfaceContainer,
+                ),
+                backgroundColor: context.appTheme.colors.warning,
+                onPressed: () {
+                  bloc.add(StartEditOwnerEvent(index: index));
+                  bloc.add(
+                    SwitchPageEvent(
+                      pageIndex: 1,
+                      isOwnerEdit: true,
+                    ),
+                  );
+                },
               ),
-              onSelected: (value) {
-                switch (value) {
-                  case 0:
-                    bloc.add(StartEditOwnerEvent(index: index));
-                    bloc.add(
-                      SwitchPageEvent(
-                        pageIndex: 1,
-                        isOwnerEdit: true,
-                      ),
-                    );
-                    break;
-
-                  case 1:
-                    showDialog(
-                      context: context,
-                      builder: (context) => BlocProvider.value(
-                        value: bloc,
-                        child: DeleteOwnerDialog(
-                          onDeletePressed: () {
-                            bloc.add(
-                                RemoveTemporaryOwnerEvent(id: owner.id ?? 0));
-                            locator<NavigationService>().pop();
-                          },
-                        ),
-                      ),
-                    );
-                    break;
-                }
-              },
-              itemBuilder: (context) {
-                return [
-                  PopupMenuItem(
-                    value: 0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.edit_note_rounded,
-                          color: context.appTheme.colors.warning,
-                        ),
-                        const SizedBox(width: 8),
-                        Text('Промени'),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.delete_rounded,
-                          color: context.appTheme.colors.error,
-                        ),
-                        const SizedBox(width: 8),
-                        Text('Изтрий'),
-                      ],
-                    ),
-                  ),
-                ];
-              },
             ),
           ),
         );

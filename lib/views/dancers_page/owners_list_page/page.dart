@@ -91,7 +91,10 @@ class OwnersListPage extends HookWidget {
             physics: NeverScrollableScrollPhysics(),
             scrollDirection: Axis.horizontal,
             children: [
-              OwnersListView(),
+              OwnersListView(
+                ageGroup: ageGroup,
+                genderType: state.genderTypeValue,
+              ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
