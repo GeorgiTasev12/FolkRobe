@@ -19,6 +19,7 @@ final class OwnersState extends Equatable {
   final int? editingOwnerIndex;
   final List<String>? selectedItems;
   final Set<int> checkedCostumeIndexes;
+  final Set<int> individualCheckedItemsIndexes;
   final String? querySearch;
   final TextEditingController? searchTextController;
   final Status status;
@@ -28,6 +29,7 @@ final class OwnersState extends Equatable {
   final bool isGenderSelected;
   final bool isCancelPressed;
   final GenderType filterGenderTypeValue;
+  final bool isIndividualItemChecked;
 
   const OwnersState({
     this.allOwnersList,
@@ -48,6 +50,7 @@ final class OwnersState extends Equatable {
     this.editingOwnerIndex,
     this.selectedItems,
     this.checkedCostumeIndexes = const {},
+    this.individualCheckedItemsIndexes = const {},
     this.querySearch,
     this.searchTextController,
     this.status = Status.initial,
@@ -57,6 +60,7 @@ final class OwnersState extends Equatable {
     this.isGenderSelected = false,
     this.isCancelPressed = false,
     this.filterGenderTypeValue = GenderType.none,
+    this.isIndividualItemChecked = false,
   });
 
   OwnersState copyWith({
@@ -66,6 +70,7 @@ final class OwnersState extends Equatable {
     int? id,
     int? pageIndex,
     Set<int>? checkedCostumeIndexes,
+    Set<int>? individualCheckedItemsIndexes,
     List<String>? dancersNames,
     List<String>? costumesTitles,
     bool? isRegionSelected,
@@ -88,6 +93,7 @@ final class OwnersState extends Equatable {
     bool? isGenderSelected,
     bool? isCancelPressed,
     GenderType? filterGenderTypeValue,
+    bool? isIndividualItemChecked,
   }) {
     return OwnersState(
       allOwnersList: allOwnersList ?? this.allOwnersList,
@@ -109,6 +115,7 @@ final class OwnersState extends Equatable {
       selectedItems: selectedItems ?? this.selectedItems,
       checkedCostumeIndexes:
           checkedCostumeIndexes ?? this.checkedCostumeIndexes,
+      individualCheckedItemsIndexes: individualCheckedItemsIndexes ?? this.individualCheckedItemsIndexes,
       querySearch: querySearch ?? this.querySearch,
       searchTextController: searchTextController ?? this.searchTextController,
       status: status ?? this.status,
@@ -118,6 +125,7 @@ final class OwnersState extends Equatable {
       isGenderSelected: isGenderSelected ?? this.isGenderSelected,
       isCancelPressed: isCancelPressed ?? this.isCancelPressed,
       filterGenderTypeValue: filterGenderTypeValue ?? this.filterGenderTypeValue,
+      isIndividualItemChecked: isIndividualItemChecked ?? this.isIndividualItemChecked,
     );
   }
 
@@ -141,6 +149,7 @@ final class OwnersState extends Equatable {
         editingOwnerIndex,
         selectedItems,
         checkedCostumeIndexes,
+        individualCheckedItemsIndexes,
         querySearch,
         searchTextController,
         status,
@@ -150,5 +159,6 @@ final class OwnersState extends Equatable {
         isGenderSelected,
         isCancelPressed,
         filterGenderTypeValue,
+        isIndividualItemChecked,
       ];
 }

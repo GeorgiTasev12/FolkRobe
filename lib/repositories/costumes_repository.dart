@@ -77,4 +77,20 @@ class CostumesRepository extends BaseRepository<Costume> {
         ageGroup,
       );
   }
+
+  static Future<void> modifyQuantityCostumes({
+    required Options option,
+    required AgeGroup? ageGroup,
+    required String quantityAdded,
+    GenderType? gender,
+    List<String>? items,
+  }) async {
+    return await DatabaseCostumeHelper().modifyQuantityCostumes(
+      quantityAdded: quantityAdded,
+      options: option,
+      ageGroup: ageGroup,
+      genderType: gender,
+      items: items
+    );
+  }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:folk_robe/common/common_divider.dart';
 import 'package:folk_robe/common/common_snackbar.dart';
 import 'package:folk_robe/locator.dart';
+import 'package:folk_robe/models/modify_quantity.dart';
 import 'package:folk_robe/models/options.dart';
 import 'package:folk_robe/models/status.dart';
 import 'package:folk_robe/service/navigation_service.dart';
@@ -258,14 +259,19 @@ class OwnersListPage extends HookWidget {
                                             ));
                                           } else {
                                             bloc.add(AddTemporaryOwnerEvent(
-                                              name: state.selectedDancerValue ??
-                                                  '',
-                                              title: state.selectedRegionValue
-                                                      ?.optionName ??
-                                                  '',
-                                              gender: state
-                                                      .selectedGenderStringValue ??
-                                                  '',
+                                              name: state.selectedDancerValue ?? '',
+                                              title: state.selectedRegionValue?.optionName ?? '',
+                                              gender: state.selectedGenderStringValue ?? '',
+                                            ));
+
+                                            bloc.add(ModifyQuantityEvent(
+                                              ageGroup: ageGroup,
+                                              genderType: state.genderTypeValue,
+                                              modifyQuantity: ModifyQuantity.removed,
+                                              items: state.checkedCostumeIndexes
+                                                .map((i) => state.costumesTitles?[i] ?? '')
+                                                .where((t) => t.isNotEmpty)
+                                                .toList(),
                                             ));
                                           }
 
