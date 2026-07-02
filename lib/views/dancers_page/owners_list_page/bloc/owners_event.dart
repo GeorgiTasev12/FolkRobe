@@ -112,3 +112,23 @@ final class OnFilterOwnersEvent extends OwnersEvent {
 
   OnFilterOwnersEvent({required this.genderType, required this.ageGroup,});
 }
+
+final class ModifyQuantityEvent extends OwnersEvent {
+  final GenderType genderType;
+  final AgeGroup ageGroup;
+  final ModifyQuantity modifyQuantity;
+  final List<String>? items;
+
+  ModifyQuantityEvent({
+    required this.ageGroup,
+    required this.genderType,
+    required this.modifyQuantity,
+    required this.items,
+  });
+}
+
+final class IndividualToggleCheckEvent extends OwnersEvent {
+  final int index;
+
+  IndividualToggleCheckEvent({required this.index});
+}

@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:folk_robe/dao/owner.dart';
+import 'package:folk_robe/models/modify_quantity.dart';
 import 'package:folk_robe/models/options.dart';
 import 'package:folk_robe/models/status.dart';
 import 'package:folk_robe/repositories/costumes_repository.dart';
@@ -32,9 +33,11 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     on<StartEditOwnerEvent>(_onStartEditOwner);
     on<SwitchPageEvent>(_onSwitchPage);
     on<ToggleCheckEvent>(_onToggleCheck);
+    on<IndividualToggleCheckEvent>(_onIndividualToggleCheck);
     on<SearchOwnerEvent>(_onSearchOwners);
     on<OnSearchClearEvent>(_onSearchClear);
     on<OnFilterOwnersEvent>(_onFilterOwners);
+    on<ModifyQuantityEvent>(_onModifyQuantity);
   }
 
   bool buildWhen(OwnersState previous, OwnersState current) =>
@@ -307,10 +310,36 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     Emitter<OwnersState> emit,
   ) async {
     try {
+      // Find the owner BEFORE deleting them, so we still know what they had checked out
+      final ownerToRemove = state.allOwnersList
+          ?.where((owner) => owner.id == event.id)
+          .firstOrNull;
+
+      final itemsToRestore = ownerToRemove?.items
+          .split(',')
+          .map((e) => e.trim())
+          .where((e) => e.isNotEmpty)
+          .toList();
+
+      final genderType = GenderType.values.firstWhere(
+        (gender) => gender.name == ownerToRemove?.gender,
+        orElse: () => GenderType.none,
+      );
+
       await OwnersRepository().delete(
         id: event.id,
         age: ageGroup,
       );
+
+      // Give the stock back for whatever this owner had
+      if (itemsToRestore != null && itemsToRestore.isNotEmpty) {
+        add(ModifyQuantityEvent(
+          ageGroup: ageGroup,
+          genderType: genderType,
+          modifyQuantity: ModifyQuantity.added,
+          items: itemsToRestore,
+        ));
+      }
 
       final updatedList = await OwnersRepository().read(
         ageGroup: ageGroup,
@@ -504,6 +533,64 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
       allOwnersList: filteredOwners,
       ownersFiltered: filteredOwners,
       isLoading: false,
+    ));
+  }
+
+  FutureOr<void> _onModifyQuantity(
+    ModifyQuantityEvent event, 
+    Emitter<OwnersState> emit,
+  ) async {
+    // Read from the modal sheet's index tracker instead of the main page one
+    
+    // Map those indexes to the correct titles
+    final selectedItems = event.items?.isNotEmpty == true
+      ? event.items!
+      : state.individualCheckedItemsIndexes
+          .map((i) => state.costumesTitles?[i] ?? '')
+          .where((item) => item.isNotEmpty)
+          .toList();
+
+    if (selectedItems.isEmpty) return;
+
+    try {
+      for (final option in Options.values) {
+        if (option == Options.none) continue;
+
+        // This will send all checked items into your SQL batch updater together
+        await CostumesRepository.modifyQuantityCostumes(
+          option: option,
+          gender: event.genderType,
+          ageGroup: event.ageGroup,
+          items: selectedItems,
+          quantityAdded: event.modifyQuantity.name
+        );
+      }
+      
+      // Clear out the selections once the button completes successfully
+      emit(state.copyWith(
+        individualCheckedItemsIndexes: {},
+      ));
+      
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  FutureOr<void> _onIndividualToggleCheck(
+    IndividualToggleCheckEvent event,
+    Emitter<OwnersState> emit,
+  ) {
+    final newSet = Set<int>.from(state.individualCheckedItemsIndexes);
+
+    if (newSet.contains(event.index)) {
+      newSet.remove(event.index);
+    } else {
+      newSet.add(event.index);
+    }
+
+    // Update UI state only (Adds checkmark and line-through)
+    emit(state.copyWith(
+      individualCheckedItemsIndexes: newSet,
     ));
   }
 }
