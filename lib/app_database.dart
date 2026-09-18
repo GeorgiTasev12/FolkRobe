@@ -39,7 +39,8 @@ class AppDatabase {
           CREATE TABLE IF NOT EXISTS $table (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT,
-            quantity INTEGER NULL
+            quantity INTEGER NULL,
+            itemCheck INTEGER NULL
           )
         ''');
       }

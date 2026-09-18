@@ -2,11 +2,13 @@ class Costume {
   final int? id;
   final int? quantity;
   final String title;
+  final int? itemCheck;
 
   Costume({
     required this.title,
     this.id,
     this.quantity,
+    this.itemCheck = 0,
   });
 
   factory Costume.fromMap(Map<String, dynamic> map) {
@@ -14,6 +16,7 @@ class Costume {
       id: map['id'] as int,
       quantity: map['quantity'],
       title: map['title'] as String,
+      itemCheck: map['itemCheck'] as int
     );
   }
 
@@ -22,6 +25,7 @@ class Costume {
       'id': id,
       'title': title,
       'quantity': quantity,
+      'itemCheck': itemCheck,
     };
   }
 
@@ -29,11 +33,13 @@ class Costume {
     int? id,
     int? quantity,
     String? title,
+    int? itemCheck,
   }) {
     return Costume(
       id: id ?? this.id,
       quantity: quantity ?? this.quantity,
       title: title ?? this.title,
+      itemCheck: itemCheck ?? this.itemCheck,
     );
   }
 }

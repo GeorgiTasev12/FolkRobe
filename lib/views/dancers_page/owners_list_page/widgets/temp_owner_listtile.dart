@@ -48,6 +48,7 @@ class TempOwnerListTile extends StatelessWidget {
             bloc: bloc,
             allOwnersList: state.allOwnersList, 
             ownerIndex: index,
+            genderType: genderType,
             deleteOwnerPressed: () => showDialog(
               context: context,
               builder: (context) => BlocProvider.value(
