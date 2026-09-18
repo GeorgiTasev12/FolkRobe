@@ -99,7 +99,7 @@ class TempOwnerListTile extends StatelessWidget {
                 index: index,
                 icon: Icon(
                   Icons.create_rounded,
-                  color: context.appTheme.colors.onSurfaceContainer,
+                  color: context.appTheme.colors.surfaceContainer,
                 ),
                 backgroundColor: context.appTheme.colors.warning,
                 onPressed: () {
