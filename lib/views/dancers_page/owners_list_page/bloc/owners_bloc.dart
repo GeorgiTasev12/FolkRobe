@@ -38,6 +38,7 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     on<OnSearchClearEvent>(_onSearchClear);
     on<OnFilterOwnersEvent>(_onFilterOwners);
     on<ModifyQuantityEvent>(_onModifyQuantity);
+    on<SaveItemsCheckedEvent>(_onSaveIteamsChecked);
   }
 
   bool buildWhen(OwnersState previous, OwnersState current) =>
@@ -591,6 +592,33 @@ class OwnersBloc extends Bloc<OwnersEvent, OwnersState> {
     // Update UI state only (Adds checkmark and line-through)
     emit(state.copyWith(
       individualCheckedItemsIndexes: newSet,
+      hasUnsavedChanges: true,
     ));
+  }
+
+  FutureOr<void> _onSaveIteamsChecked(SaveItemsCheckedEvent event, Emitter<OwnersState> emit) async {
+    final checkedId = event.hasCheckedAllItems == true ? 0 : 1;
+
+    try {
+      // Save the checked items here
+        for (final option in Options.values) {
+          if (option == Options.none) continue;
+
+          // This will send all checked items into your SQL batch updater together
+            await CostumesRepository.changeCheckedItems(
+              checkedItemId: checkedId,
+              options: option,
+              ageGroup: ageGroup,
+              genderType: event.genderType,
+            );
+        }
+
+        emit(state.copyWith(
+          individualCheckedItemsIndexes: Set<int>.from(state.individualCheckedItemsIndexes),
+          hasUnsavedChanges: false,
+        ));
+    } catch(e) {
+      throw Exception("Error: $e");
+    }
   }
 }

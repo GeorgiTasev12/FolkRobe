@@ -132,3 +132,13 @@ final class IndividualToggleCheckEvent extends OwnersEvent {
 
   IndividualToggleCheckEvent({required this.index});
 }
+
+final class SaveItemsCheckedEvent extends OwnersEvent {
+  final bool hasCheckedAllItems;
+  final GenderType genderType;
+
+  SaveItemsCheckedEvent({
+    required this.hasCheckedAllItems,
+    required this.genderType,
+  });
+}

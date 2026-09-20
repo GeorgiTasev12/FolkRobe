@@ -102,40 +102,23 @@ class DatabaseCostumeHelper extends DatabaseHelper<Costume> {
       throw Exception("Database problem, cannot update the quantity: $e");
     }
   }
-  //   Future<void> modifyQuantityCostumes({
-  //     required String quantityAdded,
-  //     GenderType? genderType,
-  //     Options? options,
-  //     AgeGroup? ageGroup,
-  //     List<String>? items,
-  //   }) async {
-  //     if (items == null || items.isEmpty) return;
 
-  //     final db = await database;
-  //     final tableName = options?.tableCostumeName(genderType, ageGroup);
-      
-  //     if (tableName == null || tableName.isEmpty) {
-  //       throw Exception("Database problem: Table name is empty for option: $options");
-  //     }
-
-  //     // We update the stock safely using SQL native decrement: quantity = quantity - 1
-  //     // We use the WHERE IN clause to update all selected items at once
-  //     final placeholders = List.filled(items.length, '?').join(', ');
-
-  //     try {
-  //       if (quantityAdded == ModifyQuantity.removed.name) {
-  //         await db.rawUpdate(
-  //           'UPDATE $tableName SET quantity = quantity - 1 WHERE title IN ($placeholders)',
-  //           items,
-  //         );
-  //       } else if(quantityAdded == ModifyQuantity.added.name) {
-  //         await db.rawUpdate(
-  //           'UPDATE $tableName SET quantity = quantity + 1 WHERE title IN ($placeholders)',
-  //           items,
-  //         );
-  //       } else {}
-  //     } catch (e) {
-  //       throw Exception("Database problem, cannot update the quantity: $e");
-  //     }
-  // }
+  Future<void> saveCheckedItems({
+    required int checkedIndividualId,
+    required Options options,
+    GenderType? genderType,
+    AgeGroup? ageGroup,
+  }) async {
+    final db = await database;
+    final tableName = options.tableCostumeName(genderType, ageGroup);
+    
+    try {
+      db.rawUpdate(
+        'UPDATE $tableName SET itemCheck = ?',
+        [checkedIndividualId]
+      );
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }

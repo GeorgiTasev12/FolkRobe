@@ -30,6 +30,7 @@ final class OwnersState extends Equatable {
   final bool isCancelPressed;
   final GenderType filterGenderTypeValue;
   final bool isIndividualItemChecked;
+  final bool hasUnsavedChanges;
 
   const OwnersState({
     this.allOwnersList,
@@ -61,6 +62,7 @@ final class OwnersState extends Equatable {
     this.isCancelPressed = false,
     this.filterGenderTypeValue = GenderType.none,
     this.isIndividualItemChecked = false,
+    this.hasUnsavedChanges = false,
   });
 
   OwnersState copyWith({
@@ -94,6 +96,7 @@ final class OwnersState extends Equatable {
     bool? isCancelPressed,
     GenderType? filterGenderTypeValue,
     bool? isIndividualItemChecked,
+    bool? hasUnsavedChanges,
   }) {
     return OwnersState(
       allOwnersList: allOwnersList ?? this.allOwnersList,
@@ -126,6 +129,7 @@ final class OwnersState extends Equatable {
       isCancelPressed: isCancelPressed ?? this.isCancelPressed,
       filterGenderTypeValue: filterGenderTypeValue ?? this.filterGenderTypeValue,
       isIndividualItemChecked: isIndividualItemChecked ?? this.isIndividualItemChecked,
+      hasUnsavedChanges: hasUnsavedChanges ?? this.hasUnsavedChanges
     );
   }
 
@@ -160,5 +164,6 @@ final class OwnersState extends Equatable {
         isCancelPressed,
         filterGenderTypeValue,
         isIndividualItemChecked,
+        hasUnsavedChanges,
       ];
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:folk_robe/common/common_divider.dart';
 import 'package:folk_robe/dao/owner.dart';
 import 'package:folk_robe/locator.dart';
+import 'package:folk_robe/models/options.dart';
 import 'package:folk_robe/service/navigation_service.dart';
 import 'package:folk_robe/theme/styles/colors_and_styles.dart';
 import 'package:folk_robe/views/dancers_page/owners_list_page/bloc/owners_bloc.dart';
@@ -13,6 +14,7 @@ Future<void> showOwnersBottomsheet({
   required int ownerIndex,
   required OwnersBloc bloc,
   required void Function() deleteOwnerPressed,
+  required GenderType genderType,
 }) {
   return showModalBottomSheet(
     context: context,
@@ -22,14 +24,17 @@ Future<void> showOwnersBottomsheet({
         bloc: bloc,
         buildWhen: (previous, current) => 
           previous.individualCheckedItemsIndexes != current.individualCheckedItemsIndexes ||
-          previous.ownersFiltered != current.ownersFiltered,
+          previous.ownersFiltered != current.ownersFiltered ||
+          previous.hasUnsavedChanges != current.hasUnsavedChanges,
         builder: (context, state) {
           final owner = (state.ownersFiltered ?? state.allOwnersList ?? [])[ownerIndex]; 
           final itemsList = (owner.items.isEmpty)
               ? []
               : owner.items.split(', ');
 
-          final bool hasCheckedItems = state.individualCheckedItemsIndexes.isNotEmpty;
+          // This will check, if all the checkboxes are all checked, it should enable the button, otherwise it stays disabled.
+          final bool hasCheckedAllItems = state.individualCheckedItemsIndexes.length == itemsList.length && itemsList.isNotEmpty;
+          // final bool isItemsChecked = state.individualCheckedItemsIndexes.isNotEmpty;
 
           return Column(
             mainAxisSize: MainAxisSize.min,
@@ -106,38 +111,82 @@ Future<void> showOwnersBottomsheet({
                   ),
                 ),
               ),
+              CommonDivider(),
+              const SizedBox(height: 3),
               SafeArea(
                 bottom: true,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: FilledButton(
-                      onPressed: !hasCheckedItems ? null : () {
-                        locator<NavigationService>().pop();
-                        deleteOwnerPressed();
-                      },
-                      style: FilledButton.styleFrom(
-                        backgroundColor: context.appTheme.colors.onSurfaceContainer,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Върни частично костюма', 
-                            style: context.appTheme.textStyles.bodyLarge.copyWith(
-                              color: context.appTheme.colors.surfaceContainer,
-                            ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: FilledButton(
+                          // !isItemsChecked
+                          onPressed: !state.hasUnsavedChanges ? null : () {
+                            bloc.add(SaveItemsCheckedEvent(
+                              hasCheckedAllItems: hasCheckedAllItems,
+                              genderType: genderType,
+                            ));
+                            locator<NavigationService>().pop();
+                          },
+                          style: FilledButton.styleFrom(
+                            backgroundColor: context.appTheme.colors.onSurfaceContainer,
                           ),
-                          const Padding(padding: EdgeInsets.symmetric(horizontal: 2)),
-                          Icon(
-                            Icons.delete_rounded,
-                            color: context.appTheme.colors.surfaceContainer,
-                          )
-                        ],
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'Запази промените', 
+                                style: context.appTheme.textStyles.bodyLarge.copyWith(
+                                  color: context.appTheme.colors.surfaceContainer,
+                                ),
+                              ),
+                              const Padding(padding: EdgeInsets.symmetric(horizontal: 2)),
+                              Icon(
+                                Icons.check_rounded,
+                                color: context.appTheme.colors.surfaceContainer,
+                              )
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: FilledButton(
+                          onPressed: !hasCheckedAllItems ? null : () {
+                            locator<NavigationService>().pop();
+                            deleteOwnerPressed();
+                          },
+                          style: FilledButton.styleFrom(
+                            backgroundColor: context.appTheme.colors.onSurfaceContainer,
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'Върни костюма', 
+                                style: context.appTheme.textStyles.bodyLarge.copyWith(
+                                  color: context.appTheme.colors.surfaceContainer,
+                                ),
+                              ),
+                              const Padding(padding: EdgeInsets.symmetric(horizontal: 2)),
+                              Icon(
+                                Icons.delete_rounded,
+                                color: context.appTheme.colors.surfaceContainer,
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

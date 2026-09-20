@@ -48,6 +48,7 @@ class TempOwnerListTile extends StatelessWidget {
             bloc: bloc,
             allOwnersList: state.allOwnersList, 
             ownerIndex: index,
+            genderType: genderType,
             deleteOwnerPressed: () => showDialog(
               context: context,
               builder: (context) => BlocProvider.value(
@@ -98,7 +99,7 @@ class TempOwnerListTile extends StatelessWidget {
                 index: index,
                 icon: Icon(
                   Icons.create_rounded,
-                  color: context.appTheme.colors.onSurfaceContainer,
+                  color: context.appTheme.colors.surfaceContainer,
                 ),
                 backgroundColor: context.appTheme.colors.warning,
                 onPressed: () {

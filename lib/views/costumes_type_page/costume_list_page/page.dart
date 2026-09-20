@@ -173,7 +173,7 @@ class CostumeListPage extends HookWidget {
 
                           return CommonListTile(
                             title: costume.title,
-                            quantity: (costume.quantity != null)
+                            quantity: (costume.quantity != null && (costume.quantity ?? 0) > 0)
                                 ? costume.quantity.toString()
                                 : null,
                             suffixWidgets: [

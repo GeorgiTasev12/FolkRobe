@@ -93,4 +93,18 @@ class CostumesRepository extends BaseRepository<Costume> {
       items: items
     );
   }
+
+  static Future<void> changeCheckedItems({
+    required int checkedItemId,
+    required Options options,
+    GenderType? genderType,
+    AgeGroup? ageGroup,
+  }) async {
+    return await DatabaseCostumeHelper().saveCheckedItems(
+      checkedIndividualId: checkedItemId,
+      options: options,
+      ageGroup: ageGroup,
+      genderType: genderType,
+    );
+  }
 }
