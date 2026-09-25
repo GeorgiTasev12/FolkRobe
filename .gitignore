@@ -306,3 +306,4 @@ linux/CMakeLists.txt
 linux/.gitignore
 macos/Flutter/GeneratedPluginRegistrant.swift
 android/build/reports/problems/problems-report.html
+android/build/reports/problems/problems-report.html
