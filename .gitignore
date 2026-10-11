@@ -308,3 +308,5 @@ macos/Flutter/GeneratedPluginRegistrant.swift
 android/build/reports/problems/problems-report.html
 android/build/reports/problems/problems-report.html
 ios/GoogleService-Info.plist
+ios/Runner/GoogleService-Info.plist
+android/build/reports/problems/problems-report.html
