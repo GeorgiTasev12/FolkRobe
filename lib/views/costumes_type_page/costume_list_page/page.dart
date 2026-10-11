@@ -4,7 +4,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:folk_robe/common/common_dialog.dart';
 import 'package:folk_robe/common/common_list_tile.dart';
 import 'package:folk_robe/common/common_snackbar.dart';
-import 'package:folk_robe/helpers/screen_size_helper.dart';
 import 'package:folk_robe/locator.dart';
 import 'package:folk_robe/models/options.dart';
 import 'package:folk_robe/models/status.dart';
@@ -57,8 +56,7 @@ class CostumeListPage extends HookWidget {
           return CorePage(
             hasFAB: true,
             hasAppBarTitle: true,
-            appBarTitle:
-                'Костюми - ${ScreenSizeHelper(context).isSmall ? null : selectedOptionString} - $ageString',
+            appBarTitle: 'Костюми - $selectedOptionString - $ageString',
             onFABPressed: () => showDialog(
               context: context,
               builder: (context) {
