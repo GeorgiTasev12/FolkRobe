@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.georgitasev.folk_robe"
+    namespace = "com.georgitasev.folkRobe"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
